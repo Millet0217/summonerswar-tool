@@ -24,11 +24,11 @@ $$('nav button').forEach(b=>b.onclick=()=>{
 
 // ---------- 怪物庫 ----------
 let uSort={k:'atk',dir:-1};
-const uCols=[['n','名稱'],['at','屬'],['s','★'],['ns','天生'],['ar','職業'],['lv','Lv'],
+const uCols=[['n','中文名'],['en','英文名'],['at','屬'],['s','★'],['ns','天生'],['ar','職業'],['lv','Lv'],
  ['con','HP'],['atk','ATK'],['def','DEF'],['spd','SPD'],['cr','CR'],['cd','CD'],['re','RES'],['ac','ACC'],['rc','符文'],['rs','目前套裝']];
 function uFilter(){
   const q=$('#uSearch').value.toLowerCase(),at=$('#uAttr').value,st=$('#uStar').value,ar=$('#uArch').value,nt=$('#uNat').value;
-  return UNITS.filter(u=>(!q||u.n.toLowerCase().includes(q))&&(!at||u.at==at)&&(!ar||u.ar==ar)
+  return UNITS.filter(u=>(!q||u.n.toLowerCase().includes(q)||(u.en&&u.en.toLowerCase().includes(q)))&&(!at||u.at==at)&&(!ar||u.ar==ar)
     &&(!nt||u.ns==+nt)&&(!st||(st=='3'?u.s<=3:u.s==+st)));
 }
 function renderUnits(){
@@ -38,6 +38,7 @@ function renderUnits(){
   let h='<thead><tr>'+uCols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('')+'</tr></thead><tbody>';
   h+=rows.map(u=>`<tr>
     <td><b>${u.n}</b></td>
+    <td class="muted">${u.en||''}</td>
     <td><span class="pill ${attrClass[u.at]}">${u.at}</span></td>
     <td>${u.s}★</td><td>${u.ns}★</td><td>${u.ar}</td><td>${u.lv}</td>
     <td>${u.con}</td><td>${u.atk}</td><td>${u.def}</td><td><b>${u.spd}</b></td>
