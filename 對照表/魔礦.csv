@@ -1,0 +1,8 @@
+﻿類別,代碼,英文,中文,備註
+類型,1,Grindstone,磨刀石,craft_type
+類型,2,Enchant Gem,附魔寶石,craft_type
+類型,3,Immemorial Grindstone,無形磨刀石,craft_type
+類型,4,Immemorial Enchant Gem,無形附魔寶石,craft_type
+類型,5,Grindstone,磨刀石,craft_type
+類型,6,Enchant Gem,附魔寶石,craft_type
+,,,,魔礦完整名稱 = 品質 + 套裝 + 屬性 + 類型；套裝/屬性/品質請沿用「符文.csv」的中文
