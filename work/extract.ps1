@@ -19,10 +19,11 @@ function Parse-Rune($r, $ownerName){
   $subSum=0.0; $subs=@(); $stypes=@()
   if($preT -ne 0){ $mx=$subMax[$preT]; if($mx){$subSum+=$preV/$mx}; $subs+="$($effName[$preT])+$preV(前)"; $stypes+=$preT }
   foreach($s in $r.sec_eff){
-    $st=[int]$s[0]; $sv=$s[1]; $grind=if($s.Count -ge 4){$s[3]}else{0}
+    $st=[int]$s[0]; $sv=$s[1]; $grind=if($s.Count -ge 4){$s[3]}else{0}; $gem=if($s.Count -ge 3){[int]$s[2]}else{0}
     $mx=$subMax[$st]; if($mx){$subSum+=($sv+$grind)/$mx}
-    $g=if($grind -gt 0){"+$grind磨"}else{""}
-    $subs+="$($effName[$st])+$sv$g"; $stypes+=$st
+    $g=if($grind -gt 0){"+$($grind)磨"}else{""}
+    $em=if($gem -gt 0){"寶"}else{""}
+    $subs+="$($effName[$st])+$sv$g$em"; $stypes+=$st
   }
   $eff=[math]::Round(($mainRatio+$subSum)/2.8*100,1)
   [pscustomobject]@{

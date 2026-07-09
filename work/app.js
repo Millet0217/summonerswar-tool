@@ -7,6 +7,7 @@ const effCls=e=>e>=100?'eff-hi':e>=85?'eff-mid':'eff-lo';
 const ownedNames=new Set(UNITS.map(u=>u.en||u.n));   // 地下城模板用英文名比對
 const enToZh={}; UNITS.forEach(u=>{ if(u.en) enToZh[u.en]=u.n; });  // 英文→顯示名(中文優先)
 const runeById={}; RUNES.forEach(r=>runeById[r.id]=r);
+const unitById={}; UNITS.forEach(u=>unitById[u.id]=u);
 
 // header
 $('#hUnits').textContent=UNITS.length;
@@ -36,7 +37,7 @@ function renderUnits(){
   rows.sort((a,b)=>{let x=a[uSort.k],y=b[uSort.k];if(typeof x=='string')return uSort.dir*x.localeCompare(y);return uSort.dir*(x-y);});
   $('#uCount').textContent=rows.length+' 隻';
   let h='<thead><tr>'+uCols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('')+'</tr></thead><tbody>';
-  h+=rows.map(u=>`<tr>
+  h+=rows.map(u=>`<tr class="clk" data-id="${u.id}">
     <td><b>${u.n}</b></td>
     <td class="muted">${u.en||''}</td>
     <td><span class="pill ${attrClass[u.at]}">${u.at}</span></td>
@@ -46,7 +47,56 @@ function renderUnits(){
     <td>${u.rc}</td><td class="muted">${u.rs||''}</td></tr>`).join('');
   $('#uTable').innerHTML=h+'</tbody>';
   $$('#uTable th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;uSort.dir=uSort.k==k?-uSort.dir:-1;uSort.k=k;renderUnits();});
+  $$('#uTable tbody tr').forEach(tr=>tr.onclick=()=>openUnitModal(unitById[tr.dataset.id]));
 }
+// ---------- 魔靈詳細彈窗（裝備符文＋魔礦） ----------
+const qName={1:'普通',2:'魔法',3:'稀有',4:'英雄',5:'傳說',6:'傳說'};
+// 副屬字串內的魔礦標記：+N磨=磨刀石、寶=附魔寶石
+const markCraft=s=>s.replace(/\+(\d+)磨/g,'<span class="grind">磨刀石+$1</span>').replace(/寶/g,'<span class="gem">附魔</span>');
+function openUnitModal(u){
+  if(!u)return;
+  const runes=(u.ri||'').split(',').filter(Boolean).map(id=>runeById[id]).filter(Boolean);
+  const bySlot={}; runes.forEach(r=>bySlot[r.sl]=r);
+  // 收集全部魔礦：磨刀石(grind) 與 附魔寶石(gem)
+  const grinds=[],gems=[];
+  runes.forEach(r=>{ (r.sub||'').split(' / ').forEach(s=>{
+    const m=s.match(/^(.+?)\+\d+\+(\d+)磨/); if(m)grinds.push(`${r.sl}洞 ${m[1].trim()}+${m[2]}`);
+    const g=s.match(/^(.+?)\+(\d+)[^\/]*寶/); if(g)gems.push(`${r.sl}洞 ${g[1].trim()}+${g[2]}`);
+  }); });
+  const efs=runes.map(r=>r.ef); const avg=efs.length?(efs.reduce((a,b)=>a+b,0)/efs.length).toFixed(1):'0';
+  let cards='';
+  for(let sl=1;sl<=6;sl++){
+    const r=bySlot[sl];
+    if(!r){cards+=`<div class="runebox empty">${sl}洞<br>（無符文）</div>`;continue;}
+    const subs=(r.sub||'').split(' / ').map(s=>`<div class="subline">${markCraft(s)}</div>`).join('');
+    cards+=`<div class="runebox">
+      <div class="rhead"><span class="slot">${sl}洞 <span class="setbadge">${r.set||'?'}</span></span>
+        <span class="qbadge q${r.q||1}">${qName[r.q]||''}</span></div>
+      <div class="main">${r.m}</div>
+      ${r.pf?`<div class="pf">前綴 ${r.pf}</div>`:''}
+      ${subs}
+      <div class="rhead" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px">
+        <span>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'} <span class="muted">+${r.lv}</span></span>
+        <span class="${effCls(r.ef)}">效率 ${r.ef}%</span></div></div>`;
+  }
+  const st=k=>`<div><span>${k[1]}</span><b>${u[k[0]]}</b></div>`;
+  const statBoxes=[['con','HP'],['atk','ATK'],['def','DEF'],['spd','SPD'],['cr','CR%'],['cd','CD%'],['re','RES%'],['ac','ACC%']].map(st).join('');
+  const goreParts=[];
+  if(grinds.length)goreParts.push(`<div>🪨 <b>磨刀石</b>　${grinds.join('　')}</div>`);
+  if(gems.length)goreParts.push(`<div>💎 <b class="gemtxt">附魔寶石</b>　${gems.join('　')}</div>`);
+  const gore=goreParts.length?`<div class="mgore">${goreParts.join('')}</div>`:`<div class="mgore muted">此魔靈的符文未套用任何魔礦（磨刀石／附魔寶石）</div>`;
+  $('#uModalBody').innerHTML=`
+    <h2>${u.n} <span class="pill ${attrClass[u.at]}">${u.at}</span> ${u.s}★</h2>
+    <div class="msub">${u.en||''}　·　${u.ar}　·　Lv${u.lv}　·　目前套裝：${u.rs||'—'}　·　符文平均效率 <b class="${effCls(avg)}">${avg}%</b></div>
+    <div class="mstats">${statBoxes}</div>
+    ${gore}
+    <div class="runegrid">${cards}</div>`;
+  $('#uModal').classList.add('open');
+}
+function closeUnitModal(){$('#uModal').classList.remove('open');}
+$('#uModalX').onclick=closeUnitModal;
+$('#uModal').onclick=e=>{if(e.target.id=='uModal')closeUnitModal();};
+document.addEventListener('keydown',e=>{if(e.key=='Escape')closeUnitModal();});
 ['uSearch','uAttr','uStar','uArch','uNat'].forEach(id=>$('#'+id).oninput=renderUnits);
 renderUnits();
 
