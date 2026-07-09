@@ -73,6 +73,9 @@ small.note{color:var(--dim);font-size:11px}
   <span class="stat">符文 <b id="hRunes">0</b></span>
   <span class="stat">平均效率 <b id="hEff">0%</b></span>
   <span class="stat">90%+符文 <b id="hHi">0</b></span>
+  <button class="btn" id="impBtn" style="margin-left:auto">📥 匯入新JSON</button>
+  <input type="file" id="impFile" accept=".json,application/json" style="display:none">
+  <span class="stat" id="impStatus"></span>
 </header>
 <nav>
   <button data-tab="units" class="active">怪物庫</button>
@@ -143,8 +146,13 @@ small.note{color:var(--dim);font-size:11px}
 </main>
 
 <script>
-const UNITS = /*UNITS_DATA*/[]/*END*/;
-const RUNES = /*RUNES_DATA*/[]/*END*/;
+let UNITS = /*UNITS_DATA*/[]/*END*/;
+let RUNES = /*RUNES_DATA*/[]/*END*/;
+const MONSTER_DB = /*MONSTER_DB*/{}/*END*/;
+const ZH_NAMES = /*ZH_NAMES*/{}/*END*/;
+</script>
+<script>
+/*IMPORTER_JS*/
 </script>
 <script>
 /*APP_JS*/

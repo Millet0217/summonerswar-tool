@@ -1,3 +1,5 @@
+// 匯入新 JSON 後由 importer.js 重新呼叫本函式即可整頁重繪
+function renderAll(){
 // ---------- 共用 ----------
 const attrClass={'水':'water','火':'fire','風':'wind','光':'light','暗':'dark'};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -254,6 +256,7 @@ $('#fRun').onclick=()=>{
 };
 
 // ---------- 總覽 ----------
+// (以下 ov() 為本次重繪的最後步驟)
 function ov(){
   const by=(arr,f)=>{const m={};arr.forEach(x=>{const k=f(x);m[k]=(m[k]||0)+1;});return m;};
   const bar=(obj,color)=>{const mx=Math.max(...Object.values(obj));return Object.entries(obj).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
@@ -274,3 +277,5 @@ function ov(){
   $('#ovGrid').innerHTML=cards.join('');
 }
 ov();
+} // end renderAll
+renderAll();
