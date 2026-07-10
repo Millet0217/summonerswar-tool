@@ -38,7 +38,7 @@ function renderUnits(){
   $('#uCount').textContent=rows.length+' 隻';
   let h='<thead><tr>'+uCols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('')+'</tr></thead><tbody>';
   h+=rows.map(u=>`<tr class="clk" data-id="${u.id}">
-    <td><b>${u.n}</b></td>
+    <td class="uic">${(u.mid&&ICONS[u.mid])?`<img src="icons/${ICONS[u.mid]}" loading="lazy" alt="">`:''}<b>${u.n}</b></td>
     <td class="muted">${u.en||''}</td>
     <td><span class="pill ${attrClass[u.at]}">${u.at}</span></td>
     <td>${u.s}★</td><td>${u.ns}★</td><td>${u.ar}</td><td>${u.lv}</td>
@@ -99,6 +99,34 @@ $('#uModal').onclick=e=>{if(e.target.id=='uModal')closeUnitModal();};
 document.addEventListener('keydown',e=>{if(e.key=='Escape')closeUnitModal();});
 ['uSearch','uAttr','uStar','uArch','uNat'].forEach(id=>$('#'+id).oninput=renderUnits);
 renderUnits();
+
+// ---------- 怪物圖鑑 ----------
+// 持有等價：同一覺醒鏈(未覺醒⇄覺醒⇄二覺)/變身共用群組代表，持有任一形態整組都算持有
+const canon=m=>(typeof LINKS!=='undefined'&&LINKS[m])||m;
+const ownedGroups=new Set(UNITS.map(u=>u.mid).filter(Boolean).map(canon));
+const isOwned=c=>ownedGroups.has(canon(c.mid));
+const elDot={'水':'water','火':'fire','風':'wind','光':'light','暗':'dark'};
+function renderDex(){
+  const q=$('#xSearch').value.toLowerCase(),at=$('#xAttr').value,ar=$('#xArch').value,
+    nt=$('#xNat').value,aw=$('#xAwk').value,ow=$('#xOwn').value;
+  const rows=CATALOG.filter(c=>{
+    const owned=isOwned(c), nm=(c.zh||c.en);
+    return (!q||nm.toLowerCase().includes(q)||c.en.toLowerCase().includes(q))
+      &&(!at||c.at==at)&&(!ar||c.ar==ar)&&(!nt||c.ns==+nt)
+      &&(aw===''||c.aw==+aw)&&(ow===''||(ow=='1'?owned:!owned));
+  });
+  const have=rows.filter(isOwned).length;
+  $('#xCount').textContent=`${rows.length} 隻　已持有 ${have}`;
+  $('#dexGrid').innerHTML=rows.map(c=>{
+    const owned=isOwned(c), nm=(c.zh||c.en);
+    return `<div class="mon ${owned?'':'no'}" title="${c.en}${owned?'（已持有）':'（未持有）'}">
+      <span class="st">${c.ns}★</span><span class="el el-${elDot[c.at]||'light'}"></span>
+      <img src="icons/${c.img}" loading="lazy" alt="">
+      <div class="mn">${nm}</div></div>`;
+  }).join('');
+}
+['xSearch','xAttr','xArch','xNat','xAwk','xOwn'].forEach(id=>$('#'+id).oninput=renderDex);
+renderDex();
 
 // ---------- 符文庫 ----------
 const sets=[...new Set(RUNES.map(r=>r.set).filter(Boolean))];

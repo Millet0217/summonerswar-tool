@@ -31,7 +31,7 @@ $U=foreach($u in $units){
   $cnt=@{}
   foreach($rid in ($u.rune_ids -split ',')){ if($rid -and $runeSetDisp.ContainsKey($rid)){ $s=$runeSetDisp[$rid]; if($cnt.ContainsKey($s)){$cnt[$s]++}else{$cnt[$s]=1} } }
   $rs=($cnt.GetEnumerator()|Sort Value -Desc|%{"$($_.Key)x$($_.Value)"}) -join ' '
-  [pscustomobject]@{ id="$($u.unit_id)"; n=$u.disp; en=$u.en; at=$u.attr; s=$u.stars; ns=$u.nat_stars; ar=$u.arch
+  [pscustomobject]@{ id="$($u.unit_id)"; mid="$($u.master_id)"; n=$u.disp; en=$u.en; at=$u.attr; s=$u.stars; ns=$u.nat_stars; ar=$u.arch
     lv=$u.level; con=$u.con; atk=$u.atk; def=$u.def; spd=$u.spd; cr=$u.cr; cd=$u.cd; re=$u.res; ac=$u.acc
     rc=$u.rune_count; rs=$rs; ri=$u.rune_ids }
 }

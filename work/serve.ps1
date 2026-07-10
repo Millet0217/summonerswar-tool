@@ -13,6 +13,10 @@ while($listener.IsListening){
     $bytes=[IO.File]::ReadAllBytes($path)
     if($path -match '\.html?$'){$ctx.Response.ContentType='text/html; charset=utf-8'}
     elseif($path -match '\.json$'){$ctx.Response.ContentType='application/json; charset=utf-8'}
+    elseif($path -match '\.png$'){$ctx.Response.ContentType='image/png'}
+    elseif($path -match '\.(jpg|jpeg)$'){$ctx.Response.ContentType='image/jpeg'}
+    elseif($path -match '\.css$'){$ctx.Response.ContentType='text/css; charset=utf-8'}
+    elseif($path -match '\.js$'){$ctx.Response.ContentType='application/javascript; charset=utf-8'}
     $ctx.Response.OutputStream.Write($bytes,0,$bytes.Length)
   } else {$ctx.Response.StatusCode=404}
   $ctx.Response.Close()

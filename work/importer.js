@@ -71,7 +71,7 @@ function parseSmw(d){
     const rs=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([k,v])=>k+'x'+v).join(' ');
     const u=o.u;
     return {
-      id:''+u.unit_id, n:o.disp, en:o.en, at:IMP_attrName[+u.attribute]||'', s:u.class, ns:o.ns, ar:o.arch,
+      id:''+u.unit_id, mid:''+u.unit_master_id, n:o.disp, en:o.en, at:IMP_attrName[+u.attribute]||'', s:u.class, ns:o.ns, ar:o.arch,
       lv:u.unit_level, con:u.con, atk:u.atk, def:u.def, spd:u.spd, cr:u.critical_rate, cd:u.critical_damage,
       re:u.resist, ac:u.accuracy, rc:o.runeCount, rs, ri:o.rids.join(',')
     };
