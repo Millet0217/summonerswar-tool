@@ -22058,10 +22058,11 @@ function fmtSub(sub,merged){
   }).join(' / ');
 }
 const gCls=g=>'g'+g, rollCls=v=>v>=5?'roll-hi':v>=3.5?'roll-mid':'roll-lo';
-const sets=[...new Set(RUNES.map(r=>r.set).filter(Boolean))];
-$('#rSet').innerHTML='<option value="">全部套裝</option>'+sets.map(s=>`<option>${s}</option>`).join('');
-const mains=[...new Set(RUNES.map(r=>r.m.split('+')[0]))];
-$('#rMain').innerHTML='<option value="">全部主屬</option>'+mains.map(s=>`<option>${s}</option>`).join('');
+// 套裝/主屬選項固定寫死全部(依 IMP_setName/IMP_effName)，不依實際符文資料產生(避免沒有該符文就不顯示)
+const ALL_SETS=Object.values(IMP_setName).filter(Boolean);
+$('#rSet').innerHTML='<option value="">全部套裝</option>'+ALL_SETS.map(s=>`<option>${s}</option>`).join('');
+const ALL_MAINS=Object.values(IMP_effName);
+$('#rMain').innerHTML='<option value="">全部主屬</option>'+ALL_MAINS.map(s=>`<option>${s}</option>`).join('');
 let rSort={k:'ef',dir:-1};
 const rCols=[['gv','評級'],['ef','效率'],['rl','有效roll'],['sl','洞'],['st','★'],['set','套裝'],['m','主屬'],['pf','前綴'],['sub','副屬'],['lv','+'],['ow','裝備者']];
 function rFilter(){
