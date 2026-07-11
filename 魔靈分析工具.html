@@ -110,6 +110,8 @@ tr.clk{cursor:pointer}
 .mgore>div{margin:2px 0}
 .grind{background:rgba(55,214,122,.2);color:var(--good);padding:0 5px;border-radius:5px;font-weight:600;margin-left:4px}
 .gem{background:rgba(176,107,255,.22);color:var(--dark);padding:0 5px;border-radius:5px;font-weight:600;margin-left:4px}
+.subsum{background:rgba(255,176,32,.22);color:var(--warn);padding:0 5px;border-radius:5px;font-weight:700}
+.subcell{cursor:pointer}.subcell:hover{background:rgba(255,176,32,.08)}
 .qbadge{font-size:11px;padding:1px 6px;border-radius:5px;font-weight:600}
 .q1{background:#3a4260;color:#cbd3ff}.q2{background:rgba(59,157,255,.2);color:var(--water)}
 .q3{background:rgba(55,214,122,.2);color:var(--good)}.q4{background:rgba(255,176,32,.2);color:var(--warn)}
@@ -22041,7 +22043,20 @@ function runeRolls(sub){
   return Math.round(n*10)/10;
 }
 // 預先算好每顆符文的 評級(gr/gv) 與 有效roll(rl)，供排序/篩選
-RUNES.forEach(r=>{ r.gr=runeGrade(r.ef); r.gv=GR_RANK[r.gr]; r.rl=runeRolls(r.sub); });
+RUNES.forEach((r,i)=>{ r.gr=runeGrade(r.ef); r.gv=GR_RANK[r.gr]; r.rl=runeRolls(r.sub); r._i=i; });
+// 副屬顯示：merged=true 時把磨刀值加總進基底值並改色，未磨刀者維持原樣
+const subMerge=new Set();
+function fmtSub(sub,merged){
+  return (sub||'').split(' / ').filter(s=>!s.endsWith('(前)')).map(s=>{
+    const m=s.match(/^(.+?)\+(\d+)(?:\+(\d+)磨)?(寶)?$/);
+    if(!m) return s.replace(/寶/g,'<span class="gem">附魔</span>');
+    const name=m[1], base=+m[2], grind=m[3]?+m[3]:0, gem=m[4]?'<span class="gem">附魔</span>':'';
+    if(grind) return merged
+      ? `<span class="subsum">${name}+${base+grind}</span>${gem}`
+      : `${name}+${base}<span class="grind">+${grind}</span>${gem}`;
+    return `${name}+${base}${gem}`;
+  }).join(' / ');
+}
 const gCls=g=>'g'+g, rollCls=v=>v>=5?'roll-hi':v>=3.5?'roll-mid':'roll-lo';
 const sets=[...new Set(RUNES.map(r=>r.set).filter(Boolean))];
 $('#rSet').innerHTML='<option value="">全部套裝</option>'+sets.map(s=>`<option>${s}</option>`).join('');
@@ -22066,11 +22081,12 @@ function renderRunes(){
     <td class="${rollCls(r.rl)}">${r.rl}</td><td>${r.sl}</td>
     <td>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'}</td>
     <td>${r.set||''}</td><td><b>${r.m}</b></td><td class="muted">${r.pf||''}</td>
-    <td style="white-space:normal;min-width:280px">${(r.sub||'').split(' / ').filter(s=>!s.endsWith('(前)')).map(s=>s.replace(/\+(\d+)磨/g,'<span class="grind">+$1</span>').replace(/寶/g,'<span class="gem">附魔</span>')).join(' / ')}</td><td>+${r.lv}</td>
+    <td class="subcell" data-ri="${r._i}" title="點擊：磨刀值加總" style="white-space:normal;min-width:280px">${fmtSub(r.sub,subMerge.has(r._i))}</td><td>+${r.lv}</td>
     <td>${r.ow?'<span class="own">'+r.ow+'</span>':'<span class="muted">倉庫</span>'}</td></tr>`).join('');
   $('#rTable').innerHTML=h+'</tbody>';
   if(rows.length>600)$('#rCount').textContent+='（顯示前600）';
   $$('#rTable th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;rSort.dir=rSort.k==k?-rSort.dir:(k=='gv'?1:-1);rSort.k=k;renderRunes();});
+  $$('#rTable .subcell').forEach(td=>td.onclick=()=>{const i=+td.dataset.ri;subMerge.has(i)?subMerge.delete(i):subMerge.add(i);td.innerHTML=fmtSub(RUNES[i].sub,subMerge.has(i));});
 }
 ['rSet','rSlot','rMain','rGrade','rEq','rAnc','rEff','rOwner'].forEach(id=>$('#'+id).oninput=renderRunes);
 renderRunes();
