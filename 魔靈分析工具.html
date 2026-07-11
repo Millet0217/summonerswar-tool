@@ -224,6 +224,8 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         <label>怪物 <select id="fUnit" style="min-width:220px"></select></label>
         <label>4件套 <select id="fSet4"></select></label>
         <label>2件套 <select id="fSet2"></select></label>
+        <label>＋2件套 <select id="fSet2b"></select></label>
+        <label>＋2件套 <select id="fSet2c"></select></label>
         <label>2洞主屬 <select id="fS2"></select></label>
         <label>4洞主屬 <select id="fS4"></select></label>
         <label>6洞主屬 <select id="fS6"></select></label>
@@ -236,7 +238,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         <span id="fConds"></span>
         <button class="btn2" id="fAddCond" type="button">＋ 新增條件</button>
       </div>
-      <small class="note">引擎會從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選上面選項可納入全帳號符文）。列舉 2 件套要放哪兩洞的所有組合取效率最高解。<br>「極大化屬性」會改以該屬性最終值最大為目標挑符文；「額外門檻」以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。</small>
+      <small class="note">引擎會從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選上面選項可納入全帳號符文）。四件套可選「無」；二件套最多三組（可重複，例如元氣×2＝四洞元氣）；未被套裝佔用的洞為自由洞，依目標挑最佳符文。引擎列舉六洞分配給各套裝需求的所有方式取最佳解。<br>「極大化屬性」會改以該屬性最終值最大為目標挑符文；「額外門檻」以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。</small>
     </div>
     <div class="fitbox">
       <div class="card"><h3 style="margin-top:0">推薦配裝</h3><div id="fResult"><span class="muted">選好條件後按「計算最佳配裝」</span></div></div>
@@ -22214,8 +22216,21 @@ renderDungeons();
 const FOUR4=['暴走','迅速','激怒','猛攻','絕望','吸血'];
 const allSetNames=[...new Set(RUNES.map(r=>r.set).filter(Boolean))];
 $('#fUnit').innerHTML=UNITS.filter(u=>u.s>=5).sort((a,b)=>a.n.localeCompare(b.n)).map(u=>`<option value="${u.id}">${u.n} (${u.at}${u.s}★)</option>`).join('');
-$('#fSet4').innerHTML=allSetNames.filter(s=>FOUR4.includes(s)).map(s=>`<option>${s}</option>`).join('');
-$('#fSet2').innerHTML=allSetNames.filter(s=>!FOUR4.includes(s)).map(s=>`<option>${s}</option>`).join('');
+const fourNames=allSetNames.filter(s=>FOUR4.includes(s));
+$('#fSet4').innerHTML='<option value="">無（不需要四件套）</option>'+fourNames.map(s=>`<option>${s}</option>`).join('');
+if(fourNames.length)$('#fSet4').value=fourNames[0]; // 預設維持第一個四件套(暴走)
+const twoNamesHtml='<option value="">無</option>'+allSetNames.filter(s=>!FOUR4.includes(s)).map(s=>`<option>${s}</option>`).join('');
+['#fSet2','#fSet2b','#fSet2c'].forEach(id=>$(id).innerHTML=twoNamesHtml);
+// 依四件套是否選用，限制二件套可用組數(四件套佔4洞→僅剩1組二件套；無→最多3組)，即時擋超額
+function fSyncSets(){
+  const allow=$('#fSet4').value?1:3;
+  ['#fSet2','#fSet2b','#fSet2c'].forEach((id,i)=>{
+    const el=$(id), lab=el.closest('label'), dis=i>=allow;
+    el.disabled=dis; if(dis)el.value=''; if(lab)lab.style.opacity=dis?0.4:1;
+  });
+}
+$('#fSet4').addEventListener('change',fSyncSets);
+fSyncSets();
 const mainOpts={2:['ATK%','DEF%','HP%','SPD'],4:['ATK%','DEF%','HP%','CRate%','CDmg%'],6:['ATK%','DEF%','HP%','RES%','ACC%']};
 [2,4,6].forEach(s=>$('#fS'+s).innerHTML='<option value="">不限</option>'+mainOpts[s].map(m=>`<option>${m}</option>`).join(''));
 
@@ -22280,14 +22295,19 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
   let pool=RUNES.filter(r=>r.st==6 && (r.eq==0 || (sel&&r.ow===sel.n) || includeAll));
   const mainOk=(r)=>{const t=r.m.split('+')[0]; if([2,4,6].includes(r.sl)&&wantMain[r.sl])return t===wantMain[r.sl]; return true;};
   const sortObj=(a,b)=>objOf(b)-objOf(a);
-  const bySlotSet={};
-  for(let sl=1;sl<=6;sl++){
-    const cand=pool.filter(r=>r.sl==sl&&mainOk(r));
-    bySlotSet[sl]={
-      s4:cand.filter(r=>r.set==s4).sort(sortObj),
-      s2:cand.filter(r=>r.set==s2).sort(sortObj),
-      any:cand.slice().sort(sortObj)
-    };
+  // 套裝需求：四件套(s4，''=無)＋多組二件套(opts.twos 或舊 s2)，合併同套裝為總洞數
+  const twos=(opts.twos&&opts.twos.length)?opts.twos.filter(Boolean):(s2?[s2]:[]);
+  const reqMap={}; if(s4)reqMap[s4]=(reqMap[s4]||0)+4; twos.forEach(t=>{reqMap[t]=(reqMap[t]||0)+2;});
+  let reqGroups=Object.entries(reqMap).map(([set,need])=>({set,need}));
+  let overflow=false, sumNeed=reqGroups.reduce((a,g)=>a+g.need,0);
+  while(sumNeed>6&&reqGroups.length){reqGroups.pop();overflow=true;sumNeed=reqGroups.reduce((a,g)=>a+g.need,0);}
+  const slots=[1,2,3,4,5,6];
+  // 每洞候選：各需求套裝的排序清單 + 全部(any，供自由洞/後備)
+  const cand={};
+  for(const sl of slots){
+    const list=pool.filter(r=>r.sl==sl&&mainOk(r));
+    const bySet={}; reqGroups.forEach(g=>{if(bySet[g.set]==null)bySet[g.set]=list.filter(r=>r.set==g.set).sort(sortObj);});
+    cand[sl]={bySet,any:list.slice().sort(sortObj)};
   }
   const canCond=(thresholds.length||maxStat)&&base;   // 新條件需有基礎體質才能算最終值
   const planFin=plan=>{
@@ -22296,28 +22316,30 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
     return sel?computeFinal(sel.mid,tot,sid):null;
   };
   const deficitOf=fin=>{ if(!fin)return 0; let d=0; thresholds.forEach(t=>{const v=fin[t.fk]; if(v!=null&&v<t.min)d+=(t.min-v);}); return d; };
-  const slots=[1,2,3,4,5,6]; let bestPlan=null;
-  for(let i=0;i<slots.length;i++)for(let j=i+1;j<slots.length;j++){
-    const twoSlots=[slots[i],slots[j]]; let plan={},okc=0,eff=0;
-    const primaryOf=sl=> (twoSlots.includes(sl)?bySlotSet[sl].s2:bySlotSet[sl].s4);
+  const combos=(arr,k)=>{const res=[];(function rec(st,cur){if(cur.length===k){res.push(cur.slice());return;}for(let i=st;i<arr.length;i++){cur.push(arr[i]);rec(i+1,cur);cur.pop();}})(0,[]);return res;};
+  let bestPlan=null;
+  // assign: {sl:套裝名 或 null(自由洞)}
+  const evaluate=assign=>{
+    const allowedOf=sl=>{const st=assign[sl]; return st?(cand[sl].bySet[st]||cand[sl].any):cand[sl].any;};
+    let plan={},okc=0;
     for(const sl of slots){
-      const primary=primaryOf(sl);
-      if(primary.length){plan[sl]=primary[0];eff+=plan[sl].ef;okc++;}
-      else{plan[sl]=bySlotSet[sl].any[0]||null;if(plan[sl])eff+=plan[sl].ef*0.5;}
+      const st=assign[sl];
+      if(st){const c=cand[sl].bySet[st]; if(c&&c.length){plan[sl]=c[0];okc++;} else plan[sl]=cand[sl].any[0]||null;}
+      else plan[sl]=cand[sl].any[0]||null;
     }
-    // 門檻修補：只在同套(primary)內換副屬，保留使用者選定的套裝
+    // 門檻修補：在該洞允許清單(自由洞=全部；套裝洞=同套)內換副屬，保留選定套裝
     if(thresholds.length&&base){
       let guard=0;
       while(deficitOf(planFin(plan))>0 && guard++<60){
         const curDef=deficitOf(planFin(plan)); let bestSwap=null;
         for(const sl of slots){
-          const primary=primaryOf(sl); if(primary.length<2)continue;
-          const cur=plan[sl];
-          for(const alt of primary){ if(alt===cur)continue;
+          const allowed=allowedOf(sl); if(allowed.length<2)continue;
+          const curr=plan[sl];
+          for(const alt of allowed){ if(alt===curr)continue;
             const test=Object.assign({},plan,{[sl]:alt});
             const nd=deficitOf(planFin(test)); const gain=curDef-nd;
             if(gain<=0)continue;
-            const objLoss=(objOf(cur)-objOf(alt));
+            const objLoss=(objOf(curr)-objOf(alt));
             const key=gain*1e6-objLoss;
             if(!bestSwap||key>bestSwap.key)bestSwap={sl,alt,key};
           }
@@ -22329,15 +22351,24 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
     const deficit=fin?deficitOf(fin):(thresholds.length?1e9:0);
     let objSum=0; slots.forEach(sl=>{objSum+=objOf(plan[sl]);});
     // 排序：先滿足門檻(deficit小)，再湊齊套裝(okc)，再目標值(objSum)
-    const cand={plan,twoSlots,okc,objSum,deficit,fin};
+    const c2={plan,okc,objSum,deficit,fin};
     const better=!bestPlan
-      || cand.deficit<bestPlan.deficit-1e-9
-      || (Math.abs(cand.deficit-bestPlan.deficit)<=1e-9 && (cand.okc>bestPlan.okc
-        || (cand.okc===bestPlan.okc && cand.objSum>bestPlan.objSum)));
-    if(better)bestPlan=cand;
-  }
+      || c2.deficit<bestPlan.deficit-1e-9
+      || (Math.abs(c2.deficit-bestPlan.deficit)<=1e-9 && (c2.okc>bestPlan.okc
+        || (c2.okc===bestPlan.okc && c2.objSum>bestPlan.objSum)));
+    if(better)bestPlan=c2;
+  };
+  // 遞迴列舉：把6洞分配給各套裝需求群組，其餘為自由洞
+  (function place(gi,remaining,assign){
+    if(gi>=reqGroups.length){const a=Object.assign({},assign); remaining.forEach(sl=>{a[sl]=null;}); evaluate(a); return;}
+    const g=reqGroups[gi];
+    for(const pick of combos(remaining,g.need)){
+      const na=Object.assign({},assign); pick.forEach(sl=>na[sl]=g.set);
+      place(gi+1,remaining.filter(sl=>!pick.includes(sl)),na);
+    }
+  })(0,slots.slice(),{});
   const unmet=(bestPlan.fin?thresholds:[]).map(t=>{const v=bestPlan.fin[t.fk];return {fk:t.fk,min:t.min,val:v};}).filter(x=>x.val==null||x.val<x.min);
-  const diag={maxStat,thresholds,base:!!base,noBaseButCond:(!base&&(thresholds.length||maxStat)),fin:bestPlan.fin,unmet};
+  const diag={maxStat,thresholds,base:!!base,noBaseButCond:(!base&&(thresholds.length||maxStat)),fin:bestPlan.fin,unmet,overflow,reqGroups};
   return {sel, p:bestPlan.plan, bestPlan, diag};
 }
 // 由 plan 導出加成合計/套裝件數/最終體質
@@ -22376,18 +22407,21 @@ function fReadConds(){
   })).filter(c=>c.fk && !isNaN(c.min));
 }
 $('#fRun').onclick=()=>{
-  const uid=$('#fUnit').value, s4=$('#fSet4').value, s2=$('#fSet2').value;
+  const uid=$('#fUnit').value, s4=$('#fSet4').value;
+  const twos=['#fSet2','#fSet2b','#fSet2c'].map(id=>$(id).disabled?'':$(id).value).filter(Boolean);
   const wantMain={2:$('#fS2').value,4:$('#fS4').value,6:$('#fS6').value};
   const includeAll=$('#fPool').checked;
-  const opts={maxStat:$('#fMaxStat').value, thresholds:fReadConds()};
-  const solved=solveFit(uid,s4,s2,wantMain,includeAll,opts);
+  const opts={maxStat:$('#fMaxStat').value, thresholds:fReadConds(), twos};
+  const solved=solveFit(uid,s4,'',wantMain,includeAll,opts);
   const p=solved.p, diag=solved.diag;
   let setCount={}; Object.values(p).forEach(r=>{if(r){setCount[r.set]=(setCount[r.set]||0)+1;}});
   let setTxt=Object.entries(setCount).map(([k,v])=>`${k}×${v}`).join('　');
   let totalEff=0,n=0;
   const selU=UNITS.find(u=>u.id==uid);
   const selIc=selU?unitIcon(selU.en||selU.n,selU.mid,'big'):'';
-  let html=`<div class="fithead">${selIc}<div><div class="muted">目標：<b>${s4}(4) + ${s2}(2)</b></div><div class="muted">達成套裝：<b style="color:var(--good)">${setTxt}</b></div></div></div>`;
+  const tgtParts=[]; if(s4)tgtParts.push(`${s4}(4)`); twos.forEach(t=>tgtParts.push(`${t}(2)`));
+  const tgtTxt=tgtParts.length?tgtParts.join(' + '):'不限套裝（自由配）';
+  let html=`<div class="fithead">${selIc}<div><div class="muted">目標：<b>${tgtTxt}</b></div><div class="muted">達成套裝：<b style="color:var(--good)">${setTxt}</b></div></div></div>`;
   // 新條件目標／達標狀態
   if(diag && (diag.maxStat || (diag.thresholds&&diag.thresholds.length))){
     let g='';
