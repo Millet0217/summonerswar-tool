@@ -103,10 +103,24 @@ function impLoadFile(file){
   reader.onerror=()=>impSetStatus('讀檔失敗', true);
   reader.readAsText(file, 'utf-8');
 }
+function impClear(){
+  UNITS=[]; RUNES=[];
+  if(typeof closeUnitModal==='function') closeUnitModal();
+  renderAll();
+  impSetStatus('已清除匯入的資料，可匯入新的 JSON');
+}
 document.addEventListener('DOMContentLoaded', ()=>{
-  const btn=document.getElementById('impBtn'), inp=document.getElementById('impFile');
+  const btn=document.getElementById('impBtn'), inp=document.getElementById('impFile'), clr=document.getElementById('clrBtn');
   if(btn&&inp){
     btn.onclick=()=>inp.click();
     inp.onchange=()=>{ impLoadFile(inp.files[0]); inp.value=''; };
+  }
+  if(clr){
+    clr.onclick=()=>{
+      if((UNITS&&UNITS.length)||(RUNES&&RUNES.length)){
+        if(!confirm('確定清除目前已匯入的怪物與符文資料？此動作僅清空畫面，不會刪除任何檔案。')) return;
+      }
+      impClear();
+    };
   }
 });

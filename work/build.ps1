@@ -9,6 +9,7 @@ $db=[IO.File]::ReadAllText("$w\monster_db.json",[Text.Encoding]::UTF8).Trim()
 $cat=[IO.File]::ReadAllText("$w\catalog.json",[Text.Encoding]::UTF8).Trim()
 $ico=[IO.File]::ReadAllText("$w\icon_map.json",[Text.Encoding]::UTF8).Trim()
 $lnk=[IO.File]::ReadAllText("$w\links.json",[Text.Encoding]::UTF8).Trim()
+$bs=[IO.File]::ReadAllText("$w\base_stats.json",[Text.Encoding]::UTF8).Trim()
 
 # 怪物中文對照 (代碼→中文)，供匯入新JSON時套用中文名
 $zh=@{}
@@ -23,6 +24,7 @@ $tpl=$tpl.Replace('/*MONSTER_DB*/{}/*END*/',$db)
 $tpl=$tpl.Replace('/*CATALOG*/[]/*END*/',$cat)
 $tpl=$tpl.Replace('/*ICONS*/{}/*END*/',$ico)
 $tpl=$tpl.Replace('/*LINKS*/{}/*END*/',$lnk)
+$tpl=$tpl.Replace('/*BASE_STATS*/{}/*END*/',$bs)
 $tpl=$tpl.Replace('/*ZH_NAMES*/{}/*END*/',$zhJson)
 $tpl=$tpl.Replace('/*IMPORTER_JS*/',$imp)
 $tpl=$tpl.Replace('/*APP_JS*/',$app)

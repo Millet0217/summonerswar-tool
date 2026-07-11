@@ -62,6 +62,16 @@ tr:hover td{background:#1e2440}
 .statsum div{background:var(--panel2);border-radius:7px;padding:6px 8px;font-size:12px}
 .statsum b{color:var(--acc)}
 small.note{color:var(--dim);font-size:11px}
+.finhead{margin:14px 0 8px;font-weight:800;font-size:13.5px}
+.finhead .muted{font-weight:400;font-size:11px;margin-left:6px}
+.fingrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.fcell{background:var(--panel2);border-radius:8px;padding:8px 10px;display:flex;align-items:baseline;gap:6px;font-size:12.5px;flex-wrap:wrap}
+.fcell .flab{color:var(--dim);width:44px;font-size:11px}
+.fcell .fbase{color:var(--dim)}
+.fcell .farr{color:var(--dim)}
+.fcell .ffin{color:var(--acc);font-weight:800;font-size:15px}
+.fcell .fup{color:var(--good);font-size:11px;font-weight:700}
+@media(max-width:640px){.fingrid{grid-template-columns:repeat(2,1fr)}}
 .btn{background:var(--acc);color:#08122b;border:none;padding:8px 14px;border-radius:8px;font-weight:600;cursor:pointer}
 tr.clk{cursor:pointer}
 /* 魔靈詳細彈窗 */
@@ -128,6 +138,7 @@ td.uic img{width:30px;height:30px;vertical-align:middle;border-radius:6px;margin
   <span class="stat">平均效率 <b id="hEff">0%</b></span>
   <span class="stat">90%+符文 <b id="hHi">0</b></span>
   <button class="btn" id="impBtn" style="margin-left:auto">📥 匯入新JSON</button>
+  <button class="btn" id="clrBtn" title="清空目前匯入的怪物與符文，方便匯入新的 JSON">🗑️ 清除資料</button>
   <input type="file" id="impFile" accept=".json,application/json" style="display:none">
   <span class="stat" id="impStatus"></span>
 </header>
@@ -226,6 +237,7 @@ const ZH_NAMES = /*ZH_NAMES*/{}/*END*/;
 const CATALOG = /*CATALOG*/[]/*END*/;   // 可召喚怪物圖鑑 [{mid,en,zh,at,ar,ns,aw,img}]
 const ICONS = /*ICONS*/{}/*END*/;        // master_id -> icon 檔名
 const LINKS = /*LINKS*/{}/*END*/;        // 持有等價：mid -> 群組代表(覺醒鏈/變身共用一格)
+const BASE_STATS = /*BASE_STATS*/{}/*END*/; // 怪物體質(6★滿級無符)：mid -> {h,a,d,s,cr,cd,re,ac}  來源 SWARFARM(=lucksack.gg 同源)
 </script>
 <script>
 /*IMPORTER_JS*/

@@ -122,7 +122,9 @@ function renderDex(){
   $('#xCount').textContent=`${rows.length} 隻　已持有 ${have}（強度依 PvE meta + swranking S37 RTA）`;
   $('#dexGrid').innerHTML=rows.map(c=>{
     const owned=isOwned(c), nm=(c.zh||c.en);
-    return `<div class="mon ${owned?'':'no'}" title="${c.en}｜強度 ${c.tier}${c.rp?'｜RTA出場 '+c.rp+'%':''}｜${owned?'已持有':'未持有'}">
+    const bs=(typeof BASE_STATS!=='undefined'&&BASE_STATS[''+c.mid]);
+    const bsTxt=bs?`　體質(6★) HP ${bs.h}／ATK ${bs.a}／DEF ${bs.d}／SPD ${bs.s}`:'';
+    return `<div class="mon ${owned?'':'no'}" title="${c.en}｜強度 ${c.tier}${c.rp?'｜RTA出場 '+c.rp+'%':''}｜${owned?'已持有':'未持有'}${bsTxt}">
       <span class="tier t${c.tier}">${c.tier}</span><span class="el el-${elDot[c.at]||'light'}"></span>
       <img src="icons/${c.img}" loading="lazy" alt="">
       <div class="mn">${nm}</div>
@@ -303,6 +305,27 @@ function parseStats(r){ // 回傳 {STAT:val}
   (r.sub||'').split(' / ').forEach(s=>{const m=s.replace('(前)','').match(/^(.+?)\+(\d+)/);if(m)add(m[1].trim(),m[2]);});
   return o;
 }
+// 套裝加成(依 set_id，個人體質類套裝)：{sid:{st:目標%欄, v:每套加成, n:件數}}
+const SET_BONUS={1:{st:'HP%',v:15,n:2},2:{st:'DEF%',v:15,n:2},4:{st:'CRate%',v:12,n:2},6:{st:'ACC%',v:20,n:2},7:{st:'RES%',v:20,n:2},3:{st:'SPD%',v:25,n:4},5:{st:'CDmg%',v:40,n:4},8:{st:'ATK%',v:35,n:4}};
+// 由 mid 的體質 + 符文加總(tot) + 套裝件數(sidCount) 算最終數值
+function computeFinal(mid, tot, sidCount){
+  const b=(typeof BASE_STATS!=='undefined'&&BASE_STATS[''+mid]); if(!b)return null;
+  const set={HP:0,ATK:0,DEF:0,SPD:0,'HP%':0,'ATK%':0,'DEF%':0,'SPD%':0,'CRate%':0,'CDmg%':0,'RES%':0,'ACC%':0};
+  const g=k=>tot[k]||0;
+  for(const sid in (sidCount||{})){ const sb=SET_BONUS[sid]; if(!sb)continue; const c=Math.floor(sidCount[sid]/sb.n); if(c>0)set[sb.st]+=sb.v*c; }
+  const r=v=>Math.round(v);
+  return {
+    hp : r(b.h*(1+(g('HP%')+set['HP%'])/100)+g('HP')),
+    atk: r(b.a*(1+(g('ATK%')+set['ATK%'])/100)+g('ATK')),
+    def: r(b.d*(1+(g('DEF%')+set['DEF%'])/100)+g('DEF')),
+    spd: r(b.s*(1+set['SPD%']/100)+g('SPD')),
+    cr : b.cr+g('CRate%')+set['CRate%'],
+    cd : b.cd+g('CDmg%')+set['CDmg%'],
+    re : b.re+g('RES%')+set['RES%'],
+    ac : b.ac+g('ACC%')+set['ACC%'],
+    base:b
+  };
+}
 $('#fRun').onclick=()=>{
   const uid=$('#fUnit').value, s4=$('#fSet4').value, s2=$('#fSet2').value;
   const wantMain={2:$('#fS2').value,4:$('#fS4').value,6:$('#fS6').value};
@@ -351,8 +374,27 @@ $('#fRun').onclick=()=>{
   // 加成合計
   const tot={}; Object.values(p).forEach(r=>{if(!r)return;const st=parseStats(r);for(const k in st)tot[k]=(tot[k]||0)+st[k];});
   const order=['ATK%','ATK','HP%','HP','DEF%','DEF','SPD','CRate%','CDmg%','RES%','ACC%'];
-  $('#fStats').innerHTML='<div class="statsum">'+order.filter(k=>tot[k]).map(k=>`<div>${k} <b>+${tot[k]}</b></div>`).join('')+'</div>'+
-    '<small class="note">此為六件符文主屬+前綴+副屬的加總(不含怪物基礎值與套裝%效果),用來快速評估配裝走向。</small>';
+  let statsHtml='<div class="statsum">'+order.filter(k=>tot[k]).map(k=>`<div>${k} <b>+${tot[k]}</b></div>`).join('')+'</div>'+
+    '<small class="note">上方為六件符文主屬+前綴+副屬的加總(不含怪物基礎值與套裝%效果)。</small>';
+  // 最終體質 = 怪物基礎值 + 符文% + 符文固定 + 套裝%
+  const sel=UNITS.find(u=>u.id==uid);
+  const sidCount={}; Object.values(p).forEach(r=>{if(r&&r.sid!=null)sidCount[r.sid]=(sidCount[r.sid]||0)+1;});
+  const fin=sel?computeFinal(sel.mid, tot, sidCount):null;
+  if(fin){
+    const rows=[['HP','hp','h'],['ATK','atk','a'],['DEF','def','d'],['SPD','spd','s'],
+      ['暴率%','cr','cr'],['暴傷%','cd','cd'],['抵抗%','re','re'],['命中%','ac','ac']];
+    const cells=rows.map(([lab,fk,bk])=>{
+      const bv=fin.base[bk], fv=fin[fk], up=fv-bv;
+      const upTxt=up>0?`<span class="fup">+${up}</span>`:'';
+      return `<div class="fcell"><span class="flab">${lab}</span><span class="fbase">${bv}</span><span class="farr">→</span><span class="ffin">${fv}</span>${upTxt}</div>`;
+    }).join('');
+    statsHtml+=`<div class="finhead">📊 ${sel.n} 配裝後最終體質<span class="muted">（基礎值 SWARFARM 6★滿級 → 套上上方符文＋套裝%後）</span></div>
+      <div class="fingrid">${cells}</div>
+      <small class="note">最終值＝基礎體質 ×(1＋屬性%＋套裝%)＋固定值。暴率/暴傷/抵抗/命中為加法。未計入領導技/塔/神器/銘刻等額外加成。</small>`;
+  } else if(sel){
+    statsHtml+=`<div class="finhead muted">查無 ${sel.n} 的體質基礎資料（mid ${sel.mid}），無法計算最終數值。</div>`;
+  }
+  $('#fStats').innerHTML=statsHtml;
 };
 
 // ---------- 總覽 ----------
