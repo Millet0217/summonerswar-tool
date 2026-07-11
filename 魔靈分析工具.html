@@ -48,6 +48,13 @@ tr:hover td{background:#1e2440}
 .unitwrap:last-child .unitrow{border-bottom:none}
 .dfitbtn{margin-left:8px;padding:1px 8px;font-size:11px;border:1px solid var(--acc);background:transparent;color:var(--acc);border-radius:5px;cursor:pointer;white-space:nowrap}
 .dfitbtn:hover{background:var(--acc);color:#0e1120}
+.btn2{background:transparent;color:var(--acc);border:1px solid var(--acc);padding:5px 10px;border-radius:7px;font-weight:600;cursor:pointer;font-size:12.5px}
+.btn2:hover{background:var(--acc);color:#08122b}
+.fcond{display:inline-flex;align-items:center;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:3px 6px;margin:2px 4px 2px 0}
+.fcond .fcondDel{border:none;background:transparent;color:var(--bad);cursor:pointer;font-size:13px;line-height:1;padding:0 2px}
+.fwarn{color:var(--bad);font-weight:600}
+.fok{color:var(--good);font-weight:600}
+.fgoal{background:#161b30;border:1px solid var(--line);border-radius:6px;padding:6px 9px;margin-bottom:8px;font-size:12.5px}
 .dfitbox{background:#161b30;border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin:4px 0 8px}
 .own{color:var(--good);font-weight:600}
 .noown{color:var(--bad)}
@@ -223,7 +230,13 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         <label><input type="checkbox" id="fPool"> 含裝在別隻的符文</label>
         <button class="btn" id="fRun">計算最佳配裝</button>
       </div>
-      <small class="note">引擎會從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選上面選項可納入全帳號符文）。列舉 2 件套要放哪兩洞的所有組合取效率最高解。</small>
+      <div class="controls" id="fCondRow" style="margin-top:6px">
+        <label>極大化屬性 <select id="fMaxStat"><option value="">不指定（效率優先）</option></select></label>
+        <span class="muted">額外門檻：</span>
+        <span id="fConds"></span>
+        <button class="btn2" id="fAddCond" type="button">＋ 新增條件</button>
+      </div>
+      <small class="note">引擎會從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選上面選項可納入全帳號符文）。列舉 2 件套要放哪兩洞的所有組合取效率最高解。<br>「極大化屬性」會改以該屬性最終值最大為目標挑符文；「額外門檻」以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。</small>
     </div>
     <div class="fitbox">
       <div class="card"><h3 style="margin-top:0">推薦配裝</h3><div id="fResult"><span class="muted">選好條件後按「計算最佳配裝」</span></div></div>
@@ -22234,33 +22247,98 @@ function computeFinal(mid, tot, sidCount){
     base:b
   };
 }
-// 共用配裝引擎：回傳 {sel, p(每洞符文), bestPlan}
-function solveFit(uid, s4, s2, wantMain, includeAll){
+// 新條件用的屬性定義：對應 computeFinal 的最終欄位(fk)與 BASE_STATS 欄位(bk)
+const STAT_KEYS=[
+  {lab:'體力',fk:'hp',pct:'HP%',flat:'HP',bk:'h',mult:true},
+  {lab:'攻擊',fk:'atk',pct:'ATK%',flat:'ATK',bk:'a',mult:true},
+  {lab:'防禦',fk:'def',pct:'DEF%',flat:'DEF',bk:'d',mult:true},
+  {lab:'速度',fk:'spd',pct:null,flat:'SPD',bk:'s',mult:false},
+  {lab:'暴率%',fk:'cr',pct:'CRate%',flat:null,bk:'cr',mult:false},
+  {lab:'暴傷%',fk:'cd',pct:'CDmg%',flat:null,bk:'cd',mult:false},
+  {lab:'抵抗%',fk:'re',pct:'RES%',flat:null,bk:'re',mult:false},
+  {lab:'命中%',fk:'ac',pct:'ACC%',flat:null,bk:'ac',mult:false},
+];
+const statByFk=fk=>STAT_KEYS.find(d=>d.fk===fk);
+// 單一符文對某屬性「最終值」的貢獻(可加總，供極大化挑選用)
+function runeStatContrib(r,d,b){
+  const st=parseStats(r); let v=0;
+  if(d.mult){ if(b)v+=b[d.bk]*(st[d.pct]||0)/100; v+=(st[d.flat]||0); }
+  else { if(d.pct)v+=(st[d.pct]||0); if(d.flat)v+=(st[d.flat]||0); }
+  return v;
+}
+// 共用配裝引擎：回傳 {sel, p(每洞符文), bestPlan, diag}
+// opts(可選)：{maxStat:fk或'', thresholds:[{fk,min}]}
+function solveFit(uid, s4, s2, wantMain, includeAll, opts){
+  opts=opts||{};
+  const maxStat=opts.maxStat||'';
+  const thresholds=(opts.thresholds||[]).filter(t=>t&&t.fk&&t.min!=null&&!isNaN(t.min));
   const sel=UNITS.find(u=>u.id==uid);
   wantMain=wantMain||{2:'',4:'',6:''};
+  const base=(sel && typeof BASE_STATS!=='undefined')?BASE_STATS[''+sel.mid]:null;
+  const dMax=maxStat?statByFk(maxStat):null;
+  const objOf=r=> r?(dMax?runeStatContrib(r,dMax,base):r.ef):0;
   let pool=RUNES.filter(r=>r.st==6 && (r.eq==0 || (sel&&r.ow===sel.n) || includeAll));
   const mainOk=(r)=>{const t=r.m.split('+')[0]; if([2,4,6].includes(r.sl)&&wantMain[r.sl])return t===wantMain[r.sl]; return true;};
+  const sortObj=(a,b)=>objOf(b)-objOf(a);
   const bySlotSet={};
   for(let sl=1;sl<=6;sl++){
     const cand=pool.filter(r=>r.sl==sl&&mainOk(r));
-    const best4=cand.filter(r=>r.set==s4).sort((a,b)=>b.ef-a.ef)[0];
-    const best2=cand.filter(r=>r.set==s2).sort((a,b)=>b.ef-a.ef)[0];
-    const bestAny=cand.slice().sort((a,b)=>b.ef-a.ef)[0];
-    bySlotSet[sl]={s4:best4,s2:best2,any:bestAny};
+    bySlotSet[sl]={
+      s4:cand.filter(r=>r.set==s4).sort(sortObj),
+      s2:cand.filter(r=>r.set==s2).sort(sortObj),
+      any:cand.slice().sort(sortObj)
+    };
   }
+  const canCond=(thresholds.length||maxStat)&&base;   // 新條件需有基礎體質才能算最終值
+  const planFin=plan=>{
+    const tot={},sid={};
+    for(const sl in plan){const r=plan[sl]; if(!r)continue; const st=parseStats(r); for(const k in st)tot[k]=(tot[k]||0)+st[k]; if(r.sid!=null)sid[r.sid]=(sid[r.sid]||0)+1;}
+    return sel?computeFinal(sel.mid,tot,sid):null;
+  };
+  const deficitOf=fin=>{ if(!fin)return 0; let d=0; thresholds.forEach(t=>{const v=fin[t.fk]; if(v!=null&&v<t.min)d+=(t.min-v);}); return d; };
   const slots=[1,2,3,4,5,6]; let bestPlan=null;
   for(let i=0;i<slots.length;i++)for(let j=i+1;j<slots.length;j++){
     const twoSlots=[slots[i],slots[j]]; let plan={},okc=0,eff=0;
+    const primaryOf=sl=> (twoSlots.includes(sl)?bySlotSet[sl].s2:bySlotSet[sl].s4);
     for(const sl of slots){
-      const useTwo=twoSlots.includes(sl);
-      const pick=useTwo?bySlotSet[sl].s2:bySlotSet[sl].s4;
-      if(pick){plan[sl]=pick;eff+=pick.ef;okc++;}
-      else{plan[sl]=bySlotSet[sl].any||null;if(plan[sl])eff+=plan[sl].ef*0.5;}
+      const primary=primaryOf(sl);
+      if(primary.length){plan[sl]=primary[0];eff+=plan[sl].ef;okc++;}
+      else{plan[sl]=bySlotSet[sl].any[0]||null;if(plan[sl])eff+=plan[sl].ef*0.5;}
     }
-    const score=okc*1000+eff;
-    if(!bestPlan||score>bestPlan.score)bestPlan={plan,score,twoSlots,okc};
+    // 門檻修補：只在同套(primary)內換副屬，保留使用者選定的套裝
+    if(thresholds.length&&base){
+      let guard=0;
+      while(deficitOf(planFin(plan))>0 && guard++<60){
+        const curDef=deficitOf(planFin(plan)); let bestSwap=null;
+        for(const sl of slots){
+          const primary=primaryOf(sl); if(primary.length<2)continue;
+          const cur=plan[sl];
+          for(const alt of primary){ if(alt===cur)continue;
+            const test=Object.assign({},plan,{[sl]:alt});
+            const nd=deficitOf(planFin(test)); const gain=curDef-nd;
+            if(gain<=0)continue;
+            const objLoss=(objOf(cur)-objOf(alt));
+            const key=gain*1e6-objLoss;
+            if(!bestSwap||key>bestSwap.key)bestSwap={sl,alt,key};
+          }
+        }
+        if(!bestSwap)break; plan[bestSwap.sl]=bestSwap.alt;
+      }
+    }
+    const fin=canCond?planFin(plan):null;
+    const deficit=fin?deficitOf(fin):(thresholds.length?1e9:0);
+    let objSum=0; slots.forEach(sl=>{objSum+=objOf(plan[sl]);});
+    // 排序：先滿足門檻(deficit小)，再湊齊套裝(okc)，再目標值(objSum)
+    const cand={plan,twoSlots,okc,objSum,deficit,fin};
+    const better=!bestPlan
+      || cand.deficit<bestPlan.deficit-1e-9
+      || (Math.abs(cand.deficit-bestPlan.deficit)<=1e-9 && (cand.okc>bestPlan.okc
+        || (cand.okc===bestPlan.okc && cand.objSum>bestPlan.objSum)));
+    if(better)bestPlan=cand;
   }
-  return {sel, p:bestPlan.plan, bestPlan};
+  const unmet=(bestPlan.fin?thresholds:[]).map(t=>{const v=bestPlan.fin[t.fk];return {fk:t.fk,min:t.min,val:v};}).filter(x=>x.val==null||x.val<x.min);
+  const diag={maxStat,thresholds,base:!!base,noBaseButCond:(!base&&(thresholds.length||maxStat)),fin:bestPlan.fin,unmet};
+  return {sel, p:bestPlan.plan, bestPlan, diag};
 }
 // 由 plan 導出加成合計/套裝件數/最終體質
 function fitDerived(sel,p){
@@ -22279,17 +22357,54 @@ function parseSetPair(str){
   const s2=parts.find(p=>p!==s4)||parts[1]||parts[0];
   return [s4,s2];
 }
+// 額外條件 UI
+const STAT_OPT_HTML=STAT_KEYS.map(d=>`<option value="${d.fk}">${d.lab}</option>`).join('');
+$('#fMaxStat').innerHTML='<option value="">不指定（效率優先）</option>'+STAT_OPT_HTML;
+function fAddCond(fk,val){
+  const sp=document.createElement('span'); sp.className='fcond';
+  sp.innerHTML=`<select class="fcondStat">${STAT_OPT_HTML}</select><span class="muted">≥</span><input type="number" class="fcondVal" style="width:132px"><button type="button" class="fcondDel" title="刪除">✕</button>`;
+  if(fk)sp.querySelector('.fcondStat').value=fk;
+  if(val!=null)sp.querySelector('.fcondVal').value=val;
+  sp.querySelector('.fcondDel').onclick=()=>sp.remove();
+  $('#fConds').appendChild(sp);
+}
+$('#fAddCond').onclick=()=>fAddCond();
+function fReadConds(){
+  return [...document.querySelectorAll('#fConds .fcond')].map(el=>({
+    fk:el.querySelector('.fcondStat').value,
+    min:parseFloat(el.querySelector('.fcondVal').value)
+  })).filter(c=>c.fk && !isNaN(c.min));
+}
 $('#fRun').onclick=()=>{
   const uid=$('#fUnit').value, s4=$('#fSet4').value, s2=$('#fSet2').value;
   const wantMain={2:$('#fS2').value,4:$('#fS4').value,6:$('#fS6').value};
   const includeAll=$('#fPool').checked;
-  const p=solveFit(uid,s4,s2,wantMain,includeAll).p;
+  const opts={maxStat:$('#fMaxStat').value, thresholds:fReadConds()};
+  const solved=solveFit(uid,s4,s2,wantMain,includeAll,opts);
+  const p=solved.p, diag=solved.diag;
   let setCount={}; Object.values(p).forEach(r=>{if(r){setCount[r.set]=(setCount[r.set]||0)+1;}});
   let setTxt=Object.entries(setCount).map(([k,v])=>`${k}×${v}`).join('　');
   let totalEff=0,n=0;
   const selU=UNITS.find(u=>u.id==uid);
   const selIc=selU?unitIcon(selU.en||selU.n,selU.mid,'big'):'';
   let html=`<div class="fithead">${selIc}<div><div class="muted">目標：<b>${s4}(4) + ${s2}(2)</b></div><div class="muted">達成套裝：<b style="color:var(--good)">${setTxt}</b></div></div></div>`;
+  // 新條件目標／達標狀態
+  if(diag && (diag.maxStat || (diag.thresholds&&diag.thresholds.length))){
+    let g='';
+    if(diag.maxStat){const d=STAT_KEYS.find(x=>x.fk===diag.maxStat); g+=`<div>🎯 極大化目標：<b>${d?d.lab:diag.maxStat}</b>${diag.fin?`（配出 <b>${diag.fin[diag.maxStat]}</b>）`:''}</div>`;}
+    if(diag.thresholds&&diag.thresholds.length){
+      g+='<div style="margin-top:3px">📋 額外門檻：'+diag.thresholds.map(t=>{
+        const d=STAT_KEYS.find(x=>x.fk===t.fk), lab=d?d.lab:t.fk;
+        const v=diag.fin?diag.fin[t.fk]:null;
+        if(v==null)return `<span class="fwarn">${lab}≥${t.min}(無基礎值)</span>`;
+        const ok=v>=t.min;
+        return `<span class="${ok?'fok':'fwarn'}">${lab} ${v}/${t.min} ${ok?'✓':'✗'}</span>`;
+      }).join('　')+'</div>';
+    }
+    if(diag.noBaseButCond) g+=`<div class="fwarn" style="margin-top:3px">⚠ 查無此怪物基礎體質(mid ${sel?sel.mid:''})，極大化／門檻條件無法計算，已略過。</div>`;
+    else if(diag.unmet&&diag.unmet.length) g+=`<div class="fwarn" style="margin-top:3px">⚠ 有 ${diag.unmet.length} 項門檻在保留套裝的前提下配不出來，以下為最佳嘗試。</div>`;
+    html+=`<div class="fgoal">${g}</div>`;
+  }
   for(let sl=1;sl<=6;sl++){
     const r=p[sl];
     if(r){totalEff+=r.ef;n++;
