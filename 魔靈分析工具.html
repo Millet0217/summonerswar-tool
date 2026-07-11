@@ -21970,7 +21970,7 @@ $('#xRta').onchange=renderDex;
 renderDex();
 
 // ---------- 符文庫 ----------
-// 符文評級：效率門檻(社群標準) + 有效roll(只算「大六」副屬 SPD/暴率/暴傷/攻%/血%/防%；排除固定值與抵抗/命中)
+// 符文評級：效率門檻(社群標準) + 有效roll(只算「大六」副屬 SPD/暴率/暴傷/攻%/血%/防%；排除固定值與抵抗/集中)
 const BIG6={'SPD':6,'CRate%':6,'CDmg%':7,'ATK%':8,'HP%':8,'DEF%':8}; // 6★每roll上限
 const GR_RANK={SSS:0,SS:1,S:2,A:3,B:4,C:5};
 const runeGrade=ef=>ef>=110?'SSS':ef>=100?'SS':ef>=90?'S':ef>=80?'A':ef>=70?'B':'C';
@@ -22021,87 +22021,87 @@ const DUNGEONS=[
  {n:'巨人窟 GB12',sub:'符文/魔力石主要來源。核心：破防+多段+回能，可做全自動循環。',teams:[
    {tl:'穩定自動隊',us:[
      ['Veromos','破防+持續傷害+淨化','絕望/意志'],
-     ['Bernard','回能+攻速buff','迅速/命中'],
-     ['Sabrina','範圍破防','刀刃/命中'],
-     ['Sigmarus','冰凍+輸出','刀刃/暴擊'],
+     ['Bernard','回能+攻速buff','迅速/集中'],
+     ['Sabrina','範圍破防','刀刃/集中'],
+     ['Sigmarus','冰凍+輸出','刀刃/激怒'],
      ['Loren','多段輸出/減攻速','絕望/刀刃']]},
    {tl:'高速循環(需高速符)',us:[
-     ['Bernard','回能','迅速/命中'],
-     ['Galleon','破防+攻擊buff','迅速/命中'],
-     ['Verdehile','爆擊回能','暴怒/刀刃'],
-     ['Lushen','斬殺(副手)','刀刃/暴擊']]}]},
- {n:'巨龍巢穴 DB12',sub:'攻速/暴擊/精準符文來源。需破防、抗擊暈、穩定輸出。',teams:[
+     ['Bernard','回能','迅速/集中'],
+     ['Galleon','破防+攻擊buff','迅速/集中'],
+     ['Verdehile','爆擊回能','暴走/刀刃'],
+     ['Lushen','斬殺(副手)','刀刃/激怒']]}]},
+ {n:'巨龍巢穴 DB12',sub:'攻速/激怒/精準符文來源。需破防、抗擊暈、穩定輸出。',teams:[
    {tl:'通用隊',us:[
      ['Veromos','淨化+持續','絕望/意志'],
      ['Galleon','破防+攻buff','迅速/意志'],
-     ['Bernard','回能','迅速/命中'],
-     ['Sigmarus','冰凍控場','刀刃/暴擊'],
-     ['Lushen','範圍斬殺','刀刃/暴擊']]},
+     ['Bernard','回能','迅速/集中'],
+     ['Sigmarus','冰凍控場','刀刃/激怒'],
+     ['Lushen','範圍斬殺','刀刃/激怒']]},
    {tl:'雙防破速刷',us:[
      ['Chasun','奶+回能','意志/迅速'],
-     ['Sabrina','破防','刀刃/命中'],
-     ['Katarina','高輸出','暴怒/刀刃'],
+     ['Sabrina','破防','刀刃/集中'],
+     ['Katarina','高輸出','暴走/刀刃'],
      ['Fran','免疫+奶','意志/迅速']]}]},
- {n:'死者之塔 NB12',sub:'暴擊傷害/暴怒/意志符文來源。怪物會反擊+回能,需破防與控場。',teams:[
+ {n:'死者之塔 NB12',sub:'激怒傷害/暴走/意志符文來源。怪物會反擊+回能,需破防與控場。',teams:[
    {tl:'通用隊',us:[
      ['Veromos','淨化+持續','絕望/意志'],
-     ['Bernard','回能','迅速/命中'],
-     ['Sabrina','破防+暈','刀刃/命中'],
-     ['Sigmarus','冰凍','刀刃/暴擊'],
+     ['Bernard','回能','迅速/集中'],
+     ['Sabrina','破防+暈','刀刃/集中'],
+     ['Sigmarus','冰凍','刀刃/激怒'],
      ['Loren','多段輸出','絕望/刀刃']]}]},
- {n:'鋼鐵要塞 SF10',sub:'免疫/專注/引導符文。BOSS會上護盾,需高頻多段。',teams:[
+ {n:'鋼鐵要塞 SF10',sub:'免疫/專注/引導符文。BOSS會上保護,需高頻多段。',teams:[
    {tl:'多段隊',us:[
      ['Veromos','淨化+破防','絕望/意志'],
-     ['Bernard','回能','迅速/命中'],
-     ['Tesarion','多段+灼燒','暴怒/刀刃'],
+     ['Bernard','回能','迅速/集中'],
+     ['Tesarion','多段+灼燒','暴走/刀刃'],
      ['Sath','破防+持續','絕望/意志']]}]},
  {n:'懲罰者地穴 PC10',sub:'反擊/破壞符文。BOSS高防,建議固傷/百分比傷害。',teams:[
    {tl:'固傷隊',us:[
      ['Veromos','淨化','絕望/意志'],
-     ['Theomars','無視抗性輸出','暴怒/刀刃'],
-     ['Bernard','回能','迅速/命中'],
+     ['Theomars','無視抗性輸出','暴走/刀刃'],
+     ['Bernard','回能','迅速/集中'],
      ['Chasun','奶+回能','意志/迅速']]}]},
  {n:'元素地下城(火/風/水/光/暗 精髓)',sub:'進階素材(精髓)來源,難度低。任意屬性優勢隊即可穩過。',teams:[
    {tl:'通用清怪隊',us:[
-     ['Lushen','範圍斬殺(光/暗皆有)','刀刃/暴擊'],
+     ['Lushen','範圍斬殺(光/暗皆有)','刀刃/激怒'],
      ['Veromos','淨化+持續','絕望/意志'],
-     ['Bernard','回能','迅速/命中'],
+     ['Bernard','回能','迅速/集中'],
      ['Colleen','奶+吸血','意志/吸血']]}]},
  {n:'次元洞 · 異界巨龍 (火 B2/B5)',sub:'次元洞素材/附魔寶石/魔石。BOSS吃「水」屬性優勢,兩側水晶需優先擊破。',teams:[
    {tl:'水隊 (打火龍)',us:[
-     ['Sigmarus','冰凍+輸出','刀刃/暴擊'],
-     ['Tetra','破防','迅速/命中'],
+     ['Sigmarus','冰凍+輸出','刀刃/激怒'],
+     ['Tetra','破防','迅速/集中'],
      ['Colleen','奶+吸血','意志/吸血'],
      ['Mikene','回能+免疫','意志/迅速'],
-     ['Govliet','水晶擊破/輸出','暴怒/刀刃']]}]},
+     ['Govliet','水晶擊破/輸出','暴走/刀刃']]}]},
  {n:'次元洞 · 異界巨龍 (水 B2/B5)',sub:'BOSS吃「風」屬性優勢。需破防+持續輸出+抗控。',teams:[
    {tl:'風隊 (打水龍)',us:[
      ['Baretta','破防+持續','絕望/意志'],
-     ['Kona','破防','迅速/命中'],
-     ['Wind Homunculus','固傷/水晶','暴怒/刀刃'],
+     ['Kona','破防','迅速/集中'],
+     ['Wind Homunculus','固傷/水晶','暴走/刀刃'],
      ['Hemos','奶+免疫','意志/迅速'],
-     ['Lushen','斬殺','刀刃/暴擊']]}]},
+     ['Lushen','斬殺','刀刃/激怒']]}]},
  {n:'次元洞 · 異界巨龍 (風 B2/B5)',sub:'BOSS吃「火」屬性優勢。以火隊多段快速擊破水晶。',teams:[
    {tl:'火隊 (打風龍)',us:[
-     ['Tesarion','多段+灼燒','暴怒/刀刃'],
+     ['Tesarion','多段+灼燒','暴走/刀刃'],
      ['Sath','破防+持續','絕望/意志'],
-     ['Fire Homunculus','固傷/水晶','暴怒/刀刃'],
+     ['Fire Homunculus','固傷/水晶','暴走/刀刃'],
      ['Chandra','控場','絕望/意志'],
-     ['Bernard','回能','迅速/命中']]}]},
+     ['Bernard','回能','迅速/集中']]}]},
  {n:'異界縫隙 R5 (團隊副本)',sub:'需高DPS在時限內擊破。屬性優勢+破防+回能+奶,分工輸出。',teams:[
    {tl:'綜合輸出隊',us:[
      ['Galleon','破防+攻buff','迅速/意志'],
-     ['Verdehile','爆擊回能','暴怒/刀刃'],
-     ['Katarina','主力輸出','暴怒/刀刃'],
+     ['Verdehile','爆擊回能','暴走/刀刃'],
+     ['Katarina','主力輸出','暴走/刀刃'],
      ['Chasun','奶+回能','意志/迅速'],
-     ['Theomars','無視抗性','暴怒/刀刃']]}]},
+     ['Theomars','無視抗性','暴走/刀刃']]}]},
  {n:'世界王 Worldboss',sub:'看總戰力/屬性覆蓋,愈多高星覆蓋各屬愈高分。帶回能+多段。',teams:[
    {tl:'高分速刷',us:[
-     ['Bernard','回能','迅速/命中'],
-     ['Verdehile','爆擊回能','暴怒/刀刃'],
-     ['Lushen','範圍斬殺','刀刃/暴擊'],
-     ['Megan','攻buff+回能','迅速/命中'],
-     ['Spectra','多段','暴怒/刀刃']]}]}
+     ['Bernard','回能','迅速/集中'],
+     ['Verdehile','爆擊回能','暴走/刀刃'],
+     ['Lushen','範圍斬殺','刀刃/激怒'],
+     ['Megan','攻buff+回能','迅速/集中'],
+     ['Spectra','多段','暴走/刀刃']]}]}
 ];
 function renderDungeons(){
   const q=$('#dSearch').value.toLowerCase(),ownedOnly=$('#dOwnedOnly').checked;
@@ -22123,11 +22123,12 @@ function renderDungeons(){
 renderDungeons();
 
 // ---------- 符文自動配裝 ----------
-const set4=['暴怒','迅速','刀刃','致命','絕望','吸血','反擊','復仇','破壞','戰意','忍受','命中(4)無效'];
-const set2all=['意志','刀刃','暴擊','命中','忍耐','活力','守護','護盾','精準','決心','強化'];
+// 4件套(官方繁中)；選項改由實際符文資料產生，避免套裝名稱對不上(暴走/激怒/猛攻/集中…)
+const FOUR4=['暴走','迅速','激怒','猛攻','絕望','吸血'];
+const allSetNames=[...new Set(RUNES.map(r=>r.set).filter(Boolean))];
 $('#fUnit').innerHTML=UNITS.filter(u=>u.s>=5).sort((a,b)=>a.n.localeCompare(b.n)).map(u=>`<option value="${u.id}">${u.n} (${u.at}${u.s}★)</option>`).join('');
-$('#fSet4').innerHTML=['暴怒','迅速','刀刃','致命','絕望','吸血','反擊','復仇','破壞','戰意'].map(s=>`<option>${s}</option>`).join('');
-$('#fSet2').innerHTML=['意志','暴擊','刀刃','命中','忍耐','活力','守護','護盾','精準'].map(s=>`<option>${s}</option>`).join('');
+$('#fSet4').innerHTML=allSetNames.filter(s=>FOUR4.includes(s)).map(s=>`<option>${s}</option>`).join('');
+$('#fSet2').innerHTML=allSetNames.filter(s=>!FOUR4.includes(s)).map(s=>`<option>${s}</option>`).join('');
 const mainOpts={2:['ATK%','DEF%','HP%','SPD'],4:['ATK%','DEF%','HP%','CRate%','CDmg%'],6:['ATK%','DEF%','HP%','RES%','ACC%']};
 [2,4,6].forEach(s=>$('#fS'+s).innerHTML='<option value="">不限</option>'+mainOpts[s].map(m=>`<option>${m}</option>`).join(''));
 
