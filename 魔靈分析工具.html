@@ -22066,7 +22066,7 @@ function renderRunes(){
     <td class="${rollCls(r.rl)}">${r.rl}</td><td>${r.sl}</td>
     <td>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'}</td>
     <td>${r.set||''}</td><td><b>${r.m}</b></td><td class="muted">${r.pf||''}</td>
-    <td style="white-space:normal;min-width:280px">${r.sub}</td><td>+${r.lv}</td>
+    <td style="white-space:normal;min-width:280px">${(r.sub||'').split(' / ').filter(s=>!s.endsWith('(前)')).map(s=>s.replace(/\+(\d+)磨/g,'<span class="grind">+$1</span>').replace(/寶/g,'<span class="gem">附魔</span>')).join(' / ')}</td><td>+${r.lv}</td>
     <td>${r.ow?'<span class="own">'+r.ow+'</span>':'<span class="muted">倉庫</span>'}</td></tr>`).join('');
   $('#rTable').innerHTML=h+'</tbody>';
   if(rows.length>600)$('#rCount').textContent+='（顯示前600）';
