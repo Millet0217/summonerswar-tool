@@ -77,7 +77,7 @@ function openUnitModal(u){
       ${subs}
       <div class="rhead" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px">
         <span>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'} <span class="muted">+${r.lv}</span></span>
-        <span class="${effCls(r.ef)}">效率 ${r.ef}%</span></div></div>`;
+        <span><span class="gbadge g${runeGrade(r.ef)}">${runeGrade(r.ef)}</span> <span class="${effCls(r.ef)}">${r.ef}%</span></span></div></div>`;
   }
   const st=k=>`<div><span>${k[1]}</span><b>${u[k[0]]}</b></div>`;
   const statBoxes=[['con','HP'],['atk','ATK'],['def','DEF'],['spd','SPD'],['cr','CR%'],['cd','CD%'],['re','RES%'],['ac','ACC%']].map(st).join('');
@@ -106,39 +106,57 @@ const canon=m=>(typeof LINKS!=='undefined'&&LINKS[m])||m;
 const ownedGroups=new Set(UNITS.map(u=>u.mid).filter(Boolean).map(canon));
 const isOwned=c=>ownedGroups.has(canon(c.mid));
 const elDot={'水':'water','火':'fire','風':'wind','光':'light','暗':'dark'};
+const TRANK={S:0,A:1,B:2,C:3,D:4};
 function renderDex(){
   const q=$('#xSearch').value.toLowerCase(),at=$('#xAttr').value,ar=$('#xArch').value,
-    nt=$('#xNat').value,aw=$('#xAwk').value,ow=$('#xOwn').value;
-  const rows=CATALOG.filter(c=>{
+    nt=$('#xNat').value,aw=$('#xAwk').value,ti=$('#xTier').value,ow=$('#xOwn').value,rta=$('#xRta').checked;
+  let rows=CATALOG.filter(c=>{
     const owned=isOwned(c), nm=(c.zh||c.en);
     return (!q||nm.toLowerCase().includes(q)||c.en.toLowerCase().includes(q))
       &&(!at||c.at==at)&&(!ar||c.ar==ar)&&(!nt||c.ns==+nt)
-      &&(aw===''||c.aw==+aw)&&(ow===''||(ow=='1'?owned:!owned));
+      &&(aw===''||c.aw==+aw)&&(!ti||c.tier==ti)&&(!rta||c.rp>0)
+      &&(ow===''||(ow=='1'?owned:!owned));
   });
+  rows.sort((a,b)=>(TRANK[a.tier]-TRANK[b.tier])||(b.rp-a.rp)||(b.ns-a.ns));
   const have=rows.filter(isOwned).length;
-  $('#xCount').textContent=`${rows.length} 隻　已持有 ${have}`;
+  $('#xCount').textContent=`${rows.length} 隻　已持有 ${have}（強度依 PvE meta + swranking S37 RTA）`;
   $('#dexGrid').innerHTML=rows.map(c=>{
     const owned=isOwned(c), nm=(c.zh||c.en);
-    return `<div class="mon ${owned?'':'no'}" title="${c.en}${owned?'（已持有）':'（未持有）'}">
-      <span class="st">${c.ns}★</span><span class="el el-${elDot[c.at]||'light'}"></span>
+    return `<div class="mon ${owned?'':'no'}" title="${c.en}｜強度 ${c.tier}${c.rp?'｜RTA出場 '+c.rp+'%':''}｜${owned?'已持有':'未持有'}">
+      <span class="tier t${c.tier}">${c.tier}</span><span class="el el-${elDot[c.at]||'light'}"></span>
       <img src="icons/${c.img}" loading="lazy" alt="">
-      <div class="mn">${nm}</div></div>`;
+      <div class="mn">${nm}</div>
+      <div class="sub2">${c.ns}★${c.rp?' · <span class="rta">RTA '+c.rp+'%</span>':''}</div></div>`;
   }).join('');
 }
-['xSearch','xAttr','xArch','xNat','xAwk','xOwn'].forEach(id=>$('#'+id).oninput=renderDex);
+['xSearch','xAttr','xArch','xNat','xAwk','xTier','xOwn'].forEach(id=>$('#'+id).oninput=renderDex);
+$('#xRta').onchange=renderDex;
 renderDex();
 
 // ---------- 符文庫 ----------
+// 符文評級：效率門檻(社群標準) + 有效roll(只算「大六」副屬 SPD/暴率/暴傷/攻%/血%/防%；排除固定值與抵抗/命中)
+const BIG6={'SPD':6,'CRate%':6,'CDmg%':7,'ATK%':8,'HP%':8,'DEF%':8}; // 6★每roll上限
+const GR_RANK={SSS:0,SS:1,S:2,A:3,B:4,C:5};
+const runeGrade=ef=>ef>=110?'SSS':ef>=100?'SS':ef>=90?'S':ef>=80?'A':ef>=70?'B':'C';
+function runeRolls(sub){
+  if(!sub)return 0; let n=0;
+  sub.split(' / ').forEach(t=>{ const m=t.match(/^([A-Za-z%]+)\+(\d+)(?:\+(\d+)磨)?/);
+    if(m){ const mx=BIG6[m[1]]; if(mx)n+=(+m[2]+(m[3]?+m[3]:0))/mx; } });
+  return Math.round(n*10)/10;
+}
+// 預先算好每顆符文的 評級(gr/gv) 與 有效roll(rl)，供排序/篩選
+RUNES.forEach(r=>{ r.gr=runeGrade(r.ef); r.gv=GR_RANK[r.gr]; r.rl=runeRolls(r.sub); });
+const gCls=g=>'g'+g, rollCls=v=>v>=5?'roll-hi':v>=3.5?'roll-mid':'roll-lo';
 const sets=[...new Set(RUNES.map(r=>r.set).filter(Boolean))];
 $('#rSet').innerHTML='<option value="">全部套裝</option>'+sets.map(s=>`<option>${s}</option>`).join('');
 const mains=[...new Set(RUNES.map(r=>r.m.split('+')[0]))];
 $('#rMain').innerHTML='<option value="">全部主屬</option>'+mains.map(s=>`<option>${s}</option>`).join('');
 let rSort={k:'ef',dir:-1};
-const rCols=[['ef','效率'],['sl','洞'],['st','★'],['set','套裝'],['m','主屬'],['pf','前綴'],['sub','副屬'],['lv','+'],['ow','裝備者']];
+const rCols=[['gv','評級'],['ef','效率'],['rl','有效roll'],['sl','洞'],['st','★'],['set','套裝'],['m','主屬'],['pf','前綴'],['sub','副屬'],['lv','+'],['ow','裝備者']];
 function rFilter(){
-  const set=$('#rSet').value,sl=$('#rSlot').value,mn=$('#rMain').value,eq=$('#rEq').value,anc=$('#rAnc').value,
+  const set=$('#rSet').value,sl=$('#rSlot').value,mn=$('#rMain').value,gd=$('#rGrade').value,eq=$('#rEq').value,anc=$('#rAnc').value,
     ef=+$('#rEff').value,ow=$('#rOwner').value.toLowerCase();
-  return RUNES.filter(r=>(!set||r.set==set)&&(!sl||r.sl==+sl)&&(!mn||r.m.startsWith(mn))
+  return RUNES.filter(r=>(!set||r.set==set)&&(!sl||r.sl==+sl)&&(!mn||r.m.startsWith(mn))&&(!gd||r.gr==gd)
     &&(eq===''||r.eq==+eq)&&(!anc||r.anc==1)&&r.ef>=ef&&(!ow||(r.ow||'').toLowerCase().includes(ow)));
 }
 function renderRunes(){
@@ -147,16 +165,18 @@ function renderRunes(){
   $('#rCount').textContent=rows.length+' 個';
   let h='<thead><tr>'+rCols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('')+'</tr></thead><tbody>';
   h+=rows.slice(0,600).map(r=>`<tr>
-    <td class="${effCls(r.ef)}">${r.ef}%</td><td>${r.sl}</td>
+    <td><span class="gbadge ${gCls(r.gr)}">${r.gr}</span></td>
+    <td class="${effCls(r.ef)}">${r.ef}%</td>
+    <td class="${rollCls(r.rl)}">${r.rl}</td><td>${r.sl}</td>
     <td>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'}</td>
     <td>${r.set||''}</td><td><b>${r.m}</b></td><td class="muted">${r.pf||''}</td>
     <td style="white-space:normal;min-width:280px">${r.sub}</td><td>+${r.lv}</td>
     <td>${r.ow?'<span class="own">'+r.ow+'</span>':'<span class="muted">倉庫</span>'}</td></tr>`).join('');
   $('#rTable').innerHTML=h+'</tbody>';
   if(rows.length>600)$('#rCount').textContent+='（顯示前600）';
-  $$('#rTable th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;rSort.dir=rSort.k==k?-rSort.dir:-1;rSort.k=k;renderRunes();});
+  $$('#rTable th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;rSort.dir=rSort.k==k?-rSort.dir:(k=='gv'?1:-1);rSort.k=k;renderRunes();});
 }
-['rSet','rSlot','rMain','rEq','rAnc','rEff','rOwner'].forEach(id=>$('#'+id).oninput=renderRunes);
+['rSet','rSlot','rMain','rGrade','rEq','rAnc','rEff','rOwner'].forEach(id=>$('#'+id).oninput=renderRunes);
 renderRunes();
 
 // ---------- 地下城 meta DB ----------

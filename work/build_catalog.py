@@ -71,6 +71,88 @@ obt = [m for m in sw if m.get("arch") != "none" and not is_dummy(m)]
 def sk(m):
     return (ELEM_ORDER.get(ELEM.get(m["element"],""),9), -m["ns"], m["name"])
 obt.sort(key=sk)
+
+# ---- 強度 tier：客觀分數打底 + PvE meta 強怪覆蓋 + 使用者 強度.csv 覆蓋 ----
+# 客觀分數：滿等五圍(max_lvl) + 天生星；只給 A/B/C/D，S 保留給 meta/使用者
+def power(m): return m["hp"]*0.1 + m["atk"] + m["def"]*0.8 + m["spd"]*5
+pw = {str(m["mid"]): power(m) for m in obt}
+plo, phi = min(pw.values()), max(pw.values())
+def base_tier(m):
+    # 客觀基準以天生星為主(玩家直覺的投資強度)，數據特別高的低星微幅上修；S/A 留給 meta
+    if m["arch"] == "Material": return "D"
+    ns = m["ns"]; pn = (pw[str(m["mid"])]-plo)/(phi-plo) if phi>plo else .5
+    t = "B" if ns>=5 else "C" if ns>=3 else "D"
+    if t == "C" and pn >= 0.85: t = "B"
+    return t
+# PvE 刷本/地下城 meta 強怪(覺醒英文名) → 沿覺醒鏈整組套用
+PVE_TIER = {
+ "S": ["Lushen","Veromos","Bernard","Galleon","Sigmarus","Theomars","Verdehile","Belladeon",
+       "Chasun","Loren","Tesarion","Baretta","Colleen","Konamiya","Ramagos","Kro","Fran","Sabrina"],
+ "A": ["Bella","Shannon","Megan","Spectra","Darion","Katarina","Sath","Chandra","Tetra","Hemos",
+       "Mikene","Verad","Rica","Charlotte","Zaiross","Perna","Jamire","Woonhak","Fermion","Woosa",
+       "Elsharion","Akhamamir","Racuni","Feng Yan","Ariel","Praha","Homunculus(Attack)",
+       "Homunculus(Support)","Tiana","Seara","Ganymede","Chilling"],
+ "B": ["Ahman","Michelle","Fao","Mav","Hraesvelg","Raoq","Icaru","Fedora","Astar"],
+}
+name2mids = defaultdict(list)
+for m in obt: name2mids[m["name"]].append(str(m["mid"]))
+grp = defaultdict(list)
+for mid in ({str(x["mid"]) for x in sw}): grp[canon.get(mid, mid)].append(mid)
+meta_map, unmatched = {}, []
+for tier, names in PVE_TIER.items():
+    for nm in names:
+        mids = name2mids.get(nm)
+        if not mids: unmatched.append(nm); continue
+        for mid in mids:
+            for gm in grp[canon.get(mid, mid)]: meta_map[gm] = tier
+
+# swranking 當前版本 RTA 統計(出場率/禁用率) → meta tier；出場率存入 rp 供圖鑑顯示
+RANK = {"S":0,"A":1,"B":2,"C":3,"D":4}
+sw_map, rp_map, sw_ver = {}, {}, ""
+swpath = os.path.join(WORK, "swranking_meta.json")
+if os.path.exists(swpath):
+    swm = load(swpath); sw_ver = swm.get("version","")
+    _is_cjk = lambda s: any('一' <= c <= '鿿' for c in (s or ""))
+    _zh_filled = 0
+    for row in swm["rows"]:
+        mid = str(row[0]); pick, ban = row[2], row[3]
+        first = row[5] if len(row) > 5 else 0
+        # 圖鑑中文名採 swranking 繁中(monsterNameZho)，僅補「原本空白」且為真中文者
+        zho = row[1]
+        if mid not in zh_existing and _is_cjk(zho):
+            zh_existing[mid] = zho; _zh_filled += 1
+        # 出場率 / 禁用率 / 首選率(被當首選=版本頂級) 三signal 取最強
+        p = "S" if pick>=0.12 else "A" if pick>=0.045 else "B" if pick>=0.02 else "C"
+        b = "S" if ban>=0.35 else "A" if ban>=0.25 else "B" if ban>=0.15 else "C"
+        fr = "S" if first>=0.06 else "A" if first>=0.03 else "B" if first>=0.01 else "C"
+        t = min(p, b, fr, key=lambda x: RANK[x])
+        for gm in grp[canon.get(mid, mid)]:
+            if gm not in sw_map or RANK[t] < RANK[sw_map[gm]]: sw_map[gm] = t
+        rp_map[mid] = round(pick*100, 1)   # RTA% 只標該精確形態
+    print(f"swranking {sw_ver}: {len(swm['rows'])} 隻 RTA meta；補中文名 {_zh_filled}")
+
+# 使用者覆蓋：只讀 對照表/強度.csv 的「覆蓋」欄(空→用自動計算，不回寫污染)
+tier_override = {}
+tpath = os.path.join(TAB, "強度.csv")
+if os.path.exists(tpath):
+    with open(tpath, encoding="utf-8-sig") as f:
+        for row in csv.DictReader(f):
+            t = (row.get("覆蓋") or "").strip().upper()
+            if t in ("S","A","B","C","D"): tier_override[str(row["代碼"])] = t
+def auto_tier(m):    # 客觀打底 + PvE meta + swranking RTA，取最強(不含使用者覆蓋)
+    mid = str(m["mid"])
+    cands = [base_tier(m)]
+    if mid in meta_map: cands.append(meta_map[mid])
+    if mid in sw_map: cands.append(sw_map[mid])
+    return min(cands, key=lambda t: RANK[t])
+def final_tier(m):
+    return tier_override.get(str(m["mid"])) or auto_tier(m)
+auto_map = {str(m["mid"]): auto_tier(m) for m in obt}
+tier_map = {str(m["mid"]): final_tier(m) for m in obt}
+print("meta 強怪未對到名字:", unmatched)
+from collections import Counter as _C
+print("tier 分佈:", dict(sorted(_C(tier_map.values()).items())))
+
 catalog = [{
     "mid": str(m["mid"]),
     "en": m["name"],
@@ -80,6 +162,8 @@ catalog = [{
     "ns": m["ns"],
     "aw": m["aw"],
     "obt": 1 if m.get("obtainable") else 0,
+    "tier": tier_map[str(m["mid"])],
+    "rp": rp_map.get(str(m["mid"]), 0),
     "img": m["img"],
 } for m in obt]
 with open(os.path.join(WORK,"catalog.json"),"w",encoding="utf-8") as f:
@@ -97,13 +181,20 @@ for m in byname:
     rows.append([mid, m["img"], m["name"], zh_existing.get(mid,""),
                  ELEM.get(m["element"],m["element"]), ARCH_ZH.get(m["arch"],m["arch"]),
                  m["ns"], AW_ZH.get(m["aw"],m["aw"]), ("可召喚" if m.get("obtainable") else "非常駐"),
+                 tier_map[mid],
                  m["hp"], m["atk"], m["def"], m["spd"], m["cr"], m["cd"], m["res"], m["acc"],
                  m.get("src","")])
 # HP/ATK/DEF = 6★ Lv40 滿等體質(max_lvl)；SPD/暴率/暴傷/抵抗/命中 為固定基礎值
 wcsv(os.path.join(TAB,"怪物圖鑑.csv"),
-     ["代碼","圖示","英文","中文","屬性","職業","天生星","覺醒","收錄",
+     ["代碼","圖示","英文","中文","屬性","職業","天生星","覺醒","收錄","強度",
       "滿HP","滿ATK","滿DEF","SPD","暴率","暴傷","抵抗","命中","取得方式"],
      rows)
+
+# 強度.csv：可編輯覆蓋源。「自動」=程式算的(參考用)，「覆蓋」=你要改就填 S/A/B/C/D(空=用自動)
+srows = [[str(m["mid"]), m["name"], zh_existing.get(str(m["mid"]),""),
+          ELEM.get(m["element"],m["element"]), ARCH_ZH.get(m["arch"],m["arch"]),
+          m["ns"], auto_map[str(m["mid"])], tier_override.get(str(m["mid"]),"")] for m in byname]
+wcsv(tpath, ["代碼","英文","中文","屬性","職業","天生星","自動","覆蓋"], srows)
 
 # 補全 怪物.csv (清乾淨亂碼、覆蓋所有可召喚，保留既有中文)
 mon_rows=[[str(m["mid"]), m["name"].replace(",","，"), zh_existing.get(str(m["mid"]),"")]

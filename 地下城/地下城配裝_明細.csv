@@ -1,0 +1,365 @@
+﻿地下城,隊伍,角色(中),角色(英),定位,持有,洞,建議套裝,建議主屬,符文★,符文套裝,符文主屬,副屬,效率,現位置
+巨人窟 GB12,破防自動隊,Veromos,Veromos,破防+持續+淨化,✓,1,意志,HP,6★,意志,ATK+160,RES%+8(前) / HP%+15+8磨 / SPD+17+3磨 / HP+401+405磨寶 / ATK%+8+6磨,115.1,Kinki
+巨人窟 GB12,破防自動隊,Veromos,Veromos,破防+持續+淨化,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+巨人窟 GB12,破防自動隊,Veromos,Veromos,破防+持續+淨化,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+巨人窟 GB12,破防自動隊,Veromos,Veromos,破防+持續+淨化,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+巨人窟 GB12,破防自動隊,Veromos,Veromos,破防+持續+淨化,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+巨人窟 GB12,破防自動隊,Veromos,Veromos,破防+持續+淨化,✓,6,絕望,ACC%,6★,絕望,ACC%+64,SPD+22+5磨 / DEF%+11+10磨寶 / HP%+7+8磨 / ATK%+5+10磨,113.4,倉庫
+巨人窟 GB12,破防自動隊,Bernard,Bernard,回能+攻速,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+巨人窟 GB12,破防自動隊,Bernard,Bernard,回能+攻速,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+巨人窟 GB12,破防自動隊,Bernard,Bernard,回能+攻速,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+巨人窟 GB12,破防自動隊,Bernard,Bernard,回能+攻速,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+巨人窟 GB12,破防自動隊,Bernard,Bernard,回能+攻速,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+巨人窟 GB12,破防自動隊,Bernard,Bernard,回能+攻速,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+巨人窟 GB12,破防自動隊,Sabrina,Sabrina,範圍破防,✓,1,迅速,HP,6★,迅速,ATK+160,ATK%+5(前) / HP+545+548磨寶 / ACC%+8 / SPD+21+4磨 / HP%+8+7磨,111.3,Nina Williams
+巨人窟 GB12,破防自動隊,Sabrina,Sabrina,範圍破防,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+巨人窟 GB12,破防自動隊,Sabrina,Sabrina,範圍破防,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+巨人窟 GB12,破防自動隊,Sabrina,Sabrina,範圍破防,✓,4,集中,HP%,6★,集中,HP%+63,ACC%+10 / SPD+22+5磨 / HP+487+519磨寶 / DEF%+5+9磨,108.4,K1D
+巨人窟 GB12,破防自動隊,Sabrina,Sabrina,範圍破防,✓,5,集中,DEF,6★,集中,HP+2448,ACC%+8(前) / SPD+14+4磨 / DEF%+13+7磨 / HP%+16+5磨 / ATK%+6+7磨,112.5,倉庫
+巨人窟 GB12,破防自動隊,Sabrina,Sabrina,範圍破防,✓,6,迅速,ACC%,6★,迅速,ACC%+64,SPD+21+4磨 / ATK%+6+7磨 / HP%+5+7磨 / HP+483+514磨寶,106.8,倉庫
+巨人窟 GB12,破防自動隊,Sigmarus,Sigmarus,冰凍+輸出,✓,1,激怒,HP,6★,激怒,ATK+160,CRate%+6(前) / HP%+13+9磨 / ATK%+13+8磨 / CDmg%+20 / SPD+9+5磨寶,118.3,Lushen
+巨人窟 GB12,破防自動隊,Sigmarus,Sigmarus,冰凍+輸出,✓,2,激怒,ATK%,6★,激怒,ATK%+63,SPD+10+5磨寶 / HP%+14+10磨 / CDmg%+14 / CRate%+18,110.7,Naomi
+巨人窟 GB12,破防自動隊,Sigmarus,Sigmarus,冰凍+輸出,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+巨人窟 GB12,破防自動隊,Sigmarus,Sigmarus,冰凍+輸出,✓,4,激怒,CDmg%,6★,激怒,CDmg%+80,ACC%+7(前) / CRate%+8寶 / DEF%+21+8磨 / SPD+6+4磨 / ATK%+22+10磨,117.9,Lucas
+巨人窟 GB12,破防自動隊,Sigmarus,Sigmarus,冰凍+輸出,✓,5,激怒,DEF,6★,激怒,HP+2448,RES%+8(前) / CRate%+15 / ATK+37+24磨寶 / ATK%+8+7磨 / CDmg%+14,110.2,Luna
+巨人窟 GB12,破防自動隊,Sigmarus,Sigmarus,冰凍+輸出,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+巨人窟 GB12,破防自動隊,Loren,Loren,多段輸出/減攻速,✓,1,刀刃,HP,6★,刀刃,ATK+160,SPD+26+5磨 / ATK%+11+9磨寶 / CDmg%+5 / HP+282+546磨,111.3,倉庫
+巨人窟 GB12,破防自動隊,Loren,Loren,多段輸出/減攻速,✓,2,絕望,ATK%,6★,絕望,ATK%+63,CRate%+6 / DEF%+11+10磨寶 / SPD+29+4磨 / HP%+8+10磨,117,Legolas
+巨人窟 GB12,破防自動隊,Loren,Loren,多段輸出/減攻速,✓,3,絕望,ATK,6★,絕望,DEF+160,DEF%+5(前) / HP%+11+7磨 / ACC%+8 / HP+537+532磨寶 / SPD+20+5磨,113.5,Juno
+巨人窟 GB12,破防自動隊,Loren,Loren,多段輸出/減攻速,✓,4,刀刃,CDmg%,6★,刀刃,CDmg%+80,SPD+20+5磨 / DEF%+8+9磨 / CRate%+12 / ATK%+11+8磨寶,111.9,Beth
+巨人窟 GB12,破防自動隊,Loren,Loren,多段輸出/減攻速,✓,5,絕望,DEF,6★,絕望,HP+2448,SPD+27+5磨 / ATK%+13+8磨寶 / DEF%+6+9磨 / HP%+6+8磨,118.5,Madeleine Cookie
+巨人窟 GB12,破防自動隊,Loren,Loren,多段輸出/減攻速,✓,6,絕望,ATK%,上古,絕望,ATK%+63,CDmg%+20 / HP%+15+8磨寶 / DEF%+16+8磨 / ACC%+18,114.2,Momo
+巨人窟 GB12,高速循環隊,Bernard,Bernard,回能,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+巨人窟 GB12,高速循環隊,Bernard,Bernard,回能,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+巨人窟 GB12,高速循環隊,Bernard,Bernard,回能,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+巨人窟 GB12,高速循環隊,Bernard,Bernard,回能,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+巨人窟 GB12,高速循環隊,Bernard,Bernard,回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+巨人窟 GB12,高速循環隊,Bernard,Bernard,回能,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+巨人窟 GB12,高速循環隊,Galleon,Galleon,破防+攻buff,✓,1,迅速,HP,6★,迅速,ATK+160,ATK%+5(前) / HP+545+548磨寶 / ACC%+8 / SPD+21+4磨 / HP%+8+7磨,111.3,Nina Williams
+巨人窟 GB12,高速循環隊,Galleon,Galleon,破防+攻buff,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+巨人窟 GB12,高速循環隊,Galleon,Galleon,破防+攻buff,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+巨人窟 GB12,高速循環隊,Galleon,Galleon,破防+攻buff,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+巨人窟 GB12,高速循環隊,Galleon,Galleon,破防+攻buff,✓,5,意志,DEF,6★,意志,HP+2448,CDmg%+7(前) / DEF%+11+7磨寶 / SPD+21+5磨 / HP%+8+7磨 / ATK%+7+10磨,118.5,Tiana
+巨人窟 GB12,高速循環隊,Galleon,Galleon,破防+攻buff,✓,6,迅速,ACC%,6★,迅速,ACC%+64,SPD+21+4磨 / ATK%+6+7磨 / HP%+5+7磨 / HP+483+514磨寶,106.8,倉庫
+巨人窟 GB12,高速循環隊,Verdehile,Verdehile,爆擊回能,✓,1,暴走,HP,6★,暴走,ATK+160,ACC%+8(前) / HP+140+456磨 / HP%+13+9磨寶 / SPD+23+4磨 / ATK%+13+8磨,124.7,倉庫
+巨人窟 GB12,高速循環隊,Verdehile,Verdehile,爆擊回能,✓,2,暴走,SPD,6★,暴走,SPD+42,DEF%+14+7磨 / ATK%+15+7磨 / HP%+15+6磨 / HP+575+533磨寶,114,Ramael and Judiah
+巨人窟 GB12,高速循環隊,Verdehile,Verdehile,爆擊回能,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+巨人窟 GB12,高速循環隊,Verdehile,Verdehile,爆擊回能,✓,4,暴走,CDmg%,6★,暴走,CDmg%+80,ATK%+6+9磨 / DEF%+12+9磨寶 / SPD+11+4磨 / HP%+30+7磨,118.8,Martina
+巨人窟 GB12,高速循環隊,Verdehile,Verdehile,爆擊回能,✓,5,暴走,DEF,6★,暴走,HP+2448,ACC%+7(前) / ATK%+21+10磨 / HP%+8+7磨 / SPD+9+4磨寶 / DEF%+22+7磨,124.4,Raoq
+巨人窟 GB12,高速循環隊,Verdehile,Verdehile,爆擊回能,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+巨人窟 GB12,高速循環隊,Lushen,Lushen,斬殺輸出,✓,1,激怒,HP,6★,激怒,ATK+160,CRate%+6(前) / HP%+13+9磨 / ATK%+13+8磨 / CDmg%+20 / SPD+9+5磨寶,118.3,Lushen
+巨人窟 GB12,高速循環隊,Lushen,Lushen,斬殺輸出,✓,2,刀刃,ATK%,6★,刀刃,ATK%+63,DEF+15(前) / HP%+21+7磨 / CRate%+10 / SPD+6+4磨 / ATK+34+28磨寶,112,Raoq
+巨人窟 GB12,高速循環隊,Lushen,Lushen,斬殺輸出,✓,3,刀刃,ATK,6★,刀刃,DEF+160,CDmg%+8寶 / HP%+7+9磨 / DEF%+7+10磨 / SPD+27+5磨,111.4,Claire
+巨人窟 GB12,高速循環隊,Lushen,Lushen,斬殺輸出,✓,4,激怒,CDmg%,6★,激怒,CDmg%+80,ACC%+7(前) / CRate%+8寶 / DEF%+21+8磨 / SPD+6+4磨 / ATK%+22+10磨,117.9,Lucas
+巨人窟 GB12,高速循環隊,Lushen,Lushen,斬殺輸出,✓,5,激怒,DEF,6★,激怒,HP+2448,RES%+8(前) / CRate%+15 / ATK+37+24磨寶 / ATK%+8+7磨 / CDmg%+14,110.2,Luna
+巨人窟 GB12,高速循環隊,Lushen,Lushen,斬殺輸出,✓,6,激怒,ATK%,6★,激怒,ATK%+63,ACC%+5(前) / CDmg%+23 / ATK+38+27磨寶 / CRate%+5 / HP%+6+10磨,107.1,Lucas
+巨人窟 GB12,高速循環隊,Veromos,Veromos,淨化+持續,✓,1,意志,HP,6★,意志,ATK+160,RES%+8(前) / HP%+15+8磨 / SPD+17+3磨 / HP+401+405磨寶 / ATK%+8+6磨,115.1,Kinki
+巨人窟 GB12,高速循環隊,Veromos,Veromos,淨化+持續,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+巨人窟 GB12,高速循環隊,Veromos,Veromos,淨化+持續,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+巨人窟 GB12,高速循環隊,Veromos,Veromos,淨化+持續,✓,4,絕望,HP%,6★,絕望,HP%+63,CRate%+4(前) / ACC%+11 / SPD+17+4磨 / HP+349+506磨 / DEF%+10+7磨寶,106.8,倉庫
+巨人窟 GB12,高速循環隊,Veromos,Veromos,淨化+持續,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+巨人窟 GB12,高速循環隊,Veromos,Veromos,淨化+持續,✓,6,意志,HP%,6★,意志,HP%+63,ATK%+7(前) / DEF%+8+7磨 / DEF+38+29磨寶 / SPD+19+4磨 / ACC%+13,118.3,Platy
+巨龍巢穴 DB12,通用隊,Veromos,Veromos,淨化+持續,✓,1,絕望,HP,6★,絕望,ATK+160,CDmg%+7(前) / HP%+11+7磨寶 / SPD+20+4磨 / ATK%+8+7磨 / ACC%+11,110.7,Juno
+巨龍巢穴 DB12,通用隊,Veromos,Veromos,淨化+持續,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+巨龍巢穴 DB12,通用隊,Veromos,Veromos,淨化+持續,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+巨龍巢穴 DB12,通用隊,Veromos,Veromos,淨化+持續,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+巨龍巢穴 DB12,通用隊,Veromos,Veromos,淨化+持續,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+巨龍巢穴 DB12,通用隊,Veromos,Veromos,淨化+持續,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+巨龍巢穴 DB12,通用隊,Galleon,Galleon,破防+攻buff,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+巨龍巢穴 DB12,通用隊,Galleon,Galleon,破防+攻buff,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+巨龍巢穴 DB12,通用隊,Galleon,Galleon,破防+攻buff,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+巨龍巢穴 DB12,通用隊,Galleon,Galleon,破防+攻buff,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+巨龍巢穴 DB12,通用隊,Galleon,Galleon,破防+攻buff,✓,5,意志,DEF,6★,意志,HP+2448,CDmg%+7(前) / DEF%+11+7磨寶 / SPD+21+5磨 / HP%+8+7磨 / ATK%+7+10磨,118.5,Tiana
+巨龍巢穴 DB12,通用隊,Galleon,Galleon,破防+攻buff,✓,6,迅速,ACC%,6★,迅速,ACC%+64,SPD+21+4磨 / ATK%+6+7磨 / HP%+5+7磨 / HP+483+514磨寶,106.8,倉庫
+巨龍巢穴 DB12,通用隊,Bernard,Bernard,回能,✓,1,意志,HP,6★,意志,ATK+160,RES%+8(前) / HP%+15+8磨 / SPD+17+3磨 / HP+401+405磨寶 / ATK%+8+6磨,115.1,Kinki
+巨龍巢穴 DB12,通用隊,Bernard,Bernard,回能,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+巨龍巢穴 DB12,通用隊,Bernard,Bernard,回能,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+巨龍巢穴 DB12,通用隊,Bernard,Bernard,回能,✓,4,迅速,HP%,6★,迅速,HP%+63,HP+302(前) / RES%+7 / SPD+22+4磨 / ATK%+15+7磨 / CDmg%+7,105.5,Konamiya
+巨龍巢穴 DB12,通用隊,Bernard,Bernard,回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+巨龍巢穴 DB12,通用隊,Bernard,Bernard,回能,✓,6,意志,HP%,6★,意志,HP%+63,ATK%+7(前) / DEF%+8+7磨 / DEF+38+29磨寶 / SPD+19+4磨 / ACC%+13,118.3,Platy
+巨龍巢穴 DB12,通用隊,Sigmarus,Sigmarus,冰凍控場,✓,1,激怒,HP,6★,激怒,ATK+160,CRate%+6(前) / HP%+13+9磨 / ATK%+13+8磨 / CDmg%+20 / SPD+9+5磨寶,118.3,Lushen
+巨龍巢穴 DB12,通用隊,Sigmarus,Sigmarus,冰凍控場,✓,2,激怒,SPD,6★,激怒,SPD+42,RES%+7(前) / HP%+13+6磨 / CDmg%+6 / ATK+39+30磨寶 / ATK%+26+8磨,120.1,倉庫
+巨龍巢穴 DB12,通用隊,Sigmarus,Sigmarus,冰凍控場,✓,3,激怒,ATK,6★,激怒,DEF+160,CDmg%+6(前) / CRate%+12 / DEF%+5+7磨 / SPD+17+4磨 / HP%+6+5磨,101.7,Brandia
+巨龍巢穴 DB12,通用隊,Sigmarus,Sigmarus,冰凍控場,✓,4,刀刃,HP%,6★,刀刃,HP%+63,ACC%+6 / ATK%+8 / SPD+5 / CRate%+27,86.3,Leo
+巨龍巢穴 DB12,通用隊,Sigmarus,Sigmarus,冰凍控場,✓,5,激怒,DEF,6★,激怒,HP+2448,RES%+8(前) / CRate%+15 / ATK+37+24磨寶 / ATK%+8+7磨 / CDmg%+14,110.2,Luna
+巨龍巢穴 DB12,通用隊,Sigmarus,Sigmarus,冰凍控場,✓,6,刀刃,HP%,6★,刀刃,HP%+63,DEF%+8(前) / CRate%+9寶 / DEF+10+28磨 / SPD+24+5磨 / ACC%+5,106.1,Teon
+巨龍巢穴 DB12,通用隊,Lushen,Lushen,範圍斬殺,✓,1,激怒,HP,6★,激怒,ATK+160,RES%+8(前) / CRate%+16 / ATK%+16+9磨 / CDmg%+7寶 / SPD+12+5磨,111.6,Hraesvelg
+巨龍巢穴 DB12,通用隊,Lushen,Lushen,範圍斬殺,✓,2,激怒,ATK%,6★,激怒,ATK%+63,SPD+10+5磨寶 / HP%+14+10磨 / CDmg%+14 / CRate%+18,110.7,Naomi
+巨龍巢穴 DB12,通用隊,Lushen,Lushen,範圍斬殺,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+巨龍巢穴 DB12,通用隊,Lushen,Lushen,範圍斬殺,✓,4,激怒,CDmg%,6★,激怒,CDmg%+80,ACC%+7(前) / CRate%+8寶 / DEF%+21+8磨 / SPD+6+4磨 / ATK%+22+10磨,117.9,Lucas
+巨龍巢穴 DB12,通用隊,Lushen,Lushen,範圍斬殺,✓,5,激怒,DEF,6★,激怒,HP+2448,SPD+16+3磨 / CRate%+8寶 / ATK%+14+7磨 / ATK+38+25磨,109.1,Hwa
+巨龍巢穴 DB12,通用隊,Lushen,Lushen,範圍斬殺,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+巨龍巢穴 DB12,雙防破速隊,Chasun,Chasun,奶+回能,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+巨龍巢穴 DB12,雙防破速隊,Chasun,Chasun,奶+回能,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+巨龍巢穴 DB12,雙防破速隊,Chasun,Chasun,奶+回能,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+巨龍巢穴 DB12,雙防破速隊,Chasun,Chasun,奶+回能,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+巨龍巢穴 DB12,雙防破速隊,Chasun,Chasun,奶+回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+巨龍巢穴 DB12,雙防破速隊,Chasun,Chasun,奶+回能,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+巨龍巢穴 DB12,雙防破速隊,Sabrina,Sabrina,破防,✓,1,迅速,HP,6★,迅速,ATK+160,ATK%+5(前) / HP+545+548磨寶 / ACC%+8 / SPD+21+4磨 / HP%+8+7磨,111.3,Nina Williams
+巨龍巢穴 DB12,雙防破速隊,Sabrina,Sabrina,破防,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+巨龍巢穴 DB12,雙防破速隊,Sabrina,Sabrina,破防,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+巨龍巢穴 DB12,雙防破速隊,Sabrina,Sabrina,破防,✓,4,集中,HP%,6★,集中,HP%+63,ACC%+10 / SPD+22+5磨 / HP+487+519磨寶 / DEF%+5+9磨,108.4,K1D
+巨龍巢穴 DB12,雙防破速隊,Sabrina,Sabrina,破防,✓,5,集中,DEF,6★,集中,HP+2448,ACC%+8(前) / SPD+14+4磨 / DEF%+13+7磨 / HP%+16+5磨 / ATK%+6+7磨,112.5,倉庫
+巨龍巢穴 DB12,雙防破速隊,Sabrina,Sabrina,破防,✓,6,迅速,ACC%,6★,迅速,ACC%+64,SPD+21+4磨 / ATK%+6+7磨 / HP%+5+7磨 / HP+483+514磨寶,106.8,倉庫
+巨龍巢穴 DB12,雙防破速隊,Katarina,Katarina,高輸出,✓,1,暴走,HP,6★,暴走,ATK+160,ACC%+8(前) / HP+140+456磨 / HP%+13+9磨寶 / SPD+23+4磨 / ATK%+13+8磨,124.7,倉庫
+巨龍巢穴 DB12,雙防破速隊,Katarina,Katarina,高輸出,✓,2,暴走,SPD,6★,暴走,SPD+42,DEF%+14+7磨 / ATK%+15+7磨 / HP%+15+6磨 / HP+575+533磨寶,114,Ramael and Judiah
+巨龍巢穴 DB12,雙防破速隊,Katarina,Katarina,高輸出,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+巨龍巢穴 DB12,雙防破速隊,Katarina,Katarina,高輸出,✓,4,暴走,CDmg%,6★,暴走,CDmg%+80,ATK%+6+9磨 / DEF%+12+9磨寶 / SPD+11+4磨 / HP%+30+7磨,118.8,Martina
+巨龍巢穴 DB12,雙防破速隊,Katarina,Katarina,高輸出,✓,5,暴走,DEF,6★,暴走,HP+2448,ACC%+7(前) / ATK%+21+10磨 / HP%+8+7磨 / SPD+9+4磨寶 / DEF%+22+7磨,124.4,Raoq
+巨龍巢穴 DB12,雙防破速隊,Katarina,Katarina,高輸出,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+巨龍巢穴 DB12,雙防破速隊,Fran,Fran,免疫+奶,✓,1,迅速,HP,6★,迅速,ATK+160,RES%+6(前) / SPD+7+4磨寶 / HP%+22+6磨 / ATK%+6+6磨 / CDmg%+20,110.3,Tarq
+巨龍巢穴 DB12,雙防破速隊,Fran,Fran,免疫+奶,✓,2,迅速,SPD,6★,迅速,SPD+42,CRate%+5(前) / DEF%+11+7磨寶 / ATK+33+26磨 / ACC%+12 / HP%+22+7磨,115.4,Shamar
+巨龍巢穴 DB12,雙防破速隊,Fran,Fran,免疫+奶,✓,3,迅速,ATK,6★,迅速,DEF+160,DEF%+8(前) / SPD+23+5磨 / HP%+10+7磨寶 / HP+274+521磨 / ACC%+8,113.7,Madeleine
+巨龍巢穴 DB12,雙防破速隊,Fran,Fran,免疫+奶,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+巨龍巢穴 DB12,雙防破速隊,Fran,Fran,免疫+奶,✓,5,迅速,DEF,6★,迅速,HP+2448,SPD+20+4磨 / HP%+11+7磨寶 / ATK%+14+7磨 / DEF%+7+9磨,113.4,Claire
+巨龍巢穴 DB12,雙防破速隊,Fran,Fran,免疫+奶,✓,6,意志,HP%,6★,意志,HP%+63,ATK%+7(前) / DEF%+8+7磨 / DEF+38+29磨寶 / SPD+19+4磨 / ACC%+13,118.3,Platy
+巨龍巢穴 DB12,雙防破速隊,Verad,Verad,免疫+控,✓,1,迅速,HP,6★,迅速,ATK+160,RES%+8(前) / ACC%+4 / SPD+20+4磨 / HP+448+485磨 / HP%+11+7磨寶,108.8,倉庫
+巨龍巢穴 DB12,雙防破速隊,Verad,Verad,免疫+控,✓,2,意志,SPD,上古,意志,SPD+42,HP%+17+9磨 / ACC%+14 / ATK%+23+8磨 / DEF%+12+9磨寶,117.9,Gandalf
+巨龍巢穴 DB12,雙防破速隊,Verad,Verad,免疫+控,✓,3,迅速,ATK,6★,迅速,DEF+160,HP+233(前) / SPD+23+5磨 / HP%+10+7磨寶 / ACC%+12 / DEF%+5+9磨,111.9,Alice
+巨龍巢穴 DB12,雙防破速隊,Verad,Verad,免疫+控,✓,4,迅速,HP%,6★,迅速,HP%+63,HP+302(前) / RES%+7 / SPD+22+4磨 / ATK%+15+7磨 / CDmg%+7,105.5,Konamiya
+巨龍巢穴 DB12,雙防破速隊,Verad,Verad,免疫+控,✓,5,意志,DEF,6★,意志,HP+2448,CDmg%+7(前) / DEF%+11+7磨寶 / SPD+21+5磨 / HP%+8+7磨 / ATK%+7+10磨,118.5,Tiana
+巨龍巢穴 DB12,雙防破速隊,Verad,Verad,免疫+控,✓,6,迅速,HP%,6★,迅速,HP%+63,HP+367+531磨 / SPD+20+5磨 / DEF%+13+10磨 / ACC%+9寶,111.2,Dova
+死者之塔 NB12,通用隊,Veromos,Veromos,淨化+持續,✓,1,絕望,HP,6★,絕望,ATK+160,CDmg%+7(前) / HP%+11+7磨寶 / SPD+20+4磨 / ATK%+8+7磨 / ACC%+11,110.7,Juno
+死者之塔 NB12,通用隊,Veromos,Veromos,淨化+持續,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+死者之塔 NB12,通用隊,Veromos,Veromos,淨化+持續,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+死者之塔 NB12,通用隊,Veromos,Veromos,淨化+持續,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+死者之塔 NB12,通用隊,Veromos,Veromos,淨化+持續,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+死者之塔 NB12,通用隊,Veromos,Veromos,淨化+持續,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+死者之塔 NB12,通用隊,Bernard,Bernard,回能,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+死者之塔 NB12,通用隊,Bernard,Bernard,回能,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+死者之塔 NB12,通用隊,Bernard,Bernard,回能,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+死者之塔 NB12,通用隊,Bernard,Bernard,回能,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+死者之塔 NB12,通用隊,Bernard,Bernard,回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+死者之塔 NB12,通用隊,Bernard,Bernard,回能,✓,6,意志,HP%,6★,意志,HP%+63,ATK%+7(前) / DEF%+8+7磨 / DEF+38+29磨寶 / SPD+19+4磨 / ACC%+13,118.3,Platy
+死者之塔 NB12,通用隊,Sabrina,Sabrina,破防+暈,✓,1,迅速,HP,6★,迅速,ATK+160,ATK%+5(前) / HP+545+548磨寶 / ACC%+8 / SPD+21+4磨 / HP%+8+7磨,111.3,Nina Williams
+死者之塔 NB12,通用隊,Sabrina,Sabrina,破防+暈,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+死者之塔 NB12,通用隊,Sabrina,Sabrina,破防+暈,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+死者之塔 NB12,通用隊,Sabrina,Sabrina,破防+暈,✓,4,集中,HP%,6★,集中,HP%+63,ACC%+10 / SPD+22+5磨 / HP+487+519磨寶 / DEF%+5+9磨,108.4,K1D
+死者之塔 NB12,通用隊,Sabrina,Sabrina,破防+暈,✓,5,集中,DEF,6★,集中,HP+2448,ACC%+8(前) / SPD+14+4磨 / DEF%+13+7磨 / HP%+16+5磨 / ATK%+6+7磨,112.5,倉庫
+死者之塔 NB12,通用隊,Sabrina,Sabrina,破防+暈,✓,6,迅速,ACC%,6★,迅速,ACC%+64,SPD+21+4磨 / ATK%+6+7磨 / HP%+5+7磨 / HP+483+514磨寶,106.8,倉庫
+死者之塔 NB12,通用隊,Sigmarus,Sigmarus,冰凍,✓,1,激怒,HP,6★,激怒,ATK+160,CRate%+6(前) / HP%+13+9磨 / ATK%+13+8磨 / CDmg%+20 / SPD+9+5磨寶,118.3,Lushen
+死者之塔 NB12,通用隊,Sigmarus,Sigmarus,冰凍,✓,2,激怒,SPD,6★,激怒,SPD+42,RES%+7(前) / HP%+13+6磨 / CDmg%+6 / ATK+39+30磨寶 / ATK%+26+8磨,120.1,倉庫
+死者之塔 NB12,通用隊,Sigmarus,Sigmarus,冰凍,✓,3,激怒,ATK,6★,激怒,DEF+160,CDmg%+6(前) / CRate%+12 / DEF%+5+7磨 / SPD+17+4磨 / HP%+6+5磨,101.7,Brandia
+死者之塔 NB12,通用隊,Sigmarus,Sigmarus,冰凍,✓,4,刀刃,HP%,6★,刀刃,HP%+63,ACC%+6 / ATK%+8 / SPD+5 / CRate%+27,86.3,Leo
+死者之塔 NB12,通用隊,Sigmarus,Sigmarus,冰凍,✓,5,激怒,DEF,6★,激怒,HP+2448,RES%+8(前) / CRate%+15 / ATK+37+24磨寶 / ATK%+8+7磨 / CDmg%+14,110.2,Luna
+死者之塔 NB12,通用隊,Sigmarus,Sigmarus,冰凍,✓,6,刀刃,HP%,6★,刀刃,HP%+63,DEF%+8(前) / CRate%+9寶 / DEF+10+28磨 / SPD+24+5磨 / ACC%+5,106.1,Teon
+死者之塔 NB12,通用隊,Loren,Loren,多段輸出,✓,1,絕望,HP,6★,絕望,ATK+160,ACC%+8(前) / CDmg%+7 / HP%+7+7磨 / SPD+21+4磨 / ATK%+10+10磨寶,110.1,ROBO-F29
+死者之塔 NB12,通用隊,Loren,Loren,多段輸出,✓,2,絕望,ATK%,6★,絕望,ATK%+63,CRate%+6 / DEF%+11+10磨寶 / SPD+29+4磨 / HP%+8+10磨,117,Legolas
+死者之塔 NB12,通用隊,Loren,Loren,多段輸出,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+死者之塔 NB12,通用隊,Loren,Loren,多段輸出,✓,4,刀刃,CDmg%,6★,刀刃,CDmg%+80,SPD+20+5磨 / DEF%+8+9磨 / CRate%+12 / ATK%+11+8磨寶,111.9,Beth
+死者之塔 NB12,通用隊,Loren,Loren,多段輸出,✓,5,絕望,DEF,6★,絕望,HP+2448,SPD+27+5磨 / ATK%+13+8磨寶 / DEF%+6+9磨 / HP%+6+8磨,118.5,Madeleine Cookie
+死者之塔 NB12,通用隊,Loren,Loren,多段輸出,✓,6,絕望,ATK%,上古,絕望,ATK%+63,CDmg%+20 / HP%+15+8磨寶 / DEF%+16+8磨 / ACC%+18,114.2,Momo
+鋼鐵要塞 SF10,多段隊,Veromos,Veromos,淨化+破防,✓,1,意志,HP,6★,意志,ATK+160,RES%+8(前) / HP%+15+8磨 / SPD+17+3磨 / HP+401+405磨寶 / ATK%+8+6磨,115.1,Kinki
+鋼鐵要塞 SF10,多段隊,Veromos,Veromos,淨化+破防,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+鋼鐵要塞 SF10,多段隊,Veromos,Veromos,淨化+破防,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+鋼鐵要塞 SF10,多段隊,Veromos,Veromos,淨化+破防,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+鋼鐵要塞 SF10,多段隊,Veromos,Veromos,淨化+破防,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+鋼鐵要塞 SF10,多段隊,Veromos,Veromos,淨化+破防,✓,6,絕望,ACC%,6★,絕望,ACC%+64,SPD+22+5磨 / DEF%+11+10磨寶 / HP%+7+8磨 / ATK%+5+10磨,113.4,倉庫
+鋼鐵要塞 SF10,多段隊,Bernard,Bernard,回能,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+鋼鐵要塞 SF10,多段隊,Bernard,Bernard,回能,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+鋼鐵要塞 SF10,多段隊,Bernard,Bernard,回能,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+鋼鐵要塞 SF10,多段隊,Bernard,Bernard,回能,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+鋼鐵要塞 SF10,多段隊,Bernard,Bernard,回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+鋼鐵要塞 SF10,多段隊,Bernard,Bernard,回能,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+鋼鐵要塞 SF10,多段隊,Tesarion,Tesarion,多段+灼燒,✓,1,暴走,HP,6★,暴走,ATK+160,ACC%+8(前) / HP+140+456磨 / HP%+13+9磨寶 / SPD+23+4磨 / ATK%+13+8磨,124.7,倉庫
+鋼鐵要塞 SF10,多段隊,Tesarion,Tesarion,多段+灼燒,✓,2,暴走,SPD,6★,暴走,SPD+42,DEF%+14+7磨 / ATK%+15+7磨 / HP%+15+6磨 / HP+575+533磨寶,114,Ramael and Judiah
+鋼鐵要塞 SF10,多段隊,Tesarion,Tesarion,多段+灼燒,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+鋼鐵要塞 SF10,多段隊,Tesarion,Tesarion,多段+灼燒,✓,4,暴走,CDmg%,6★,暴走,CDmg%+80,ATK%+6+9磨 / DEF%+12+9磨寶 / SPD+11+4磨 / HP%+30+7磨,118.8,Martina
+鋼鐵要塞 SF10,多段隊,Tesarion,Tesarion,多段+灼燒,✓,5,暴走,DEF,6★,暴走,HP+2448,ACC%+7(前) / ATK%+21+10磨 / HP%+8+7磨 / SPD+9+4磨寶 / DEF%+22+7磨,124.4,Raoq
+鋼鐵要塞 SF10,多段隊,Tesarion,Tesarion,多段+灼燒,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+鋼鐵要塞 SF10,多段隊,Sath,Sath,破防+持續,✓,1,絕望,HP,6★,絕望,ATK+160,CDmg%+7(前) / HP%+11+7磨寶 / SPD+20+4磨 / ATK%+8+7磨 / ACC%+11,110.7,Juno
+鋼鐵要塞 SF10,多段隊,Sath,Sath,破防+持續,✓,2,意志,SPD,上古,意志,SPD+42,HP%+17+9磨 / ACC%+14 / ATK%+23+8磨 / DEF%+12+9磨寶,117.9,Gandalf
+鋼鐵要塞 SF10,多段隊,Sath,Sath,破防+持續,✓,3,絕望,ATK,6★,絕望,DEF+160,DEF%+5(前) / HP%+11+7磨 / ACC%+8 / HP+537+532磨寶 / SPD+20+5磨,113.5,Juno
+鋼鐵要塞 SF10,多段隊,Sath,Sath,破防+持續,✓,4,絕望,HP%,6★,絕望,HP%+63,CRate%+4(前) / ACC%+11 / SPD+17+4磨 / HP+349+506磨 / DEF%+10+7磨寶,106.8,倉庫
+鋼鐵要塞 SF10,多段隊,Sath,Sath,破防+持續,✓,5,絕望,DEF,6★,絕望,HP+2448,SPD+27+5磨 / ATK%+13+8磨寶 / DEF%+6+9磨 / HP%+6+8磨,118.5,Madeleine Cookie
+鋼鐵要塞 SF10,多段隊,Sath,Sath,破防+持續,✓,6,意志,ACC%,6★,意志,ACC%+64,DEF%+8(前) / CRate%+24 / SPD+6+3磨 / ATK%+8+4磨 / HP%+13+5磨,108.9,倉庫
+鋼鐵要塞 SF10,多段隊,Colleen,Colleen,奶+吸血,✓,1,吸血,HP,6★,吸血,ATK+160,HP+163(前) / ACC%+9寶 / SPD+27+5磨 / ATK%+7+9磨 / HP%+5+9磨,111.7,Jultan
+鋼鐵要塞 SF10,多段隊,Colleen,Colleen,奶+吸血,✓,2,吸血,SPD,6★,吸血,SPD+42,CDmg%+7 / CRate%+7寶 / DEF%+21+9磨 / HP%+21+9磨,104.8,Nezuko Kamado
+鋼鐵要塞 SF10,多段隊,Colleen,Colleen,奶+吸血,✓,3,吸血,ATK,6★,吸血,DEF+160,SPD+22+5磨 / HP%+11+9磨寶 / CRate%+9 / DEF%+6+10磨,110.7,Jultan
+鋼鐵要塞 SF10,多段隊,Colleen,Colleen,奶+吸血,✓,4,意志,HP%,上古,意志,HP%+63,ATK%+21+7磨 / DEF%+16+8磨 / CRate%+7 / CDmg%+16,106.8,Kovarci
+鋼鐵要塞 SF10,多段隊,Colleen,Colleen,奶+吸血,✓,5,意志,DEF,6★,意志,HP+2448,CDmg%+7(前) / DEF%+11+7磨寶 / SPD+21+5磨 / HP%+8+7磨 / ATK%+7+10磨,118.5,Tiana
+鋼鐵要塞 SF10,多段隊,Colleen,Colleen,奶+吸血,✓,6,吸血,HP%,6★,吸血,HP%+63,DEF%+12+10磨寶 / SPD+20+5磨 / HP+245+530磨 / CRate%+11,113,Jultan
+懲罰者地穴 PC10,固傷隊,Veromos,Veromos,淨化,✓,1,絕望,HP,6★,絕望,ATK+160,CDmg%+7(前) / HP%+11+7磨寶 / SPD+20+4磨 / ATK%+8+7磨 / ACC%+11,110.7,Juno
+懲罰者地穴 PC10,固傷隊,Veromos,Veromos,淨化,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+懲罰者地穴 PC10,固傷隊,Veromos,Veromos,淨化,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+懲罰者地穴 PC10,固傷隊,Veromos,Veromos,淨化,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+懲罰者地穴 PC10,固傷隊,Veromos,Veromos,淨化,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+懲罰者地穴 PC10,固傷隊,Veromos,Veromos,淨化,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+懲罰者地穴 PC10,固傷隊,Theomars,Theomars,無視抗性輸出,✓,1,暴走,HP,6★,暴走,ATK+160,ACC%+8(前) / HP+140+456磨 / HP%+13+9磨寶 / SPD+23+4磨 / ATK%+13+8磨,124.7,倉庫
+懲罰者地穴 PC10,固傷隊,Theomars,Theomars,無視抗性輸出,✓,2,暴走,SPD,6★,暴走,SPD+42,DEF%+14+7磨 / ATK%+15+7磨 / HP%+15+6磨 / HP+575+533磨寶,114,Ramael and Judiah
+懲罰者地穴 PC10,固傷隊,Theomars,Theomars,無視抗性輸出,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+懲罰者地穴 PC10,固傷隊,Theomars,Theomars,無視抗性輸出,✓,4,暴走,CDmg%,6★,暴走,CDmg%+80,ATK%+6+9磨 / DEF%+12+9磨寶 / SPD+11+4磨 / HP%+30+7磨,118.8,Martina
+懲罰者地穴 PC10,固傷隊,Theomars,Theomars,無視抗性輸出,✓,5,暴走,DEF,6★,暴走,HP+2448,ACC%+7(前) / ATK%+21+10磨 / HP%+8+7磨 / SPD+9+4磨寶 / DEF%+22+7磨,124.4,Raoq
+懲罰者地穴 PC10,固傷隊,Theomars,Theomars,無視抗性輸出,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+懲罰者地穴 PC10,固傷隊,Bernard,Bernard,回能,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+懲罰者地穴 PC10,固傷隊,Bernard,Bernard,回能,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+懲罰者地穴 PC10,固傷隊,Bernard,Bernard,回能,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+懲罰者地穴 PC10,固傷隊,Bernard,Bernard,回能,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+懲罰者地穴 PC10,固傷隊,Bernard,Bernard,回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+懲罰者地穴 PC10,固傷隊,Bernard,Bernard,回能,✓,6,意志,HP%,6★,意志,HP%+63,ATK%+7(前) / DEF%+8+7磨 / DEF+38+29磨寶 / SPD+19+4磨 / ACC%+13,118.3,Platy
+懲罰者地穴 PC10,固傷隊,Chasun,Chasun,奶+回能,✓,1,迅速,HP,6★,迅速,ATK+160,ATK%+5(前) / HP+545+548磨寶 / ACC%+8 / SPD+21+4磨 / HP%+8+7磨,111.3,Nina Williams
+懲罰者地穴 PC10,固傷隊,Chasun,Chasun,奶+回能,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+懲罰者地穴 PC10,固傷隊,Chasun,Chasun,奶+回能,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+懲罰者地穴 PC10,固傷隊,Chasun,Chasun,奶+回能,✓,4,迅速,HP%,6★,迅速,HP%+63,HP+302(前) / RES%+7 / SPD+22+4磨 / ATK%+15+7磨 / CDmg%+7,105.5,Konamiya
+懲罰者地穴 PC10,固傷隊,Chasun,Chasun,奶+回能,✓,5,意志,DEF,6★,意志,HP+2448,CDmg%+7(前) / DEF%+11+7磨寶 / SPD+21+5磨 / HP%+8+7磨 / ATK%+7+10磨,118.5,Tiana
+懲罰者地穴 PC10,固傷隊,Chasun,Chasun,奶+回能,✓,6,意志,HP%,6★,意志,HP%+63,ACC%+8(前) / SPD+12+5磨 / DEF%+16+10磨 / RES%+12 / ATK%+16+7磨,117.6,Kinki
+懲罰者地穴 PC10,固傷隊,Fran,Fran,免疫+奶,✓,1,意志,HP,6★,意志,ATK+160,RES%+8(前) / HP%+15+8磨 / SPD+17+3磨 / HP+401+405磨寶 / ATK%+8+6磨,115.1,Kinki
+懲罰者地穴 PC10,固傷隊,Fran,Fran,免疫+奶,✓,2,迅速,SPD,6★,迅速,SPD+42,CRate%+5(前) / DEF%+11+7磨寶 / ATK+33+26磨 / ACC%+12 / HP%+22+7磨,115.4,Shamar
+懲罰者地穴 PC10,固傷隊,Fran,Fran,免疫+奶,✓,3,迅速,ATK,6★,迅速,DEF+160,DEF%+8(前) / SPD+23+5磨 / HP%+10+7磨寶 / HP+274+521磨 / ACC%+8,113.7,Madeleine
+懲罰者地穴 PC10,固傷隊,Fran,Fran,免疫+奶,✓,4,意志,HP%,上古,意志,HP%+63,ATK%+21+7磨 / DEF%+16+8磨 / CRate%+7 / CDmg%+16,106.8,Kovarci
+懲罰者地穴 PC10,固傷隊,Fran,Fran,免疫+奶,✓,5,迅速,DEF,6★,迅速,HP+2448,SPD+20+4磨 / HP%+11+7磨寶 / ATK%+14+7磨 / DEF%+7+9磨,113.4,Claire
+懲罰者地穴 PC10,固傷隊,Fran,Fran,免疫+奶,✓,6,迅速,HP%,6★,迅速,HP%+63,HP+367+531磨 / SPD+20+5磨 / DEF%+13+10磨 / ACC%+9寶,111.2,Dova
+元素地下城,通用清怪隊,Lushen,Lushen,範圍斬殺,✓,1,激怒,HP,6★,激怒,ATK+160,CRate%+6(前) / HP%+13+9磨 / ATK%+13+8磨 / CDmg%+20 / SPD+9+5磨寶,118.3,Lushen
+元素地下城,通用清怪隊,Lushen,Lushen,範圍斬殺,✓,2,激怒,ATK%,6★,激怒,ATK%+63,SPD+10+5磨寶 / HP%+14+10磨 / CDmg%+14 / CRate%+18,110.7,Naomi
+元素地下城,通用清怪隊,Lushen,Lushen,範圍斬殺,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+元素地下城,通用清怪隊,Lushen,Lushen,範圍斬殺,✓,4,激怒,CDmg%,6★,激怒,CDmg%+80,ACC%+7(前) / CRate%+8寶 / DEF%+21+8磨 / SPD+6+4磨 / ATK%+22+10磨,117.9,Lucas
+元素地下城,通用清怪隊,Lushen,Lushen,範圍斬殺,✓,5,激怒,DEF,6★,激怒,HP+2448,RES%+8(前) / CRate%+15 / ATK+37+24磨寶 / ATK%+8+7磨 / CDmg%+14,110.2,Luna
+元素地下城,通用清怪隊,Lushen,Lushen,範圍斬殺,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+元素地下城,通用清怪隊,Veromos,Veromos,淨化+持續,✓,1,絕望,HP,6★,絕望,ATK+160,CDmg%+7(前) / HP%+11+7磨寶 / SPD+20+4磨 / ATK%+8+7磨 / ACC%+11,110.7,Juno
+元素地下城,通用清怪隊,Veromos,Veromos,淨化+持續,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+元素地下城,通用清怪隊,Veromos,Veromos,淨化+持續,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+元素地下城,通用清怪隊,Veromos,Veromos,淨化+持續,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+元素地下城,通用清怪隊,Veromos,Veromos,淨化+持續,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+元素地下城,通用清怪隊,Veromos,Veromos,淨化+持續,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+元素地下城,通用清怪隊,Bernard,Bernard,回能,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+元素地下城,通用清怪隊,Bernard,Bernard,回能,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+元素地下城,通用清怪隊,Bernard,Bernard,回能,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+元素地下城,通用清怪隊,Bernard,Bernard,回能,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+元素地下城,通用清怪隊,Bernard,Bernard,回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+元素地下城,通用清怪隊,Bernard,Bernard,回能,✓,6,意志,HP%,6★,意志,HP%+63,ATK%+7(前) / DEF%+8+7磨 / DEF+38+29磨寶 / SPD+19+4磨 / ACC%+13,118.3,Platy
+元素地下城,通用清怪隊,Colleen,Colleen,奶+吸血,✓,1,吸血,HP,6★,吸血,ATK+160,HP+163(前) / ACC%+9寶 / SPD+27+5磨 / ATK%+7+9磨 / HP%+5+9磨,111.7,Jultan
+元素地下城,通用清怪隊,Colleen,Colleen,奶+吸血,✓,2,意志,SPD,上古,意志,SPD+42,HP%+17+9磨 / ACC%+14 / ATK%+23+8磨 / DEF%+12+9磨寶,117.9,Gandalf
+元素地下城,通用清怪隊,Colleen,Colleen,奶+吸血,✓,3,吸血,ATK,6★,吸血,DEF+160,SPD+22+5磨 / HP%+11+9磨寶 / CRate%+9 / DEF%+6+10磨,110.7,Jultan
+元素地下城,通用清怪隊,Colleen,Colleen,奶+吸血,✓,4,意志,HP%,上古,意志,HP%+63,ATK%+21+7磨 / DEF%+16+8磨 / CRate%+7 / CDmg%+16,106.8,Kovarci
+元素地下城,通用清怪隊,Colleen,Colleen,奶+吸血,✓,5,吸血,DEF,6★,吸血,HP+2448,CRate%+6(前) / SPD+17+4磨 / ATK%+10+7磨 / HP%+6+7磨 / DEF%+7+7磨,107.1,Daphnis
+元素地下城,通用清怪隊,Colleen,Colleen,奶+吸血,✓,6,吸血,HP%,6★,吸血,HP%+63,DEF%+12+10磨寶 / SPD+20+5磨 / HP+245+530磨 / CRate%+11,113,Jultan
+次元異界龍 火(水隊),打火龍,Sigmarus,Sigmarus,冰凍+輸出,✓,1,激怒,HP,6★,激怒,ATK+160,CRate%+6(前) / HP%+13+9磨 / ATK%+13+8磨 / CDmg%+20 / SPD+9+5磨寶,118.3,Lushen
+次元異界龍 火(水隊),打火龍,Sigmarus,Sigmarus,冰凍+輸出,✓,2,激怒,ATK%,6★,激怒,ATK%+63,SPD+10+5磨寶 / HP%+14+10磨 / CDmg%+14 / CRate%+18,110.7,Naomi
+次元異界龍 火(水隊),打火龍,Sigmarus,Sigmarus,冰凍+輸出,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+次元異界龍 火(水隊),打火龍,Sigmarus,Sigmarus,冰凍+輸出,✓,4,激怒,CDmg%,6★,激怒,CDmg%+80,ACC%+7(前) / CRate%+8寶 / DEF%+21+8磨 / SPD+6+4磨 / ATK%+22+10磨,117.9,Lucas
+次元異界龍 火(水隊),打火龍,Sigmarus,Sigmarus,冰凍+輸出,✓,5,激怒,DEF,6★,激怒,HP+2448,RES%+8(前) / CRate%+15 / ATK+37+24磨寶 / ATK%+8+7磨 / CDmg%+14,110.2,Luna
+次元異界龍 火(水隊),打火龍,Sigmarus,Sigmarus,冰凍+輸出,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+次元異界龍 火(水隊),打火龍,Tetra,Tetra,破防,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+次元異界龍 火(水隊),打火龍,Tetra,Tetra,破防,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+次元異界龍 火(水隊),打火龍,Tetra,Tetra,破防,✓,3,集中,ATK,6★,集中,DEF+160,RES%+5(前) / SPD+10+3磨 / HP%+13+10磨 / HP+572+520磨 / DEF%+12+7磨,114,K1D
+次元異界龍 火(水隊),打火龍,Tetra,Tetra,破防,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+次元異界龍 火(水隊),打火龍,Tetra,Tetra,破防,✓,5,集中,DEF,6★,集中,HP+2448,ACC%+8(前) / SPD+14+4磨 / DEF%+13+7磨 / HP%+16+5磨 / ATK%+6+7磨,112.5,倉庫
+次元異界龍 火(水隊),打火龍,Tetra,Tetra,破防,✓,6,迅速,ACC%,6★,迅速,ACC%+64,SPD+21+4磨 / ATK%+6+7磨 / HP%+5+7磨 / HP+483+514磨寶,106.8,倉庫
+次元異界龍 火(水隊),打火龍,Colleen,Colleen,奶+吸血,✓,1,吸血,HP,6★,吸血,ATK+160,HP+163(前) / ACC%+9寶 / SPD+27+5磨 / ATK%+7+9磨 / HP%+5+9磨,111.7,Jultan
+次元異界龍 火(水隊),打火龍,Colleen,Colleen,奶+吸血,✓,2,吸血,SPD,6★,吸血,SPD+42,CDmg%+7 / CRate%+7寶 / DEF%+21+9磨 / HP%+21+9磨,104.8,Nezuko Kamado
+次元異界龍 火(水隊),打火龍,Colleen,Colleen,奶+吸血,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+次元異界龍 火(水隊),打火龍,Colleen,Colleen,奶+吸血,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+次元異界龍 火(水隊),打火龍,Colleen,Colleen,奶+吸血,✓,5,吸血,DEF,6★,吸血,HP+2448,CRate%+6(前) / SPD+17+4磨 / ATK%+10+7磨 / HP%+6+7磨 / DEF%+7+7磨,107.1,Daphnis
+次元異界龍 火(水隊),打火龍,Colleen,Colleen,奶+吸血,✓,6,吸血,HP%,6★,吸血,HP%+63,DEF%+12+10磨寶 / SPD+20+5磨 / HP+245+530磨 / CRate%+11,113,Jultan
+次元異界龍 火(水隊),打火龍,Mikene,Mikene,回能+免疫,✓,1,意志,HP,6★,意志,ATK+160,RES%+8(前) / HP%+15+8磨 / SPD+17+3磨 / HP+401+405磨寶 / ATK%+8+6磨,115.1,Kinki
+次元異界龍 火(水隊),打火龍,Mikene,Mikene,回能+免疫,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+次元異界龍 火(水隊),打火龍,Mikene,Mikene,回能+免疫,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+次元異界龍 火(水隊),打火龍,Mikene,Mikene,回能+免疫,✓,4,迅速,HP%,6★,迅速,HP%+63,HP+302(前) / RES%+7 / SPD+22+4磨 / ATK%+15+7磨 / CDmg%+7,105.5,Konamiya
+次元異界龍 火(水隊),打火龍,Mikene,Mikene,回能+免疫,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+次元異界龍 火(水隊),打火龍,Mikene,Mikene,回能+免疫,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+次元異界龍 火(水隊),打火龍,,Govliet,水晶擊破/輸出,✗未持有,,,,,,,,,
+次元異界龍 水(風隊),打水龍,Baretta,Baretta,破防+持續,✓,1,意志,HP,6★,意志,ATK+160,RES%+8(前) / HP%+15+8磨 / SPD+17+3磨 / HP+401+405磨寶 / ATK%+8+6磨,115.1,Kinki
+次元異界龍 水(風隊),打水龍,Baretta,Baretta,破防+持續,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+次元異界龍 水(風隊),打水龍,Baretta,Baretta,破防+持續,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+次元異界龍 水(風隊),打水龍,Baretta,Baretta,破防+持續,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+次元異界龍 水(風隊),打水龍,Baretta,Baretta,破防+持續,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+次元異界龍 水(風隊),打水龍,Baretta,Baretta,破防+持續,✓,6,絕望,ACC%,6★,絕望,ACC%+64,SPD+22+5磨 / DEF%+11+10磨寶 / HP%+7+8磨 / ATK%+5+10磨,113.4,倉庫
+次元異界龍 水(風隊),打水龍,,Kona,破防,✗未持有,,,,,,,,,
+次元異界龍 水(風隊),打水龍,,Wind Homunculus,固傷/水晶,✗未持有,,,,,,,,,
+次元異界龍 水(風隊),打水龍,Hemos,Hemos,奶+免疫,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+次元異界龍 水(風隊),打水龍,Hemos,Hemos,奶+免疫,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+次元異界龍 水(風隊),打水龍,Hemos,Hemos,奶+免疫,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+次元異界龍 水(風隊),打水龍,Hemos,Hemos,奶+免疫,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+次元異界龍 水(風隊),打水龍,Hemos,Hemos,奶+免疫,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+次元異界龍 水(風隊),打水龍,Hemos,Hemos,奶+免疫,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+次元異界龍 水(風隊),打水龍,Lushen,Lushen,斬殺,✓,1,激怒,HP,6★,激怒,ATK+160,CRate%+6(前) / HP%+13+9磨 / ATK%+13+8磨 / CDmg%+20 / SPD+9+5磨寶,118.3,Lushen
+次元異界龍 水(風隊),打水龍,Lushen,Lushen,斬殺,✓,2,激怒,ATK%,6★,激怒,ATK%+63,SPD+10+5磨寶 / HP%+14+10磨 / CDmg%+14 / CRate%+18,110.7,Naomi
+次元異界龍 水(風隊),打水龍,Lushen,Lushen,斬殺,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+次元異界龍 水(風隊),打水龍,Lushen,Lushen,斬殺,✓,4,激怒,CDmg%,6★,激怒,CDmg%+80,ACC%+7(前) / CRate%+8寶 / DEF%+21+8磨 / SPD+6+4磨 / ATK%+22+10磨,117.9,Lucas
+次元異界龍 水(風隊),打水龍,Lushen,Lushen,斬殺,✓,5,激怒,DEF,6★,激怒,HP+2448,RES%+8(前) / CRate%+15 / ATK+37+24磨寶 / ATK%+8+7磨 / CDmg%+14,110.2,Luna
+次元異界龍 水(風隊),打水龍,Lushen,Lushen,斬殺,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+次元異界龍 風(火隊),打風龍,Tesarion,Tesarion,多段+灼燒,✓,1,暴走,HP,6★,暴走,ATK+160,ACC%+8(前) / HP+140+456磨 / HP%+13+9磨寶 / SPD+23+4磨 / ATK%+13+8磨,124.7,倉庫
+次元異界龍 風(火隊),打風龍,Tesarion,Tesarion,多段+灼燒,✓,2,暴走,SPD,6★,暴走,SPD+42,DEF%+14+7磨 / ATK%+15+7磨 / HP%+15+6磨 / HP+575+533磨寶,114,Ramael and Judiah
+次元異界龍 風(火隊),打風龍,Tesarion,Tesarion,多段+灼燒,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+次元異界龍 風(火隊),打風龍,Tesarion,Tesarion,多段+灼燒,✓,4,暴走,CDmg%,6★,暴走,CDmg%+80,ATK%+6+9磨 / DEF%+12+9磨寶 / SPD+11+4磨 / HP%+30+7磨,118.8,Martina
+次元異界龍 風(火隊),打風龍,Tesarion,Tesarion,多段+灼燒,✓,5,暴走,DEF,6★,暴走,HP+2448,ACC%+7(前) / ATK%+21+10磨 / HP%+8+7磨 / SPD+9+4磨寶 / DEF%+22+7磨,124.4,Raoq
+次元異界龍 風(火隊),打風龍,Tesarion,Tesarion,多段+灼燒,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+次元異界龍 風(火隊),打風龍,Sath,Sath,破防+持續,✓,1,意志,HP,6★,意志,ATK+160,RES%+8(前) / HP%+15+8磨 / SPD+17+3磨 / HP+401+405磨寶 / ATK%+8+6磨,115.1,Kinki
+次元異界龍 風(火隊),打風龍,Sath,Sath,破防+持續,✓,2,絕望,SPD,6★,絕望,SPD+42,CDmg%+13 / HP%+11+8磨寶 / ATK%+15+10磨 / DEF%+19+10磨,114.2,Nana
+次元異界龍 風(火隊),打風龍,Sath,Sath,破防+持續,✓,3,絕望,ATK,上古,絕望,DEF+160,ACC%+8(前) / HP+400+521磨 / SPD+22+5磨 / HP%+15+8磨 / DEF%+8+5磨寶,124.7,倉庫
+次元異界龍 風(火隊),打風龍,Sath,Sath,破防+持續,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+次元異界龍 風(火隊),打風龍,Sath,Sath,破防+持續,✓,5,絕望,DEF,上古,絕望,HP+2448,DEF%+14+11磨 / HP%+10+9磨寶 / SPD+23+5磨 / DEF+15+34磨,125.8,Kinki
+次元異界龍 風(火隊),打風龍,Sath,Sath,破防+持續,✓,6,絕望,ACC%,6★,絕望,ACC%+64,SPD+22+5磨 / DEF%+11+10磨寶 / HP%+7+8磨 / ATK%+5+10磨,113.4,倉庫
+次元異界龍 風(火隊),打風龍,,Fire Homunculus,固傷/水晶,✗未持有,,,,,,,,,
+次元異界龍 風(火隊),打風龍,Chandra,Chandra,控場,✓,1,絕望,HP,6★,絕望,ATK+160,CDmg%+7(前) / HP%+11+7磨寶 / SPD+20+4磨 / ATK%+8+7磨 / ACC%+11,110.7,Juno
+次元異界龍 風(火隊),打風龍,Chandra,Chandra,控場,✓,2,意志,SPD,上古,意志,SPD+42,HP%+17+9磨 / ACC%+14 / ATK%+23+8磨 / DEF%+12+9磨寶,117.9,Gandalf
+次元異界龍 風(火隊),打風龍,Chandra,Chandra,控場,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+次元異界龍 風(火隊),打風龍,Chandra,Chandra,控場,✓,4,絕望,HP%,6★,絕望,HP%+63,CRate%+4(前) / ACC%+11 / SPD+17+4磨 / HP+349+506磨 / DEF%+10+7磨寶,106.8,倉庫
+次元異界龍 風(火隊),打風龍,Chandra,Chandra,控場,✓,5,絕望,DEF,6★,絕望,HP+2448,SPD+27+5磨 / ATK%+13+8磨寶 / DEF%+6+9磨 / HP%+6+8磨,118.5,Madeleine Cookie
+次元異界龍 風(火隊),打風龍,Chandra,Chandra,控場,✓,6,絕望,HP%,上古,絕望,HP%+63,DEF%+32+9磨 / ACC%+10 / ATK%+14+7磨寶 / RES%+16,114.3,Tomoe
+次元異界龍 風(火隊),打風龍,Bernard,Bernard,回能,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+次元異界龍 風(火隊),打風龍,Bernard,Bernard,回能,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+次元異界龍 風(火隊),打風龍,Bernard,Bernard,回能,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+次元異界龍 風(火隊),打風龍,Bernard,Bernard,回能,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+次元異界龍 風(火隊),打風龍,Bernard,Bernard,回能,✓,5,意志,DEF,6★,意志,HP+2448,CDmg%+7(前) / DEF%+11+7磨寶 / SPD+21+5磨 / HP%+8+7磨 / ATK%+7+10磨,118.5,Tiana
+次元異界龍 風(火隊),打風龍,Bernard,Bernard,回能,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+異界縫隙 R5,綜合輸出隊,Galleon,Galleon,破防+攻buff,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+異界縫隙 R5,綜合輸出隊,Galleon,Galleon,破防+攻buff,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+異界縫隙 R5,綜合輸出隊,Galleon,Galleon,破防+攻buff,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+異界縫隙 R5,綜合輸出隊,Galleon,Galleon,破防+攻buff,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+異界縫隙 R5,綜合輸出隊,Galleon,Galleon,破防+攻buff,✓,5,意志,DEF,6★,意志,HP+2448,CDmg%+7(前) / DEF%+11+7磨寶 / SPD+21+5磨 / HP%+8+7磨 / ATK%+7+10磨,118.5,Tiana
+異界縫隙 R5,綜合輸出隊,Galleon,Galleon,破防+攻buff,✓,6,迅速,ACC%,6★,迅速,ACC%+64,SPD+21+4磨 / ATK%+6+7磨 / HP%+5+7磨 / HP+483+514磨寶,106.8,倉庫
+異界縫隙 R5,綜合輸出隊,Verdehile,Verdehile,爆擊回能,✓,1,暴走,HP,6★,暴走,ATK+160,ACC%+8(前) / HP+140+456磨 / HP%+13+9磨寶 / SPD+23+4磨 / ATK%+13+8磨,124.7,倉庫
+異界縫隙 R5,綜合輸出隊,Verdehile,Verdehile,爆擊回能,✓,2,暴走,SPD,6★,暴走,SPD+42,DEF%+14+7磨 / ATK%+15+7磨 / HP%+15+6磨 / HP+575+533磨寶,114,Ramael and Judiah
+異界縫隙 R5,綜合輸出隊,Verdehile,Verdehile,爆擊回能,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+異界縫隙 R5,綜合輸出隊,Verdehile,Verdehile,爆擊回能,✓,4,暴走,CDmg%,6★,暴走,CDmg%+80,ATK%+6+9磨 / DEF%+12+9磨寶 / SPD+11+4磨 / HP%+30+7磨,118.8,Martina
+異界縫隙 R5,綜合輸出隊,Verdehile,Verdehile,爆擊回能,✓,5,暴走,DEF,6★,暴走,HP+2448,ACC%+7(前) / ATK%+21+10磨 / HP%+8+7磨 / SPD+9+4磨寶 / DEF%+22+7磨,124.4,Raoq
+異界縫隙 R5,綜合輸出隊,Verdehile,Verdehile,爆擊回能,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+異界縫隙 R5,綜合輸出隊,Katarina,Katarina,主力輸出,✓,1,刀刃,HP,6★,刀刃,ATK+160,SPD+26+5磨 / ATK%+11+9磨寶 / CDmg%+5 / HP+282+546磨,111.3,倉庫
+異界縫隙 R5,綜合輸出隊,Katarina,Katarina,主力輸出,✓,2,暴走,SPD,6★,暴走,SPD+42,RES%+8(前) / HP+209 / CDmg%+14 / ATK+31+18磨寶 / ATK%+30+7磨,111.7,Gandalf
+異界縫隙 R5,綜合輸出隊,Katarina,Katarina,主力輸出,✓,3,暴走,ATK,6★,暴走,DEF+160,DEF%+6(前) / HP%+20+7磨 / HP+508+532磨寶 / ACC%+7 / SPD+18+5磨,118.6,Nobara Kugisaki
+異界縫隙 R5,綜合輸出隊,Katarina,Katarina,主力輸出,✓,4,刀刃,CDmg%,6★,刀刃,CDmg%+80,SPD+20+5磨 / DEF%+8+9磨 / CRate%+12 / ATK%+11+8磨寶,111.9,Beth
+異界縫隙 R5,綜合輸出隊,Katarina,Katarina,主力輸出,✓,5,暴走,DEF,6★,暴走,HP+2448,CDmg%+4(前) / DEF+36+28磨寶 / SPD+22+5磨 / DEF%+7+7磨 / HP%+8+7磨,120.7,Veromos
+異界縫隙 R5,綜合輸出隊,Katarina,Katarina,主力輸出,✓,6,暴走,ATK%,6★,暴走,ATK%+63,ACC%+7(前) / SPD+20+4磨 / HP+396+491磨 / CRate%+6 / HP%+10+7磨寶,109.8,Elsharion
+異界縫隙 R5,綜合輸出隊,Chasun,Chasun,奶+回能,✓,1,迅速,HP,6★,迅速,ATK+160,ATK%+5(前) / HP+545+548磨寶 / ACC%+8 / SPD+21+4磨 / HP%+8+7磨,111.3,Nina Williams
+異界縫隙 R5,綜合輸出隊,Chasun,Chasun,奶+回能,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+異界縫隙 R5,綜合輸出隊,Chasun,Chasun,奶+回能,✓,3,迅速,ATK,6★,迅速,DEF+160,CDmg%+7(前) / SPD+22+4磨 / HP%+9+7磨寶 / DEF%+8+7磨 / HP+335+439磨,116.2,Tiana
+異界縫隙 R5,綜合輸出隊,Chasun,Chasun,奶+回能,✓,4,意志,HP%,上古,意志,HP%+63,RES%+10寶 / HP+332+353磨 / DEF%+19+12磨 / SPD+18+4磨,111.6,Amber
+異界縫隙 R5,綜合輸出隊,Chasun,Chasun,奶+回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+異界縫隙 R5,綜合輸出隊,Chasun,Chasun,奶+回能,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+異界縫隙 R5,綜合輸出隊,Theomars,Theomars,無視抗性,✓,1,暴走,HP,6★,暴走,ATK+160,SPD+23+5磨 / HP+333+517磨 / ATK%+8+7磨 / HP%+11+10磨寶,117.4,Magnus
+異界縫隙 R5,綜合輸出隊,Theomars,Theomars,無視抗性,✓,2,刀刃,SPD,6★,刀刃,SPD+42,HP+316(前) / ATK+17+22磨 / ATK%+21+7磨 / CDmg%+6 / DEF%+11+7磨寶,102.9,Sonia
+異界縫隙 R5,綜合輸出隊,Theomars,Theomars,無視抗性,✓,3,刀刃,ATK,6★,刀刃,DEF+160,CDmg%+8寶 / HP%+7+9磨 / DEF%+7+10磨 / SPD+27+5磨,111.4,Claire
+異界縫隙 R5,綜合輸出隊,Theomars,Theomars,無視抗性,✓,4,暴走,HP%,6★,暴走,HP%+63,CDmg%+5(前) / SPD+20+4磨 / DEF%+11+7磨寶 / ATK+20+23磨 / ATK%+13+7磨,118.7,Mo Long
+異界縫隙 R5,綜合輸出隊,Theomars,Theomars,無視抗性,✓,5,暴走,DEF,6★,暴走,HP+2448,CDmg%+6(前) / SPD+20+4磨 / ATK%+12+7磨 / HP%+13+7磨寶 / DEF%+8+7磨,118.6,Amber
+異界縫隙 R5,綜合輸出隊,Theomars,Theomars,無視抗性,✓,6,暴走,HP%,6★,暴走,HP%+63,ACC%+7(前) / DEF%+12+8磨 / SPD+21+5磨 / HP+315+534磨 / ATK%+11+10磨寶,125.7,倉庫
+世界王 Worldboss,高分速刷,Bernard,Bernard,回能,✓,1,迅速,HP,6★,迅速,ATK+160,CRate%+5(前) / CDmg%+10寶 / ATK%+27+7磨 / HP+366+482磨 / SPD+12+4磨,117.4,Shamar
+世界王 Worldboss,高分速刷,Bernard,Bernard,回能,✓,2,迅速,SPD,6★,迅速,SPD+42,HP+202+547磨 / ATK%+28+10磨 / CRate%+10 / ATK+32+30磨寶,118,Lagmaron
+世界王 Worldboss,高分速刷,Bernard,Bernard,回能,✓,3,集中,ATK,6★,集中,DEF+160,RES%+5(前) / SPD+10+3磨 / HP%+13+10磨 / HP+572+520磨 / DEF%+12+7磨,114,K1D
+世界王 Worldboss,高分速刷,Bernard,Bernard,回能,✓,4,迅速,HP%,6★,迅速,HP%+63,CDmg%+6(前) / ATK%+8+7磨 / DEF%+11+9磨寶 / SPD+21+4磨 / ACC%+14,115.3,Bastet
+世界王 Worldboss,高分速刷,Bernard,Bernard,回能,✓,5,集中,DEF,6★,集中,HP+2448,ACC%+8(前) / SPD+14+4磨 / DEF%+13+7磨 / HP%+16+5磨 / ATK%+6+7磨,112.5,倉庫
+世界王 Worldboss,高分速刷,Bernard,Bernard,回能,✓,6,迅速,ACC%,6★,迅速,ACC%+64,SPD+21+4磨 / ATK%+6+7磨 / HP%+5+7磨 / HP+483+514磨寶,106.8,倉庫
+世界王 Worldboss,高分速刷,Verdehile,Verdehile,爆擊回能,✓,1,暴走,HP,6★,暴走,ATK+160,ACC%+8(前) / HP+140+456磨 / HP%+13+9磨寶 / SPD+23+4磨 / ATK%+13+8磨,124.7,倉庫
+世界王 Worldboss,高分速刷,Verdehile,Verdehile,爆擊回能,✓,2,暴走,SPD,6★,暴走,SPD+42,DEF%+14+7磨 / ATK%+15+7磨 / HP%+15+6磨 / HP+575+533磨寶,114,Ramael and Judiah
+世界王 Worldboss,高分速刷,Verdehile,Verdehile,爆擊回能,✓,3,刀刃,ATK,6★,刀刃,DEF+160,ACC%+8(前) / CRate%+20 / HP%+13+9磨 / DEF%+11+8磨寶 / HP+320+406磨,117.1,倉庫
+世界王 Worldboss,高分速刷,Verdehile,Verdehile,爆擊回能,✓,4,暴走,CDmg%,6★,暴走,CDmg%+80,ATK%+6+9磨 / DEF%+12+9磨寶 / SPD+11+4磨 / HP%+30+7磨,118.8,Martina
+世界王 Worldboss,高分速刷,Verdehile,Verdehile,爆擊回能,✓,5,暴走,DEF,6★,暴走,HP+2448,ACC%+7(前) / ATK%+21+10磨 / HP%+8+7磨 / SPD+9+4磨寶 / DEF%+22+7磨,124.4,Raoq
+世界王 Worldboss,高分速刷,Verdehile,Verdehile,爆擊回能,✓,6,刀刃,ATK%,6★,刀刃,ATK%+63,DEF%+6(前) / ATK+36+30磨寶 / ACC%+4 / SPD+10+3磨 / CDmg%+25,109.2,Teshar
+世界王 Worldboss,高分速刷,Lushen,Lushen,範圍斬殺,✓,1,激怒,HP,6★,激怒,ATK+160,CRate%+6(前) / HP%+13+9磨 / ATK%+13+8磨 / CDmg%+20 / SPD+9+5磨寶,118.3,Lushen
+世界王 Worldboss,高分速刷,Lushen,Lushen,範圍斬殺,✓,2,刀刃,ATK%,6★,刀刃,ATK%+63,DEF+15(前) / HP%+21+7磨 / CRate%+10 / SPD+6+4磨 / ATK+34+28磨寶,112,Raoq
+世界王 Worldboss,高分速刷,Lushen,Lushen,範圍斬殺,✓,3,刀刃,ATK,6★,刀刃,DEF+160,CDmg%+8寶 / HP%+7+9磨 / DEF%+7+10磨 / SPD+27+5磨,111.4,Claire
+世界王 Worldboss,高分速刷,Lushen,Lushen,範圍斬殺,✓,4,激怒,CDmg%,6★,激怒,CDmg%+80,ACC%+7(前) / CRate%+8寶 / DEF%+21+8磨 / SPD+6+4磨 / ATK%+22+10磨,117.9,Lucas
+世界王 Worldboss,高分速刷,Lushen,Lushen,範圍斬殺,✓,5,激怒,DEF,6★,激怒,HP+2448,RES%+8(前) / CRate%+15 / ATK+37+24磨寶 / ATK%+8+7磨 / CDmg%+14,110.2,Luna
+世界王 Worldboss,高分速刷,Lushen,Lushen,範圍斬殺,✓,6,激怒,ATK%,6★,激怒,ATK%+63,ACC%+5(前) / CDmg%+23 / ATK+38+27磨寶 / CRate%+5 / HP%+6+10磨,107.1,Lucas
+世界王 Worldboss,高分速刷,Megan,Megan,攻buff+回能,✓,1,迅速,HP,6★,迅速,ATK+160,ATK%+5(前) / HP+545+548磨寶 / ACC%+8 / SPD+21+4磨 / HP%+8+7磨,111.3,Nina Williams
+世界王 Worldboss,高分速刷,Megan,Megan,攻buff+回能,✓,2,迅速,SPD,6★,迅速,SPD+42,ATK%+23+9磨 / ATK+31+26磨寶 / CDmg%+13 / HP+597+452磨,117.9,Tiana
+世界王 Worldboss,高分速刷,Megan,Megan,攻buff+回能,✓,3,意志,ATK,6★,意志,DEF+160,CRate%+6(前) / SPD+16+4磨 / HP%+15+6磨 / DEF%+11+10磨寶 / HP+738+483磨,127.4,Rina
+世界王 Worldboss,高分速刷,Megan,Megan,攻buff+回能,✓,4,迅速,HP%,6★,迅速,HP%+63,HP+302(前) / RES%+7 / SPD+22+4磨 / ATK%+15+7磨 / CDmg%+7,105.5,Konamiya
+世界王 Worldboss,高分速刷,Megan,Megan,攻buff+回能,✓,5,迅速,DEF,6★,迅速,HP+2448,DEF%+8(前) / SPD+22+4磨 / DEF+38+29磨寶 / HP%+5+7磨 / RES%+8,115.6,Konamiya
+世界王 Worldboss,高分速刷,Megan,Megan,攻buff+回能,✓,6,意志,HP%,6★,意志,HP%+63,CRate%+6(前) / DEF%+7+10磨 / SPD+23+5磨 / CDmg%+10 / ATK%+11+9磨寶,119.4,Carcano
+世界王 Worldboss,高分速刷,Spectra,Spectra,多段,✓,1,刀刃,HP,6★,刀刃,ATK+160,SPD+26+5磨 / ATK%+11+9磨寶 / CDmg%+5 / HP+282+546磨,111.3,倉庫
+世界王 Worldboss,高分速刷,Spectra,Spectra,多段,✓,2,暴走,SPD,6★,暴走,SPD+42,RES%+8(前) / HP+209 / CDmg%+14 / ATK+31+18磨寶 / ATK%+30+7磨,111.7,Gandalf
+世界王 Worldboss,高分速刷,Spectra,Spectra,多段,✓,3,暴走,ATK,6★,暴走,DEF+160,DEF%+6(前) / HP%+20+7磨 / HP+508+532磨寶 / ACC%+7 / SPD+18+5磨,118.6,Nobara Kugisaki
+世界王 Worldboss,高分速刷,Spectra,Spectra,多段,✓,4,刀刃,CDmg%,6★,刀刃,CDmg%+80,SPD+20+5磨 / DEF%+8+9磨 / CRate%+12 / ATK%+11+8磨寶,111.9,Beth
+世界王 Worldboss,高分速刷,Spectra,Spectra,多段,✓,5,暴走,DEF,6★,暴走,HP+2448,CDmg%+4(前) / DEF+36+28磨寶 / SPD+22+5磨 / DEF%+7+7磨 / HP%+8+7磨,120.7,Veromos
+世界王 Worldboss,高分速刷,Spectra,Spectra,多段,✓,6,暴走,ATK%,6★,暴走,ATK%+63,ACC%+7(前) / SPD+20+4磨 / HP+396+491磨 / CRate%+6 / HP%+10+7磨寶,109.8,Elsharion

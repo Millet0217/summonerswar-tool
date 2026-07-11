@@ -1,8 +1,11 @@
 # 帳號原始匯出檔（含 session_key 等憑證，勿上傳遠端）
 smw*.json
+# 其他帳號匯出檔（玩家名-wizardId.json，同樣含個資/憑證）
+*-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].json
 
 # OS / 編輯器暫存
 Thumbs.db
 .DS_Store
+desktop.ini
 *.tmp
 ~$*
