@@ -22228,14 +22228,13 @@ function renderDungeons(){
 renderDungeons();
 
 // ---------- 符文自動配裝 ----------
-// 4件套(官方繁中)；選項改由實際符文資料產生，避免套裝名稱對不上(暴走/激怒/猛攻/集中…)
+// 4件套/2件套(官方繁中)：固定寫死全部套裝選項，不依實際符文資料產生(避免沒有該符文就不顯示)
 const FOUR4=['暴走','迅速','激怒','猛攻','絕望','吸血'];
-const allSetNames=[...new Set(RUNES.map(r=>r.set).filter(Boolean))];
+const TWO2=['祝福','守護','刀刃','集中','忍耐','應報','意志','保護','反擊','鬥志','決心','剛毅','命中','韌性','封印','無形','破壞'];
 $('#fUnit').innerHTML=UNITS.filter(u=>u.s>=5).sort((a,b)=>a.n.localeCompare(b.n)).map(u=>`<option value="${u.id}">${u.n} (${u.at}${u.s}★)</option>`).join('');
-const fourNames=allSetNames.filter(s=>FOUR4.includes(s));
-$('#fSet4').innerHTML='<option value="">無（不需要四件套）</option>'+fourNames.map(s=>`<option>${s}</option>`).join('');
-if(fourNames.length)$('#fSet4').value=fourNames[0]; // 預設維持第一個四件套(暴走)
-const twoNamesHtml='<option value="">無</option>'+allSetNames.filter(s=>!FOUR4.includes(s)).map(s=>`<option>${s}</option>`).join('');
+$('#fSet4').innerHTML='<option value="">無（不需要四件套）</option>'+FOUR4.map(s=>`<option>${s}</option>`).join('');
+$('#fSet4').value=FOUR4[0]; // 預設維持第一個四件套(暴走)
+const twoNamesHtml='<option value="">無</option>'+TWO2.map(s=>`<option>${s}</option>`).join('');
 ['#fSet2','#fSet2b','#fSet2c'].forEach(id=>$(id).innerHTML=twoNamesHtml);
 // 依四件套是否選用，限制二件套可用組數(四件套佔4洞→僅剩1組二件套；無→最多3組)，即時擋超額
 function fSyncSets(){
