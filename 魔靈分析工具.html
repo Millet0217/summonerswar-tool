@@ -130,6 +130,12 @@ tr.clk{cursor:pointer}
 .mon.no{opacity:.82}
 .el-water{background:var(--water)}.el-fire{background:var(--fire)}.el-wind{background:var(--wind)}.el-light{background:#e9e9f2}.el-dark{background:var(--dark)}
 td.uic img{width:30px;height:30px;vertical-align:middle;border-radius:6px;margin-right:6px}
+img.uico{width:28px;height:28px;border-radius:6px;vertical-align:middle;object-fit:cover}
+img.uico.off{filter:grayscale(1) brightness(.45) contrast(.9);background:#0c0f1a;opacity:.85}
+img.uico.big{width:44px;height:44px;border-radius:8px}
+.uname{display:inline-flex;align-items:center;gap:4px}
+.uname .uok{font-size:11px;font-weight:700}
+.fithead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -21872,6 +21878,13 @@ const effCls=e=>e>=100?'eff-hi':e>=85?'eff-mid':'eff-lo';
 const ownedNames=new Set(UNITS.map(u=>u.en||u.n));   // 地下城模板用英文名比對
 const enToZh={}; UNITS.forEach(u=>{ if(u.en) enToZh[u.en]=u.n; });  // 英文→顯示名(中文優先)
 const enToUnit={}; UNITS.forEach(u=>{const k=u.en||u.n; if(!enToUnit[k]||u.s>enToUnit[k].s)enToUnit[k]=u;}); // 英文名→擁有的最高星該魔靈(地下城配裝用)
+// 英文名→圖示檔名(地下城模板顯示 icon 用；取 RTA 出場率/天生星最高的形態當代表)
+const enToImg={}; if(typeof CATALOG!=='undefined') CATALOG.forEach(c=>{ if(!c.en) return; const cur=enToImg[c.en]; const rp=c.rp||0, ns=c.ns||0; if(!cur||rp>cur.rp||(rp===cur.rp&&ns>cur.ns)) enToImg[c.en]={img:c.img,rp,ns}; });
+// 依英文名(+可選 mid)產出魔靈 icon <img>；優先用實際持有怪的圖示，否則用圖鑑代表形態
+function unitIcon(en,mid,cls){
+  let img=(mid&&typeof ICONS!=='undefined'&&ICONS[mid])||(enToImg[en]&&enToImg[en].img)||'';
+  return img?`<img class="uico${cls?' '+cls:''}" src="icons/${img}" loading="lazy" alt="${en}" title="${en}">`:'';
+}
 const runeById={}; RUNES.forEach(r=>runeById[r.id]=r);
 const unitById={}; UNITS.forEach(u=>unitById[u.id]=u);
 
@@ -22170,8 +22183,9 @@ function renderDungeons(){
       let rows=t.us.filter(u=>!ownedOnly||ownedNames.has(u[0])).map(u=>{
         let has=ownedNames.has(u[0]);
         let disp=has&&enToZh[u[0]]?enToZh[u[0]]:u[0];
+        let ic=unitIcon(u[0],has&&enToUnit[u[0]]?enToUnit[u[0]].mid:null,has?'':'off');
         let btn=has?`<button class="dfitbtn" onclick="dFit(this,'${u[0].replace(/'/g,"\\'")}','${u[2]}')">自動配裝</button>`:'';
-        return `<div class="unitwrap"><div class="unitrow"><span class="${has?'own':'noown'}">${has?'✓':'✗'} ${disp}<span class="rl" style="margin-left:6px">${disp!==u[0]?u[0]:''}</span></span>
+        return `<div class="unitwrap"><div class="unitrow"><span class="uname ${has?'own':'noown'}" title="${disp}">${ic||disp}${has?'<span class="uok">✓</span>':''}</span>
           <span class="rl">${u[1]} <span class="setbadge">${u[2]}</span>${btn}</span></div><div class="dfitbox" style="display:none"></div></div>`;
       }).join('');
       return `<div class="team"><div class="tl">${t.tl} <span class="muted">(擁有 ${owned}/${t.us.length})</span></div>${rows}</div>`;
@@ -22273,7 +22287,9 @@ $('#fRun').onclick=()=>{
   let setCount={}; Object.values(p).forEach(r=>{if(r){setCount[r.set]=(setCount[r.set]||0)+1;}});
   let setTxt=Object.entries(setCount).map(([k,v])=>`${k}×${v}`).join('　');
   let totalEff=0,n=0;
-  let html=`<div class="muted" style="margin-bottom:8px">目標：<b>${s4}(4) + ${s2}(2)</b>　達成套裝：<b style="color:var(--good)">${setTxt}</b></div>`;
+  const selU=UNITS.find(u=>u.id==uid);
+  const selIc=selU?unitIcon(selU.en||selU.n,selU.mid,'big'):'';
+  let html=`<div class="fithead">${selIc}<div><div class="muted">目標：<b>${s4}(4) + ${s2}(2)</b></div><div class="muted">達成套裝：<b style="color:var(--good)">${setTxt}</b></div></div></div>`;
   for(let sl=1;sl<=6;sl++){
     const r=p[sl];
     if(r){totalEff+=r.ef;n++;
@@ -22300,7 +22316,7 @@ $('#fRun').onclick=()=>{
       const upTxt=up>0?`<span class="fup">+${up}</span>`:'';
       return `<div class="fcell"><span class="flab">${lab}</span><span class="fbase">${bv}</span><span class="farr">→</span><span class="ffin">${fv}</span>${upTxt}</div>`;
     }).join('');
-    statsHtml+=`<div class="finhead">📊 ${sel.n} 配裝後最終體質<span class="muted">（基礎值 SWARFARM 6★滿級 → 套上上方符文＋套裝%後）</span></div>
+    statsHtml+=`<div class="finhead">📊 ${unitIcon(sel.en||sel.n,sel.mid)}${sel.n} 配裝後最終體質<span class="muted">（基礎值 SWARFARM 6★滿級 → 套上上方符文＋套裝%後）</span></div>
       <div class="fingrid">${cells}</div>
       <small class="note">最終值＝基礎體質 ×(1＋屬性%＋套裝%)＋固定值。暴率/暴傷/抵抗/命中為加法。未計入領導技/塔/神器/銘刻等額外加成。</small>`;
   } else if(sel){
