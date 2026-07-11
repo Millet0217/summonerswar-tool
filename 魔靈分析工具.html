@@ -45,7 +45,10 @@ tr:hover td{background:#1e2440}
 .team{border:1px solid var(--line);border-radius:9px;padding:10px;margin-bottom:10px;background:var(--panel2)}
 .team .tl{font-weight:600;margin-bottom:6px;color:var(--acc)}
 .unitrow{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dashed #2a3255;font-size:12.5px}
-.unitrow:last-child{border-bottom:none}
+.unitwrap:last-child .unitrow{border-bottom:none}
+.dfitbtn{margin-left:8px;padding:1px 8px;font-size:11px;border:1px solid var(--acc);background:transparent;color:var(--acc);border-radius:5px;cursor:pointer;white-space:nowrap}
+.dfitbtn:hover{background:var(--acc);color:#0e1120}
+.dfitbox{background:#161b30;border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin:4px 0 8px}
 .own{color:var(--good);font-weight:600}
 .noown{color:var(--bad)}
 .rl{color:var(--dim);font-size:11px}
@@ -21868,6 +21871,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const effCls=e=>e>=100?'eff-hi':e>=85?'eff-mid':'eff-lo';
 const ownedNames=new Set(UNITS.map(u=>u.en||u.n));   // 地下城模板用英文名比對
 const enToZh={}; UNITS.forEach(u=>{ if(u.en) enToZh[u.en]=u.n; });  // 英文→顯示名(中文優先)
+const enToUnit={}; UNITS.forEach(u=>{const k=u.en||u.n; if(!enToUnit[k]||u.s>enToUnit[k].s)enToUnit[k]=u;}); // 英文名→擁有的最高星該魔靈(地下城配裝用)
 const runeById={}; RUNES.forEach(r=>runeById[r.id]=r);
 const unitById={}; UNITS.forEach(u=>unitById[u.id]=u);
 
@@ -22131,6 +22135,33 @@ const DUNGEONS=[
      ['Megan','攻buff+回能','迅速/集中'],
      ['Spectra','多段','暴走/刀刃']]}]}
 ];
+// 地下城卡片內就地展開自動配裝
+function renderDFit(sel,p,s4,s2){
+  const {setCount,fin}=fitDerived(sel,p);
+  const setTxt=Object.entries(setCount).map(([k,v])=>`${k}×${v}`).join('　')||'—';
+  let totalEff=0,n=0,lines='';
+  for(let sl=1;sl<=6;sl++){const r=p[sl];
+    if(r){totalEff+=r.ef;n++;
+      const loc=r.ow?`<span class="own">${r.ow}</span>`:'<span class="muted">倉庫</span>';
+      lines+=`<div class="slotline"><span><b>${sl}洞</b> <span class="setbadge">${r.set}</span> ${r.m} <span class="muted">${r.sub}</span></span><span>${r.anc?'<span class="anc">A</span> ':''}<b class="${effCls(r.ef)}">${r.ef}%</b> ${loc}</span></div>`;
+    } else lines+=`<div class="slotline"><span><b>${sl}洞</b> <span class="noown">缺符合套裝的符文</span></span></div>`;
+  }
+  const head=`<div class="muted" style="margin:4px 0 6px">目標 <b>${s4}(4)+${s2}(2)</b>　達成 <b style="color:var(--good)">${setTxt}</b>　平均效率 <b class="${effCls(totalEff/Math.max(n,1))}">${(totalEff/Math.max(n,1)).toFixed(1)}%</b>（湊 ${n}/6）</div>`;
+  let stat='';
+  if(fin){
+    const rows=[['速度','spd','s'],['HP','hp','h'],['ATK','atk','a'],['DEF','def','d'],['暴率%','cr','cr'],['暴傷%','cd','cd'],['抵抗%','re','re'],['命中%','ac','ac']];
+    stat='<div class="fingrid" style="margin-top:6px">'+rows.map(([lab,fk,bk])=>{const bv=fin.base[bk],fv=fin[fk],up=fv-bv;const upTxt=up>0?`<span class="fup">+${up}</span>`:'';return `<div class="fcell"><span class="flab">${lab}</span><span class="fbase">${bv}</span><span class="farr">→</span><span class="ffin">${fv}</span>${upTxt}</div>`;}).join('')+'</div><small class="note">配後速度即第一格；最終值＝基礎體質×(1＋屬性%＋套裝%)＋固定值，未計領導技/塔/神器/銘刻。</small>';
+  } else stat='<small class="note muted">查無此魔靈體質基礎資料，無法算最終數值。</small>';
+  return head+lines+stat;
+}
+window.dFit=function(btn,en,setStr){
+  const box=btn.closest('.unitwrap').querySelector('.dfitbox');
+  if(box.dataset.open==='1'){box.style.display='none';box.dataset.open='0';btn.textContent='自動配裝';return;}
+  const u=enToUnit[en];
+  if(!u){box.innerHTML='<span class="noown">查無此魔靈資料</span>';}
+  else{const [s4,s2]=parseSetPair(setStr); const {sel,p}=solveFit(u.id,s4,s2,{2:'',4:'',6:''},false); box.innerHTML=renderDFit(sel,p,s4,s2);}
+  box.style.display='block';box.dataset.open='1';btn.textContent='收合配裝';
+};
 function renderDungeons(){
   const q=$('#dSearch').value.toLowerCase(),ownedOnly=$('#dOwnedOnly').checked;
   $('#dungeonGrid').innerHTML=DUNGEONS.filter(d=>!q||d.n.toLowerCase().includes(q)||d.teams.some(t=>t.us.some(u=>u[0].toLowerCase().includes(q)))).map(d=>{
@@ -22139,8 +22170,9 @@ function renderDungeons(){
       let rows=t.us.filter(u=>!ownedOnly||ownedNames.has(u[0])).map(u=>{
         let has=ownedNames.has(u[0]);
         let disp=has&&enToZh[u[0]]?enToZh[u[0]]:u[0];
-        return `<div class="unitrow"><span class="${has?'own':'noown'}">${has?'✓':'✗'} ${disp}<span class="rl" style="margin-left:6px">${disp!==u[0]?u[0]:''}</span></span>
-          <span class="rl">${u[1]} <span class="setbadge">${u[2]}</span></span></div>`;
+        let btn=has?`<button class="dfitbtn" onclick="dFit(this,'${u[0].replace(/'/g,"\\'")}','${u[2]}')">自動配裝</button>`:'';
+        return `<div class="unitwrap"><div class="unitrow"><span class="${has?'own':'noown'}">${has?'✓':'✗'} ${disp}<span class="rl" style="margin-left:6px">${disp!==u[0]?u[0]:''}</span></span>
+          <span class="rl">${u[1]} <span class="setbadge">${u[2]}</span>${btn}</span></div><div class="dfitbox" style="display:none"></div></div>`;
       }).join('');
       return `<div class="team"><div class="tl">${t.tl} <span class="muted">(擁有 ${owned}/${t.us.length})</span></div>${rows}</div>`;
     }).join('');
@@ -22188,38 +22220,56 @@ function computeFinal(mid, tot, sidCount){
     base:b
   };
 }
-$('#fRun').onclick=()=>{
-  const uid=$('#fUnit').value, s4=$('#fSet4').value, s2=$('#fSet2').value;
-  const wantMain={2:$('#fS2').value,4:$('#fS4').value,6:$('#fS6').value};
-  const includeAll=$('#fPool').checked;
-  // 建立可用池
-  let pool=RUNES.filter(r=>r.st==6 && (r.eq==0 || r.ow===UNITS.find(u=>u.id==uid).n || includeAll));
-  // 主屬篩選 (偶數洞)
+// 共用配裝引擎：回傳 {sel, p(每洞符文), bestPlan}
+function solveFit(uid, s4, s2, wantMain, includeAll){
+  const sel=UNITS.find(u=>u.id==uid);
+  wantMain=wantMain||{2:'',4:'',6:''};
+  let pool=RUNES.filter(r=>r.st==6 && (r.eq==0 || (sel&&r.ow===sel.n) || includeAll));
   const mainOk=(r)=>{const t=r.m.split('+')[0]; if([2,4,6].includes(r.sl)&&wantMain[r.sl])return t===wantMain[r.sl]; return true;};
-  // 每洞的候選(依套裝分兩桶)
-  const bySlotSet={}; // bySlotSet[slot][ '4'|'2' ] = best rune
+  const bySlotSet={};
   for(let sl=1;sl<=6;sl++){
     const cand=pool.filter(r=>r.sl==sl&&mainOk(r));
     const best4=cand.filter(r=>r.set==s4).sort((a,b)=>b.ef-a.ef)[0];
     const best2=cand.filter(r=>r.set==s2).sort((a,b)=>b.ef-a.ef)[0];
-    const bestAny=cand.sort((a,b)=>b.ef-a.ef)[0];
+    const bestAny=cand.slice().sort((a,b)=>b.ef-a.ef)[0];
     bySlotSet[sl]={s4:best4,s2:best2,any:bestAny};
   }
-  // 列舉哪兩洞放 2件套 (C(6,2)=15)
   const slots=[1,2,3,4,5,6]; let bestPlan=null;
   for(let i=0;i<slots.length;i++)for(let j=i+1;j<slots.length;j++){
-    const twoSlots=[slots[i],slots[j]]; let plan={},okc=0,eff=0,valid=true;
+    const twoSlots=[slots[i],slots[j]]; let plan={},okc=0,eff=0;
     for(const sl of slots){
       const useTwo=twoSlots.includes(sl);
       const pick=useTwo?bySlotSet[sl].s2:bySlotSet[sl].s4;
       if(pick){plan[sl]=pick;eff+=pick.ef;okc++;}
-      else{plan[sl]=bySlotSet[sl].any||null;if(plan[sl])eff+=plan[sl].ef*0.5;valid=false;}
+      else{plan[sl]=bySlotSet[sl].any||null;if(plan[sl])eff+=plan[sl].ef*0.5;}
     }
     const score=okc*1000+eff;
     if(!bestPlan||score>bestPlan.score)bestPlan={plan,score,twoSlots,okc};
   }
-  // 輸出
-  const p=bestPlan.plan;
+  return {sel, p:bestPlan.plan, bestPlan};
+}
+// 由 plan 導出加成合計/套裝件數/最終體質
+function fitDerived(sel,p){
+  const tot={}; Object.values(p).forEach(r=>{if(!r)return;const st=parseStats(r);for(const k in st)tot[k]=(tot[k]||0)+st[k];});
+  const sidCount={}; Object.values(p).forEach(r=>{if(r&&r.sid!=null)sidCount[r.sid]=(sidCount[r.sid]||0)+1;});
+  const setCount={}; Object.values(p).forEach(r=>{if(r)setCount[r.set]=(setCount[r.set]||0)+1;});
+  const fin=sel?computeFinal(sel.mid,tot,sidCount):null;
+  return {tot,sidCount,setCount,fin};
+}
+// 解析地下城建議套裝字串(如「刀刃/激怒」)→ [4件套, 2件套]；4件套依 FOUR4 判定
+function parseSetPair(str){
+  const parts=String(str||'').split(/[\/／]/).map(s=>s.trim()).filter(Boolean);
+  if(!parts.length)return['',''];
+  const four=parts.find(p=>FOUR4.includes(p));
+  const s4=four||parts[0];
+  const s2=parts.find(p=>p!==s4)||parts[1]||parts[0];
+  return [s4,s2];
+}
+$('#fRun').onclick=()=>{
+  const uid=$('#fUnit').value, s4=$('#fSet4').value, s2=$('#fSet2').value;
+  const wantMain={2:$('#fS2').value,4:$('#fS4').value,6:$('#fS6').value};
+  const includeAll=$('#fPool').checked;
+  const p=solveFit(uid,s4,s2,wantMain,includeAll).p;
   let setCount={}; Object.values(p).forEach(r=>{if(r){setCount[r.set]=(setCount[r.set]||0)+1;}});
   let setTxt=Object.entries(setCount).map(([k,v])=>`${k}×${v}`).join('　');
   let totalEff=0,n=0;
