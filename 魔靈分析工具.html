@@ -21958,7 +21958,7 @@ function renderUnits(){
     <td class="muted">${u.en||''}</td>
     <td><span class="pill ${attrClass[u.at]}">${u.at}</span></td>
     <td>${u.s}★</td><td>${u.ns}★</td><td>${u.ar}</td><td>${u.lv}</td>
-    <td>${u.con}</td><td>${u.atk}</td><td>${u.def}</td><td><b>${u.spd}</b></td>
+    <td>${u.con*15}</td><td>${u.atk}</td><td>${u.def}</td><td><b>${u.spd}</b></td>
     <td>${u.cr}</td><td>${u.cd}</td><td>${u.re}</td><td>${u.ac}</td>
     <td>${u.rc}</td><td class="muted">${u.rs||''}</td></tr>`).join('');
   $('#uTable').innerHTML=h+'</tbody>';
@@ -21995,7 +21995,7 @@ function openUnitModal(u){
         <span>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'} <span class="muted">+${r.lv}</span></span>
         <span><span class="gbadge g${runeGrade(r.ef)}">${runeGrade(r.ef)}</span> <span class="${effCls(r.ef)}">${r.ef}%</span></span></div></div>`;
   }
-  const st=k=>`<div><span>${k[1]}</span><b>${u[k[0]]}</b></div>`;
+  const st=k=>`<div><span>${k[1]}</span><b>${k[0]==='con'?u.con*15:u[k[0]]}</b></div>`;
   const statBoxes=[['con','HP'],['atk','ATK'],['def','DEF'],['spd','SPD'],['cr','CR%'],['cd','CD%'],['re','RES%'],['ac','ACC%']].map(st).join('');
   const goreParts=[];
   if(grinds.length)goreParts.push(`<div>🪨 <b>磨刀石</b>　${grinds.join('　')}</div>`);
