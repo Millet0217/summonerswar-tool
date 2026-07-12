@@ -21798,10 +21798,10 @@ function IMP_parseRune(r, ownerId){
   let subSum=0; const subs=[], stypes=[];
   if(preT!==0){ const mx=IMP_subMax[preT]; if(mx)subSum+=preV/mx; subs.push(IMP_effName[preT]+'+'+preV+'(前)'); stypes.push(preT); }
   for(const s of (r.sec_eff||[])){
-    const st=+s[0], sv=s[1], grind=s.length>=4?s[3]:0;
+    const st=+s[0], sv=s[1], gem=(s.length>=3&&s[2])?'寶':'', grind=s.length>=4?s[3]:0;
     const mx=IMP_subMax[st]; if(mx)subSum+=(sv+grind)/mx;
     const g=grind>0?('+'+grind+'磨'):'';
-    subs.push(IMP_effName[st]+'+'+sv+g); stypes.push(st);
+    subs.push(IMP_effName[st]+'+'+sv+g+gem); stypes.push(st);
   }
   const eff=Math.round((mainRatio+subSum)/2.8*1000)/10;
   return {
