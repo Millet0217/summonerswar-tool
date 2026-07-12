@@ -21969,44 +21969,51 @@ function renderUnits(){
 const qName={1:'普通',2:'魔法',3:'稀有',4:'英雄',5:'傳說',6:'傳說'};
 // 副屬字串內的魔礦標記：+N磨=磨刀石、寶=附魔寶石
 const markCraft=s=>s.replace(/\+(\d+)磨/g,'<span class="grind">磨刀石+$1</span>').replace(/寶/g,'<span class="gem">附魔</span>');
+// 體質方塊：分開(基礎+符文) ⇄ 加總 可點擊切換
+let uStatMerged=false;
+const uStatRows=[['hp','HP','h'],['atk','ATK','a'],['def','DEF','d'],['spd','SPD','s'],['cr','CR%','cr'],['cd','CD%','cd'],['re','RES%','re'],['ac','ACC%','ac']];
+function renderUStats(u,fin){
+  const el=$('#uStats'); if(!el)return;
+  let html;
+  if(!fin){ // 無 BASE_STATS 資料 → 只顯示基礎
+    const base={hp:u.con*15,atk:u.atk,def:u.def,spd:u.spd,cr:u.cr,cd:u.cd,re:u.re,ac:u.ac};
+    html=uStatRows.map(([fk,lab])=>`<div><span>${lab}</span><b>${base[fk]}</b></div>`).join('');
+  }else if(uStatMerged){
+    html=uStatRows.map(([fk,lab])=>`<div><span>${lab}</span><b>${fin[fk]}</b></div>`).join('');
+  }else{
+    html=uStatRows.map(([fk,lab,bk])=>{const b=fin.base[bk],add=fin[fk]-b;return `<div><span>${lab}</span><b>${b}</b>${add?` <span class="grind">+${add}</span>`:''}</div>`;}).join('');
+  }
+  el.innerHTML=html;
+}
 function openUnitModal(u){
   if(!u)return;
   const runes=(u.ri||'').split(',').filter(Boolean).map(id=>runeById[id]).filter(Boolean);
   const bySlot={}; runes.forEach(r=>bySlot[r.sl]=r);
-  // 收集全部魔礦：磨刀石(grind) 與 附魔寶石(gem)
-  const grinds=[],gems=[];
-  runes.forEach(r=>{ (r.sub||'').split(' / ').forEach(s=>{
-    const m=s.match(/^(.+?)\+\d+\+(\d+)磨/); if(m)grinds.push(`${r.sl}洞 ${m[1].trim()}+${m[2]}`);
-    const g=s.match(/^(.+?)\+(\d+)[^\/]*寶/); if(g)gems.push(`${r.sl}洞 ${g[1].trim()}+${g[2]}`);
-  }); });
+  // 符文加總 → 最終體質（供分開/加總切換）
+  const tot={}; runes.forEach(r=>{const st=parseStats(r);for(const k in st)tot[k]=(tot[k]||0)+st[k];});
+  const sidCount={}; runes.forEach(r=>{if(r.sid!=null)sidCount[r.sid]=(sidCount[r.sid]||0)+1;});
+  const fin=(typeof computeFinal==='function')?computeFinal(u.mid,tot,sidCount):null;
   const efs=runes.map(r=>r.ef); const avg=efs.length?(efs.reduce((a,b)=>a+b,0)/efs.length).toFixed(1):'0';
+  // 符文卡（精簡：洞位/套裝 + 主屬 + 可點擊合併磨刀的副屬，跟符文庫一致）
   let cards='';
   for(let sl=1;sl<=6;sl++){
     const r=bySlot[sl];
     if(!r){cards+=`<div class="runebox empty">${sl}洞<br>（無符文）</div>`;continue;}
-    const subs=(r.sub||'').split(' / ').map(s=>`<div class="subline">${markCraft(s)}</div>`).join('');
     cards+=`<div class="runebox">
-      <div class="rhead"><span class="slot">${sl}洞 <span class="setbadge">${r.set||'?'}</span></span>
-        <span class="qbadge q${r.q||1}">${qName[r.q]||''}</span></div>
+      <div class="rhead"><span class="slot">${sl}洞 <span class="setbadge">${r.set||'?'}</span></span></div>
       <div class="main">${r.m}</div>
       ${r.pf?`<div class="pf">前綴 ${r.pf}</div>`:''}
-      ${subs}
-      <div class="rhead" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px">
-        <span>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'} <span class="muted">+${r.lv}</span></span>
-        <span><span class="gbadge g${runeGrade(r.ef)}">${runeGrade(r.ef)}</span> <span class="${effCls(r.ef)}">${r.ef}%</span></span></div></div>`;
+      <div class="subcell" data-ri="${r._i}" title="點擊：磨刀值加總" style="cursor:pointer">${fmtSubLines(r.sub,subMerge.has(r._i))}</div></div>`;
   }
-  const st=k=>`<div><span>${k[1]}</span><b>${k[0]==='con'?u.con*15:u[k[0]]}</b></div>`;
-  const statBoxes=[['con','HP'],['atk','ATK'],['def','DEF'],['spd','SPD'],['cr','CR%'],['cd','CD%'],['re','RES%'],['ac','ACC%']].map(st).join('');
-  const goreParts=[];
-  if(grinds.length)goreParts.push(`<div>🪨 <b>磨刀石</b>　${grinds.join('　')}</div>`);
-  if(gems.length)goreParts.push(`<div>💎 <b class="gemtxt">附魔寶石</b>　${gems.join('　')}</div>`);
-  const gore=goreParts.length?`<div class="mgore">${goreParts.join('')}</div>`:`<div class="mgore muted">此魔靈的符文未套用任何魔礦（磨刀石／附魔寶石）</div>`;
+  uStatMerged=false;
   $('#uModalBody').innerHTML=`
     <h2>${u.n} <span class="pill ${attrClass[u.at]}">${u.at}</span> ${u.s}★</h2>
     <div class="msub">${u.en||''}　·　${u.ar}　·　Lv${u.lv}　·　目前套裝：${u.rs||'—'}　·　符文平均效率 <b class="${effCls(avg)}">${avg}%</b></div>
-    <div class="mstats">${statBoxes}</div>
-    ${gore}
+    <div class="mstats" id="uStats" title="點擊：切換 基礎+符文 ⇄ 加總" style="cursor:pointer"></div>
     <div class="runegrid">${cards}</div>`;
+  renderUStats(u,fin);
+  $('#uStats').onclick=()=>{uStatMerged=!uStatMerged;renderUStats(u,fin);};
+  $$('#uModalBody .subcell').forEach(td=>td.onclick=()=>{const i=+td.dataset.ri;subMerge.has(i)?subMerge.delete(i):subMerge.add(i);td.innerHTML=fmtSubLines(RUNES[i].sub,subMerge.has(i));});
   $('#uModal').classList.add('open');
 }
 function closeUnitModal(){$('#uModal').classList.remove('open');}
@@ -22076,6 +22083,17 @@ function fmtSub(sub,merged){
       : `${name}+${base}<span class="grind">+${grind}</span>${gem}`;
     return `${name}+${base}${gem}`;
   }).join(' / ');
+}
+// 同 fmtSub，但每條副屬各自包一行 div（魔靈庫符文卡用，視覺較清楚）
+function fmtSubLines(sub,merged){
+  return (sub||'').split(' / ').filter(s=>!s.endsWith('(前)')).map(s=>{
+    const m=s.match(/^(.+?)\+(\d+)(?:\+(\d+)磨)?(寶)?$/);
+    let inner;
+    if(!m) inner=s.replace(/寶/g,'<span class="gem">附魔</span>');
+    else{ const name=m[1],base=+m[2],grind=m[3]?+m[3]:0,gem=m[4]?'<span class="gem">附魔</span>':'';
+      inner=grind?(merged?`<span class="subsum">${name}+${base+grind}</span>${gem}`:`${name}+${base}<span class="grind">+${grind}</span>${gem}`):`${name}+${base}${gem}`; }
+    return `<div class="subline">${inner}</div>`;
+  }).join('');
 }
 const gCls=g=>'g'+g, rollCls=v=>v>=5?'roll-hi':v>=3.5?'roll-mid':'roll-lo';
 // 套裝/主屬選項固定寫死全部(依 IMP_setName/IMP_effName)，不依實際符文資料產生(避免沒有該符文就不顯示)
