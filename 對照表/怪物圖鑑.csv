@@ -18,7 +18,6 @@
 13714,unit_icon_0014_3_0.png,Ahman,,光,體力,3,覺醒,可召喚,B,10710,549,549,101,15,50,15,0,Secret Dungeon / Scroll of Light and Darkness
 28014,unit_icon_0115_1_4.png,Ahmed,,光,體力,4,覺醒,可召喚,B,11535,659,549,103,15,50,15,0,
 19213,unit_icon_0032_2_2.png,Akhamamir,,風,攻擊,5,覺醒,可召喚,A,11370,812,571,100,30,50,15,0,Guild Shop
-17113,unit_icon_0019_2_4.png,Akhamamir,,風,攻擊,5,覺醒,非常駐,A,11850,933,417,100,30,50,15,0,
 13312,unit_icon_0011_1_3.png,Akia,,火,攻擊,4,覺醒,可召喚,B,10380,758,527,106,15,50,15,0,Fusion / Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 13814,unit_icon_0014_3_2.png,Akroma,阿卡洛瑪,光,防禦,5,覺醒,可召喚,B,10710,681,747,116,15,50,15,0,Scroll of Light and Darkness
 30114,unit_icon_0145_1_4.png,Alesia,,光,攻擊,4,覺醒,可召喚,B,9885,769,549,104,15,50,15,0,
@@ -291,7 +290,7 @@
 34103,unit_icon_0193_0_3.png,Centaur Knight,,風,攻擊,4,未覺醒,可召喚,C,8235,736,527,103,15,50,15,0,
 34104,unit_icon_0193_0_4.png,Centaur Knight,,光,攻擊,4,未覺醒,可召喚,C,8895,714,505,103,15,50,15,0,
 34105,unit_icon_0193_0_5.png,Centaur Knight,,暗,攻擊,4,未覺醒,可召喚,C,8565,714,527,103,15,50,15,0,
-14912,unit_icon_0018_1_0.png,Ceres,,火,攻擊,3,覺醒,可召喚,C,10050,801,340,102,15,50,15,0,Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
+14912,unit_icon_0018_1_0.png,Ceres,,火,攻擊,3,覺醒,可召喚,B,10050,801,340,102,15,50,15,0,Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 13215,unit_icon_0013_4_1.png,Chacha,,暗,支援,2,覺醒,可召喚,D,8400,549,538,99,15,50,15,0,Secret Dungeon
 13235,unit_icon_0070_3_4.png,Chacha and Friends,,暗,支援,2,二次覺醒,可召喚,D,10380,659,681,99,15,50,15,0,Secret Dungeon
 28313,unit_icon_0118_1_3.png,Chakra,沙克拉,風,攻擊,5,覺醒,可召喚,B,10215,867,593,106,15,50,15,0,
@@ -373,7 +372,7 @@
 30104,unit_icon_0145_0_4.png,Cyborg,,光,攻擊,4,未覺醒,可召喚,C,9225,692,505,103,15,50,15,0,
 30105,unit_icon_0145_0_5.png,Cyborg,,暗,攻擊,4,未覺醒,可召喚,C,9060,714,494,103,15,50,15,0,
 34012,unit_icon_0192_1_2.png,Cynthia,,火,支援,5,覺醒,可召喚,B,11040,747,659,99,30,50,15,0,
-10711,unit_icon_0002_0_3.png,Dagora,,水,體力,3,覺醒,可召喚,C,11850,417,604,102,15,50,15,0,Mt. White Ragon / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
+10711,unit_icon_0002_0_3.png,Dagora,,水,體力,3,覺醒,可召喚,B,11850,417,604,102,15,50,15,0,Mt. White Ragon / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 10731,unit_icon_0051_0_2.png,Dagora,,水,體力,3,二次覺醒,可召喚,B,12675,527,659,102,15,50,15,0,Mt. White Ragon / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 13713,unit_icon_0014_2_0.png,Dagorr,,風,攻擊,3,覺醒,可召喚,C,9885,692,461,101,15,50,15,0,Secret Dungeon / Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 10811,unit_icon_0003_0_0.png,Daharenos,,水,攻擊,2,覺醒,可召喚,D,7080,758,417,107,15,50,15,0,Hydeni Ruins / Magic Shop / Unknown Scroll or Social Summon
@@ -557,7 +556,6 @@
 14911,unit_icon_0018_0_0.png,Ellin,,水,攻擊,3,覺醒,可召喚,C,9060,823,384,102,15,50,15,0,Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 11314,unit_icon_0005_3_0.png,Elpuria,,光,體力,3,覺醒,可召喚,C,10545,538,571,100,30,50,15,0,Scroll of Light and Darkness
 19214,unit_icon_0032_3_2.png,Elsharion,艾莎莉恩,光,攻擊,5,覺醒,可召喚,A,10545,780,659,100,15,50,15,25,
-17114,unit_icon_0019_3_4.png,Elsharion,,光,攻擊,5,覺醒,非常駐,A,10215,988,472,100,15,50,40,0,
 10111,unit_icon_0000_0_1.png,Elucia,,水,支援,3,覺醒,可召喚,C,9060,626,582,104,15,50,15,0,Secret Dungeon / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 10131,unit_icon_0051_0_0.png,Elucia,,水,支援,3,二次覺醒,可召喚,B,10050,714,648,104,15,50,15,0,Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 11714,unit_icon_0006_3_3.png,Eludain,,光,攻擊,3,覺醒,可召喚,C,7740,867,428,98,15,50,15,0,Scroll of Light and Darkness
@@ -579,7 +577,7 @@
 15304,unit_icon_0020_3_0.png,Epikion Priest,,光,支援,4,未覺醒,可召喚,C,10710,549,549,95,15,50,15,0,Scroll of Light and Darkness
 11814,unit_icon_0007_3_0.png,Eredas,,光,體力,4,覺醒,可召喚,B,11535,703,505,105,15,50,15,0,Scroll of Light and Darkness
 30713,unit_icon_0161_1_3.png,Ereshion,埃萊希翁,風,防禦,5,覺醒,可召喚,S,10380,604,845,101,30,50,15,0,
-11313,unit_icon_0005_2_0.png,Ermeda,,風,體力,3,覺醒,可召喚,C,11370,582,472,100,15,50,15,0,Tamor Desert / Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
+11313,unit_icon_0005_2_0.png,Ermeda,,風,體力,3,覺醒,可召喚,B,11370,582,472,100,15,50,15,0,Tamor Desert / Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 20913,unit_icon_0041_2_1.png,Erwin,,風,攻擊,3,覺醒,可召喚,C,8400,714,538,101,15,50,15,0,Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 14014,unit_icon_0015_3_1.png,Eshir,,光,體力,3,覺醒,可召喚,A,12840,472,483,115,15,50,15,0,Scroll of Light and Darkness
 14034,unit_icon_0053_3_1.png,Eshir,伊休魯,光,體力,3,二次覺醒,可召喚,A,13170,571,582,115,15,50,15,0,Scroll of Light and Darkness
@@ -893,15 +891,10 @@
 11031,unit_icon_0051_0_3.png,Icaru,,水,防禦,3,二次覺醒,可召喚,B,9885,637,736,108,15,50,15,0,Garen Forest / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 11614,unit_icon_0006_3_1.png,Icasha,,光,支援,4,覺醒,可召喚,B,9225,615,747,99,15,50,15,0,Scroll of Light and Darkness
 19201,unit_icon_0032_0_1.png,Ifrit,,水,攻擊,5,未覺醒,可召喚,S,10050,725,582,99,15,50,15,0,Guild Shop
-17101,unit_icon_0019_0_3.png,Ifrit,,水,體力,5,未覺醒,非常駐,S,12510,571,571,99,15,50,15,0,
 19202,unit_icon_0032_1_1.png,Ifrit,,火,體力,5,未覺醒,可召喚,S,10215,648,648,99,15,50,15,0,Guild Shop
-17102,unit_icon_0019_1_3.png,Ifrit,,火,體力,5,未覺醒,非常駐,S,13830,527,527,99,15,50,15,0,
 19203,unit_icon_0032_2_1.png,Ifrit,,風,攻擊,5,未覺醒,可召喚,A,9060,758,615,99,15,50,15,0,Guild Shop
-17103,unit_icon_0019_2_3.png,Ifrit,,風,攻擊,5,未覺醒,非常駐,A,10875,780,472,99,15,50,15,0,
 19204,unit_icon_0032_3_1.png,Ifrit,,光,攻擊,5,未覺醒,可召喚,A,10050,692,615,99,15,50,15,0,
-17104,unit_icon_0019_3_3.png,Ifrit,,光,攻擊,5,未覺醒,非常駐,A,9225,747,615,99,15,50,15,0,
 19205,unit_icon_0032_4_1.png,Ifrit,,暗,支援,5,未覺醒,可召喚,S,9555,637,703,99,15,50,15,0,Fusion
-17105,unit_icon_0019_4_3.png,Ifrit,,暗,體力,5,未覺醒,非常駐,S,9885,659,659,99,15,50,15,0,
 17812,unit_icon_0028_1_2.png,Igmanodon,,火,防禦,3,覺醒,可召喚,C,8730,582,648,103,30,50,15,0,Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 19512,unit_icon_0034_1_2.png,Ignicus,,火,體力,3,覺醒,可召喚,C,9885,637,516,105,15,50,15,0,Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 20114,unit_icon_0037_3_1.png,Illianna,,光,支援,4,覺醒,可召喚,B,11040,538,703,104,15,50,15,0,Scroll of Light and Darkness
@@ -1006,7 +999,7 @@
 13401,unit_icon_0016_0_3.png,Joker,,水,攻擊,4,未覺醒,可召喚,C,9555,769,406,102,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
 13402,unit_icon_0016_1_3.png,Joker,,火,防禦,4,未覺醒,可召喚,C,8400,615,637,102,15,50,15,0,Fusion / Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 13403,unit_icon_0016_2_3.png,Joker,,風,攻擊,4,未覺醒,可召喚,S,8730,812,417,102,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
-13404,unit_icon_0016_3_3.png,Joker,,光,體力,4,未覺醒,可召喚,C,11040,549,527,102,15,50,15,0,Scroll of Light and Darkness
+13404,unit_icon_0016_3_3.png,Joker,,光,體力,4,未覺醒,可召喚,B,11040,549,527,102,15,50,15,0,Scroll of Light and Darkness
 13405,unit_icon_0016_4_3.png,Joker,,暗,攻擊,4,未覺醒,可召喚,C,9060,780,428,102,15,50,15,0,Scroll of Light and Darkness
 21811,unit_icon_0044_0_4.png,Josephine,喬瑟芬,水,體力,5,覺醒,可召喚,S,12345,659,659,102,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
 15215,unit_icon_0021_4_0.png,Jubelle,,暗,防禦,3,覺醒,可召喚,C,9885,494,659,113,15,50,15,0,Secret Dungeon / Scroll of Light and Darkness
@@ -1085,7 +1078,7 @@
 11112,unit_icon_0004_1_1.png,Krakdon,,火,防禦,3,覺醒,可召喚,C,8235,615,648,99,15,50,15,0,Faimon Volcano / Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 11015,unit_icon_0003_4_4.png,Kro,,暗,攻擊,3,覺醒,可召喚,S,9060,626,582,108,15,50,15,0,Secret Dungeon / Scroll of Light and Darkness
 11035,unit_icon_0051_4_3.png,Kro,,暗,攻擊,3,二次覺醒,可召喚,S,9555,769,626,108,15,50,15,0,Secret Dungeon / Scroll of Light and Darkness
-21015,unit_icon_0041_4_2.png,Kroa,,暗,支援,3,覺醒,可召喚,C,9390,560,626,120,15,50,15,0,Scroll of Light and Darkness
+21015,unit_icon_0041_4_2.png,Kroa,,暗,支援,3,覺醒,可召喚,B,9390,560,626,120,15,50,15,0,Scroll of Light and Darkness
 11412,unit_icon_0005_1_2.png,Kugo,,火,防禦,3,覺醒,可召喚,C,10545,384,725,89,15,50,15,25,Mt. Siz / Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 11411,unit_icon_0005_0_2.png,Kuhn,,水,防禦,3,覺醒,可召喚,C,10710,351,747,87,15,50,40,0,Secret Dungeon / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 10415,unit_icon_0001_4_2.png,Kumae,,暗,體力,3,覺醒,可召喚,C,11205,494,571,101,15,50,15,0,Secret Dungeon / Scroll of Light and Darkness
@@ -1097,7 +1090,7 @@
 17303,unit_icon_0026_2_4.png,Kung Fu Girl,,風,攻擊,4,未覺醒,可召喚,C,8565,626,615,101,15,50,15,0,Fusion / Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 17304,unit_icon_0026_3_4.png,Kung Fu Girl,,光,體力,4,未覺醒,可召喚,C,9060,604,604,101,15,50,15,0,Scroll of Light and Darkness
 17305,unit_icon_0026_4_4.png,Kung Fu Girl,,暗,攻擊,4,未覺醒,可召喚,C,8895,648,571,101,15,50,15,0,Scroll of Light and Darkness
-13712,unit_icon_0014_1_0.png,Kungen,,火,體力,3,覺醒,可召喚,C,12345,384,604,101,15,50,15,0,Secret Dungeon / Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
+13712,unit_icon_0014_1_0.png,Kungen,,火,體力,3,覺醒,可召喚,B,12345,384,604,101,15,50,15,0,Secret Dungeon / Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 23312,unit_icon_0052_1_2.png,Kunite,,火,防禦,4,覺醒,可召喚,B,10050,483,823,93,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 24811,unit_icon_0064_1_1.png,Kyle,,水,攻擊,4,覺醒,可召喚,B,9555,747,593,101,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
 14613,unit_icon_0017_2_2.png,Lagmaron,,風,攻擊,5,覺醒,可召喚,B,11535,801,571,110,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
@@ -1158,7 +1151,7 @@
 17803,unit_icon_0028_2_1.png,Lizardman,,風,防禦,3,未覺醒,可召喚,C,7905,560,560,102,15,50,15,0,Secret Dungeon / Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 17804,unit_icon_0028_3_1.png,Lizardman,,光,防禦,3,未覺醒,可召喚,C,8235,549,549,102,15,50,15,0,Scroll of Light and Darkness
 17805,unit_icon_0028_4_1.png,Lizardman,,暗,防禦,3,未覺醒,可召喚,C,8400,516,571,102,15,50,15,0,Scroll of Light and Darkness
-20213,unit_icon_0037_2_3.png,Lo,,風,攻擊,3,覺醒,可召喚,C,9390,659,527,114,15,50,15,0,Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
+20213,unit_icon_0037_2_3.png,Lo,,風,攻擊,3,覺醒,可召喚,B,9390,659,527,114,15,50,15,0,Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 35401,unit_icon_0217_1_1.png,Lob Ear,,水,攻擊,4,未覺醒,非常駐,C,9060,659,549,104,15,50,15,0,
 35411,unit_icon_0217_1_1.png,Lob Ear,,水,攻擊,4,覺醒,可召喚,B,9885,736,582,105,30,50,15,0,
 35402,unit_icon_0217_1_2.png,Lob Ear,,火,攻擊,4,未覺醒,非常駐,C,9225,659,538,104,15,50,15,0,
@@ -1203,7 +1196,7 @@
 10734,unit_icon_0051_3_2.png,Lusha,,光,體力,3,二次覺醒,可召喚,B,12510,428,769,102,15,50,15,0,Secret Dungeon / Scroll of Light and Darkness
 13413,unit_icon_0011_2_2.png,Lushen,,風,攻擊,4,覺醒,可召喚,S,9225,900,461,103,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 18915,unit_icon_0033_4_3.png,Lydia,,暗,攻擊,5,覺醒,可召喚,B,10545,790,648,96,30,50,15,0,Scroll of Light and Darkness
-14914,unit_icon_0018_3_0.png,Lyn,,光,攻擊,3,覺醒,可召喚,C,10380,790,329,102,15,50,15,0,Scroll of Light and Darkness
+14914,unit_icon_0018_3_0.png,Lyn,,光,攻擊,3,覺醒,可召喚,B,10380,790,329,102,15,50,15,0,Scroll of Light and Darkness
 24211,unit_icon_0061_1_1.png,M. BISON,,水,體力,5,覺醒,可召喚,B,12180,714,615,101,15,50,40,0,
 24212,unit_icon_0061_1_2.png,M. BISON,,火,體力,5,覺醒,可召喚,B,13170,615,648,101,15,50,15,25,
 24213,unit_icon_0061_1_3.png,M. BISON,,風,體力,5,覺醒,可召喚,B,11850,747,604,101,15,50,15,25,
@@ -1379,7 +1372,7 @@
 20313,unit_icon_0038_2_3.png,Namib,,風,體力,3,覺醒,可召喚,C,10380,549,571,97,15,50,15,0,Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 25211,unit_icon_0075_1_1.png,Nana,娜娜,水,支援,5,覺醒,可召喚,B,11370,758,626,116,15,50,15,0,
 18512,unit_icon_0030_1_4.png,Nangrim,,火,攻擊,3,覺醒,可召喚,C,8565,725,516,100,15,50,15,0,Secret Dungeon / Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
-15013,unit_icon_0018_2_2.png,Naomi,,風,攻擊,3,覺醒,可召喚,C,8895,681,538,119,15,50,15,0,Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
+15013,unit_icon_0018_2_2.png,Naomi,,風,攻擊,3,覺醒,可召喚,B,8895,681,538,119,15,50,15,0,Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 15033,unit_icon_0053_2_2.png,Naomi,,風,攻擊,3,二次覺醒,可召喚,B,10050,769,593,119,15,50,15,0,Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 23514,unit_icon_0054_3_0.png,Narsha,娜瑞莎,光,攻擊,5,覺醒,可召喚,B,10215,834,626,108,15,50,15,25,Scroll of Light and Darkness
 23614,unit_icon_0054_3_1.png,Narsha,,光,攻擊,5,覺醒,非常駐,B,10215,834,626,108,15,50,15,25,
@@ -1388,11 +1381,11 @@
 10134,unit_icon_0051_3_0.png,Neal,,光,支援,3,二次覺醒,可召喚,B,11040,714,582,101,15,50,15,0,Secret Dungeon / Scroll of Light and Darkness
 26013,unit_icon_0085_1_3.png,Nebelung,,風,體力,4,覺醒,可召喚,B,12015,571,604,100,15,50,15,0,
 20101,unit_icon_0037_0_0.png,Neostone Agent,,水,支援,4,未覺醒,可召喚,C,9225,538,659,103,15,50,15,0,Fusion / Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
-20102,unit_icon_0037_1_0.png,Neostone Agent,,火,支援,4,未覺醒,可召喚,C,10710,681,417,103,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
+20102,unit_icon_0037_1_0.png,Neostone Agent,,火,支援,4,未覺醒,可召喚,B,10710,681,417,103,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 20103,unit_icon_0037_2_0.png,Neostone Agent,,風,支援,4,未覺醒,可召喚,C,9720,670,494,103,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 20104,unit_icon_0037_3_0.png,Neostone Agent,,光,支援,4,未覺醒,可召喚,C,10380,483,637,103,15,50,15,0,Scroll of Light and Darkness
 20105,unit_icon_0037_4_0.png,Neostone Agent,,暗,支援,5,未覺醒,可召喚,B,9885,681,637,103,15,50,15,0,Scroll of Light and Darkness
-20001,unit_icon_0035_0_4.png,Neostone Fighter,,水,攻擊,4,未覺醒,可召喚,C,10215,648,483,106,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
+20001,unit_icon_0035_0_4.png,Neostone Fighter,,水,攻擊,4,未覺醒,可召喚,B,10215,648,483,106,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
 20002,unit_icon_0035_1_4.png,Neostone Fighter,,火,攻擊,4,未覺醒,可召喚,C,9720,681,483,106,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 20003,unit_icon_0035_2_4.png,Neostone Fighter,,風,攻擊,4,未覺醒,可召喚,C,8235,703,560,106,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 20004,unit_icon_0035_3_4.png,Neostone Fighter,,光,攻擊,4,未覺醒,可召喚,C,9060,692,516,106,15,50,15,0,Scroll of Light and Darkness
@@ -1435,7 +1428,7 @@
 11205,unit_icon_0004_4_2.png,Nine-tailed Fox,,暗,攻擊,4,未覺醒,可召喚,C,8235,812,450,101,15,50,15,0,Scroll of Light and Darkness
 13501,unit_icon_0013_0_2.png,Ninja,,水,攻擊,4,未覺醒,可召喚,C,7080,845,494,106,15,50,15,0,Fusion / Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
 13502,unit_icon_0013_1_2.png,Ninja,,火,攻擊,4,未覺醒,可召喚,C,7575,834,472,106,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
-13503,unit_icon_0013_2_2.png,Ninja,,風,體力,4,未覺醒,可召喚,C,10050,703,439,106,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
+13503,unit_icon_0013_2_2.png,Ninja,,風,體力,4,未覺醒,可召喚,B,10050,703,439,106,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 13504,unit_icon_0013_3_2.png,Ninja,,光,攻擊,4,未覺醒,可召喚,C,8235,758,505,106,15,50,15,0,Scroll of Light and Darkness
 13505,unit_icon_0013_4_2.png,Ninja,,暗,體力,5,未覺醒,可召喚,B,11040,736,505,106,15,50,15,0,Scroll of Light and Darkness
 22112,unit_icon_0046_1_1.png,Nisha,,火,支援,4,覺醒,可召喚,B,11370,549,670,104,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
@@ -1539,7 +1532,7 @@
 13905,unit_icon_0014_4_3.png,Pierrette,,暗,攻擊,4,未覺醒,可召喚,C,7575,801,505,102,15,50,15,0,Scroll of Light and Darkness
 15813,unit_icon_0007_2_1.png,Pigma,,風,防禦,3,覺醒,可召喚,C,9060,593,615,102,30,50,15,0,Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 19401,unit_icon_0033_0_4.png,Pirate Captain,,水,體力,4,未覺醒,可召喚,S,10380,659,461,107,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
-19402,unit_icon_0033_1_4.png,Pirate Captain,,火,攻擊,4,未覺醒,可召喚,C,9555,769,406,107,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
+19402,unit_icon_0033_1_4.png,Pirate Captain,,火,攻擊,4,未覺醒,可召喚,B,9555,769,406,107,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 19403,unit_icon_0033_2_4.png,Pirate Captain,,風,攻擊,4,未覺醒,可召喚,C,9060,681,527,107,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 19404,unit_icon_0033_3_4.png,Pirate Captain,,光,攻擊,4,未覺醒,可召喚,C,8895,703,516,107,15,50,15,0,Scroll of Light and Darkness
 19405,unit_icon_0033_4_4.png,Pirate Captain,,暗,支援,4,未覺醒,可召喚,C,9885,571,582,107,15,50,15,0,Scroll of Light and Darkness
@@ -1659,8 +1652,6 @@
 25403,unit_icon_0077_0_3.png,ROBO,,風,攻擊,4,未覺醒,可召喚,B,8730,703,527,100,15,50,15,0,
 25404,unit_icon_0077_0_4.png,ROBO,,光,體力,4,未覺醒,可召喚,B,10710,538,560,100,15,50,15,0,
 25405,unit_icon_0077_0_5.png,ROBO,,暗,攻擊,4,未覺醒,可召喚,C,8565,692,549,100,15,50,15,0,
-25501,unit_icon_0077_0_1.png,ROBO(물)_잔해,,水,體力,4,未覺醒,非常駐,C,10215,560,571,100,15,50,15,0,
-25511,unit_icon_0077_1_1.png,ROBO(물)_잔해,,水,體力,4,覺醒,非常駐,B,11370,604,615,101,15,50,15,0,
 25414,unit_icon_0077_1_4.png,ROBO-E65,機械Q寶-E65,光,體力,4,覺醒,可召喚,B,11850,582,604,101,15,50,15,0,
 25415,unit_icon_0077_1_5.png,ROBO-F29,,暗,攻擊,4,覺醒,可召喚,B,9390,769,582,101,15,50,15,0,
 25413,unit_icon_0077_1_3.png,ROBO-G92,機械Q寶-G92,風,攻擊,4,覺醒,可召喚,B,9555,780,560,101,15,50,15,0,
@@ -1745,7 +1736,7 @@
 25905,unit_icon_0086_0_5.png,Shadowcaster,,暗,攻擊,5,未覺醒,可召喚,B,9555,790,549,104,15,50,15,0,
 15814,unit_icon_0007_3_1.png,Shaffron,,光,防禦,3,覺醒,可召喚,C,8895,604,615,102,30,50,15,0,Scroll of Light and Darkness
 28013,unit_icon_0115_1_3.png,Shahat,,風,體力,5,覺醒,可召喚,B,12510,714,593,103,15,50,15,25,
-11311,unit_icon_0005_0_0.png,Shailoq,,水,體力,3,覺醒,可召喚,C,9720,560,604,115,15,50,15,0,Secret Dungeon / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
+11311,unit_icon_0005_0_0.png,Shailoq,,水,體力,3,覺醒,可召喚,B,9720,560,604,115,15,50,15,0,Secret Dungeon / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 21912,unit_icon_0045_1_1.png,Shaina,,火,攻擊,4,覺醒,可召喚,B,9390,747,604,103,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 14013,unit_icon_0015_2_1.png,Shakan,,風,防禦,3,覺醒,可召喚,C,8565,582,659,115,15,50,15,0,Secret Dungeon / Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 14033,unit_icon_0053_2_1.png,Shakan,,風,防禦,3,二次覺醒,可召喚,B,10050,626,736,115,15,50,15,0,Secret Dungeon / Wind Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
@@ -1773,7 +1764,7 @@
 11212,unit_icon_0004_1_3.png,Shihwa,,火,攻擊,4,覺醒,可召喚,B,9555,714,626,102,15,50,15,0,Guild Shop / Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 11813,unit_icon_0007_2_0.png,Shimitae,,風,攻擊,4,覺醒,可召喚,B,10215,834,461,106,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 25011,unit_icon_0072_1_1.png,Shizuka,玄佳,水,支援,5,覺醒,可召喚,A,11040,659,747,103,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
-12014,unit_icon_0007_3_4.png,Shren,,光,支援,3,覺醒,可召喚,C,10380,725,395,104,15,50,15,0,Scroll of Light and Darkness
+12014,unit_icon_0007_3_4.png,Shren,,光,支援,3,覺醒,可召喚,B,10380,725,395,104,15,50,15,0,Scroll of Light and Darkness
 12034,unit_icon_0074_3_4.png,Shren,,光,支援,3,二次覺醒,可召喚,B,11040,790,505,104,15,50,15,0,
 10615,unit_icon_0002_4_1.png,Shumar,,暗,攻擊,3,覺醒,可召喚,C,7575,834,472,115,30,50,15,0,Secret Dungeon / Scroll of Light and Darkness
 10635,unit_icon_0211_3_5.png,Shumar,,暗,攻擊,3,二次覺醒,可召喚,B,9390,878,527,115,30,50,15,0,
@@ -1897,7 +1888,7 @@
 11803,unit_icon_0006_2_4.png,Sylph,,風,攻擊,4,未覺醒,可召喚,C,9390,758,428,105,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 11804,unit_icon_0006_3_4.png,Sylph,,光,體力,4,未覺醒,可召喚,C,10215,659,472,104,15,50,15,0,Scroll of Light and Darkness
 11805,unit_icon_0006_4_4.png,Sylph,,暗,攻擊,4,未覺醒,可召喚,C,10545,604,505,104,15,50,15,0,Scroll of Light and Darkness
-11901,unit_icon_0009_0_3.png,Sylphid,,水,支援,4,未覺醒,可召喚,C,11700,417,615,102,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
+11901,unit_icon_0009_0_3.png,Sylphid,,水,支援,4,未覺醒,可召喚,B,11700,417,615,102,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
 11902,unit_icon_0009_1_3.png,Sylphid,,火,支援,4,未覺醒,可召喚,C,8400,703,549,102,15,50,15,0,Legendary Scroll / Fire Scroll / Mystical Scroll or Crystal Summon
 11903,unit_icon_0009_2_3.png,Sylphid,,風,支援,4,未覺醒,可召喚,C,10050,549,593,103,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 11904,unit_icon_0009_3_3.png,Sylphid,,光,支援,4,未覺醒,可召喚,C,11040,538,538,102,15,50,15,0,Scroll of Light and Darkness
@@ -1927,7 +1918,7 @@
 31814,unit_icon_0167_1_4.png,Tanjiro Kamado,,光,攻擊,5,覺醒,可召喚,B,10215,867,593,103,30,50,15,0,
 10412,unit_icon_0001_1_2.png,Tantra,,火,體力,2,覺醒,可召喚,D,8895,560,494,101,15,50,15,0,Magic Shop / Secret Dungeon / Unknown Scroll or Social Summon
 19913,unit_icon_0036_2_2.png,Tanya,,風,攻擊,4,覺醒,可召喚,B,9390,747,604,102,30,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
-23311,unit_icon_0052_0_2.png,Tanzaite,,水,防禦,4,覺醒,可召喚,C,9555,538,801,93,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
+23311,unit_icon_0052_0_2.png,Tanzaite,,水,防禦,4,覺醒,可召喚,B,9555,538,801,93,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
 18402,unit_icon_0029_1_4.png,Taoist,,火,攻擊,3,未覺醒,可召喚,C,7740,604,527,103,15,50,15,0,Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 18405,unit_icon_0029_4_4.png,Taoist,,暗,體力,3,未覺醒,可召喚,A,8400,549,538,103,15,50,15,0,Scroll of Light and Darkness
 18401,unit_icon_0029_0_4.png,Taoist,,水,攻擊,4,未覺醒,可召喚,C,9390,692,494,103,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
@@ -1945,7 +1936,6 @@
 18113,unit_icon_0029_2_1.png,Taurus,,風,攻擊,4,覺醒,可召喚,B,9225,790,571,101,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 10914,unit_icon_0003_3_2.png,Teon,,光,支援,3,覺醒,可召喚,C,9555,571,604,95,15,50,15,0,Scroll of Light and Darkness
 19212,unit_icon_0032_1_2.png,Tesarion,泰莎麗恩,火,體力,5,覺醒,可召喚,S,11535,747,626,100,15,50,15,25,Guild Shop
-17112,unit_icon_0019_1_4.png,Tesarion,,火,體力,5,覺醒,非常駐,S,14985,571,571,100,15,50,40,0,
 14513,unit_icon_0017_2_3.png,Teshar,,風,攻擊,5,覺醒,可召喚,B,9555,1098,406,114,15,50,15,0,Legendary Scroll / Wind Scroll / Mystical Scroll or Crystal Summon
 19611,unit_icon_0035_0_0.png,Tetra,,水,支援,4,覺醒,可召喚,A,10545,582,692,110,15,50,15,0,Legendary Scroll / Water Scroll / Mystical Scroll or Crystal Summon
 31101,unit_icon_0165_1_1.png,Tetsuya,,水,支援,4,未覺醒,非常駐,B,10050,659,648,101,15,50,15,0,
@@ -1961,7 +1951,6 @@
 20415,unit_icon_0038_4_1.png,Thebae,特貝,暗,體力,5,覺醒,可召喚,B,12675,692,604,101,15,50,15,0,Scroll of Light and Darkness
 31312,unit_icon_0175_1_2.png,Theodora,,火,支援,5,覺醒,可召喚,B,10545,769,670,100,30,50,15,0,
 19211,unit_icon_0032_0_2.png,Theomars,,水,攻擊,5,覺醒,可召喚,S,10875,823,593,100,30,50,15,0,Guild Shop
-17111,unit_icon_0019_0_4.png,Theomars,,水,體力,5,覺醒,非常駐,S,13995,604,604,115,15,50,15,0,
 34215,unit_icon_0202_1_5.png,Theonia,,暗,攻擊,5,覺醒,可召喚,B,9720,790,703,103,15,50,15,25,
 26713,unit_icon_0096_1_3.png,Thomas,,風,攻擊,5,覺醒,可召喚,B,9885,823,659,110,15,50,15,0,
 16015,unit_icon_0018_4_4.png,Thrain,,暗,攻擊,3,覺醒,可召喚,C,10215,823,307,94,15,50,15,0,Scroll of Light and Darkness
@@ -2065,7 +2054,6 @@
 32605,unit_icon_0180_1_5.png,Vermilion Bird Dancer,,暗,支援,5,未覺醒,非常駐,B,10050,637,670,100,15,50,15,0,
 32615,unit_icon_0180_1_5.png,Vermilion Bird Dancer,,暗,支援,5,覺醒,可召喚,B,11040,692,714,101,15,50,15,25,
 19215,unit_icon_0032_4_2.png,Veromos,貝拉穆斯,暗,支援,5,覺醒,可召喚,S,10710,670,758,100,15,50,15,25,Fusion
-17115,unit_icon_0019_4_4.png,Veromos,,暗,體力,5,覺醒,非常駐,S,11700,681,681,115,15,50,15,0,
 26114,unit_icon_0087_1_4.png,Veronica,費洛妮卡,光,攻擊,5,覺醒,可召喚,A,10545,823,615,104,15,50,15,25,
 22412,unit_icon_0047_1_0.png,Vidurr,,火,防禦,3,覺醒,可召喚,C,9060,505,703,99,30,50,15,0,Fire Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
 14011,unit_icon_0015_0_1.png,Vigor,,水,體力,3,覺醒,可召喚,B,11535,582,461,115,15,50,15,0,Secret Dungeon / Water Scroll / Mystical Scroll or Crystal Summon / Unknown Scroll or Social Summon
@@ -2182,159 +2170,3 @@
 36014,unit_icon_0223_1_4.png,Übel,,光,攻擊,4,覺醒,可召喚,B,9555,736,604,101,15,50,15,25,
 36005,unit_icon_0223_1_5.png,Übel,,暗,攻擊,4,未覺醒,非常駐,C,8730,659,571,100,15,50,15,0,
 36015,unit_icon_0223_1_5.png,Übel,,暗,攻擊,4,覺醒,可召喚,B,9390,725,626,101,15,50,15,25,
-23401,unit_icon_0052_0_1.png,가고일(물),,水,防禦,4,未覺醒,非常駐,C,8730,494,736,92,15,50,15,0,
-23411,unit_icon_0052_0_2.png,가고일(물),,水,防禦,4,覺醒,非常駐,C,9555,538,801,93,15,50,15,0,
-23403,unit_icon_0052_2_1.png,가고일(바람),,風,防禦,4,未覺醒,非常駐,C,8895,505,714,92,15,50,15,0,
-23413,unit_icon_0052_2_2.png,가고일(바람),,風,防禦,4,覺醒,非常駐,C,9225,527,834,93,15,50,15,0,
-23402,unit_icon_0052_1_1.png,가고일(불),,火,防禦,4,未覺醒,非常駐,C,9390,439,747,92,15,50,15,0,
-23412,unit_icon_0052_1_2.png,가고일(불),,火,防禦,4,覺醒,非常駐,B,10050,483,823,93,15,50,15,0,
-23404,unit_icon_0052_3_1.png,가고일(빛),,光,防禦,4,未覺醒,非常駐,C,9060,483,725,92,15,50,15,0,
-23414,unit_icon_0052_3_2.png,가고일(빛),,光,防禦,4,覺醒,非常駐,B,9885,505,812,93,15,50,15,0,
-23405,unit_icon_0052_4_1.png,가고일(어둠),,暗,防禦,4,未覺醒,非常駐,C,8730,472,758,92,15,50,15,0,
-23415,unit_icon_0052_4_2.png,가고일(어둠),,暗,防禦,4,覺醒,非常駐,C,9390,494,856,93,15,50,15,0,
-34514,unit_icon_0204_1_4.png,간달프(빛)(강화),,光,支援,5,覺醒,非常駐,B,12180,571,758,100,15,50,40,0,
-29201,unit_icon_0141_1_1.png,게롤트(물),,水,攻擊,5,未覺醒,非常駐,B,9390,758,593,99,15,50,15,0,
-29203,unit_icon_0141_1_3.png,게롤트(바람),,風,體力,5,未覺醒,非常駐,B,10875,703,549,99,15,50,15,0,
-29202,unit_icon_0141_1_2.png,게롤트(불),,火,攻擊,5,未覺醒,非常駐,B,9390,769,582,99,15,50,15,0,
-29204,unit_icon_0141_1_4.png,게롤트(빛),,光,攻擊,5,未覺醒,非常駐,B,9720,747,582,99,15,50,15,0,
-29205,unit_icon_0141_1_5.png,게롤트(어둠),,暗,體力,5,未覺醒,非常駐,B,11205,670,560,99,15,50,15,0,
-30301,unit_icon_0158_1_1.png,고죠 사토루(물),,水,防禦,5,未覺醒,非常駐,B,9555,615,725,105,15,50,15,0,
-30303,unit_icon_0158_1_3.png,고죠 사토루(바람),,風,防禦,5,未覺醒,非常駐,B,9225,626,736,105,15,50,15,0,
-30302,unit_icon_0158_1_2.png,고죠 사토루(불),,火,攻擊,5,未覺醒,非常駐,B,9225,780,582,105,15,50,15,0,
-30304,unit_icon_0158_1_4.png,고죠 사토루(빛),,光,防禦,5,未覺醒,非常駐,B,9555,593,747,105,15,50,15,0,
-30305,unit_icon_0158_1_5.png,고죠 사토루(어둠),,暗,攻擊,5,未覺醒,非常駐,B,9885,725,593,105,15,50,15,0,
-33401,unit_icon_0184_1_1.png,니나 윌리엄스(물),,水,支援,5,未覺醒,非常駐,B,10050,681,626,104,15,50,15,0,
-33403,unit_icon_0184_1_3.png,니나 윌리엄스(바람),,風,攻擊,4,未覺醒,非常駐,C,9390,670,516,104,15,50,15,0,
-33402,unit_icon_0184_1_2.png,니나 윌리엄스(불),,火,攻擊,4,未覺醒,非常駐,C,9225,681,516,104,15,50,15,0,
-33404,unit_icon_0184_1_4.png,니나 윌리엄스(빛),,光,支援,5,未覺醒,非常駐,B,9720,670,659,104,15,50,15,0,
-33405,unit_icon_0184_1_5.png,니나 윌리엄스(어둠),,暗,支援,5,未覺醒,非常駐,B,10050,659,648,104,15,50,15,0,
-24301,unit_icon_0063_1_1.png,달심(물),,水,攻擊,4,未覺醒,非常駐,C,8895,670,549,100,15,50,15,0,
-24303,unit_icon_0063_1_3.png,달심(바람),,風,攻擊,4,未覺醒,非常駐,C,8400,681,571,100,15,50,15,0,
-24302,unit_icon_0063_1_2.png,달심(불),,火,支援,4,未覺醒,非常駐,C,9720,582,582,100,15,50,15,0,
-24304,unit_icon_0063_1_4.png,달심(빛),,光,支援,4,未覺醒,非常駐,C,9555,648,527,100,15,50,15,0,
-24305,unit_icon_0063_1_5.png,달심(어둠),,暗,防禦,4,未覺醒,非常駐,C,8895,571,648,100,15,50,15,0,
-23201,unit_icon_0052_0_3.png,데몬(물),,水,攻擊,5,未覺醒,非常駐,B,9885,736,582,103,15,50,15,0,
-23211,unit_icon_0052_0_4.png,데몬(물),,水,攻擊,5,覺醒,非常駐,B,10545,823,615,104,30,50,15,0,
-23205,unit_icon_0052_4_3.png,데몬(어둠),,暗,攻擊,5,未覺醒,非常駐,B,9390,790,560,103,15,50,15,0,
-23215,unit_icon_0052_4_4.png,데몬(어둠),,暗,攻擊,5,覺醒,非常駐,S,10050,878,593,104,30,50,15,0,
-24001,unit_icon_0059_1_1.png,류(물),,水,攻擊,5,未覺醒,非常駐,B,10380,714,571,102,15,50,15,0,
-24003,unit_icon_0059_1_3.png,류(바람),,風,攻擊,5,未覺醒,非常駐,B,9555,758,582,102,15,50,15,0,
-24002,unit_icon_0059_1_2.png,류(불),,火,攻擊,5,未覺醒,非常駐,B,9390,801,549,102,15,50,15,0,
-24004,unit_icon_0059_1_4.png,류(빛),,光,攻擊,5,未覺醒,非常駐,B,10050,769,538,102,15,50,15,0,
-24005,unit_icon_0059_1_5.png,류(어둠),,暗,攻擊,5,未覺醒,非常駐,B,10215,736,560,102,15,50,15,0,
-26601,unit_icon_0091_1_1.png,마들렌맛 쿠키(물),,水,攻擊,4,未覺醒,非常駐,C,9060,670,538,102,15,50,15,0,
-26603,unit_icon_0091_1_3.png,마들렌맛 쿠키(바람),,風,體力,4,未覺醒,非常駐,C,9885,604,549,102,15,50,15,0,
-26602,unit_icon_0091_1_2.png,마들렌맛 쿠키(불),,火,攻擊,4,未覺醒,非常駐,C,8895,659,560,102,15,50,15,0,
-26604,unit_icon_0091_1_4.png,마들렌맛 쿠키(빛),,光,攻擊,4,未覺醒,非常駐,C,8730,681,549,102,15,50,15,0,
-26605,unit_icon_0091_1_5.png,마들렌맛 쿠키(어둠),,暗,體力,4,未覺醒,非常駐,C,10050,615,527,102,15,50,15,0,
-33002,unit_icon_0188_1_2.png,미시마 헤이하치(불),,火,體力,5,未覺醒,非常駐,B,10545,648,626,98,15,50,15,0,
-27501,unit_icon_0110_1_1.png,바예크(물),,水,支援,4,未覺醒,非常駐,C,8895,659,560,102,15,50,15,0,
-27503,unit_icon_0110_1_3.png,바예크(바람),,風,體力,5,未覺醒,非常駐,B,11205,670,560,102,15,50,15,0,
-27502,unit_icon_0110_1_2.png,바예크(불),,火,體力,5,未覺醒,非常駐,B,10875,681,571,102,15,50,15,0,
-27504,unit_icon_0110_1_4.png,바예크(빛),,光,體力,4,未覺醒,非常駐,C,10380,604,516,102,15,50,15,0,
-27505,unit_icon_0110_1_5.png,바예크(어둠),,暗,支援,5,未覺醒,非常駐,B,10215,692,604,102,15,50,15,0,
-24201,unit_icon_0061_1_1.png,바이슨(물),,水,體力,5,未覺醒,非常駐,B,11205,659,571,100,15,50,15,0,
-24203,unit_icon_0061_1_3.png,바이슨(바람),,風,體力,5,未覺醒,非常駐,B,10545,703,571,100,15,50,15,0,
-24202,unit_icon_0061_1_2.png,바이슨(불),,火,體力,5,未覺醒,非常駐,B,11850,582,604,100,15,50,15,0,
-24204,unit_icon_0061_1_4.png,바이슨(빛),,光,體力,5,未覺醒,非常駐,B,11205,615,615,100,15,50,15,0,
-24205,unit_icon_0061_1_5.png,바이슨(어둠),,暗,體力,5,未覺醒,非常駐,B,11700,593,604,100,15,50,15,0,
-30205,unit_icon_0154_1_5.png,스쿠나(어둠),,暗,攻擊,5,未覺醒,非常駐,B,10050,725,582,103,15,50,15,0,
-29301,unit_icon_0142_1_1.png,시리(물),,水,攻擊,5,未覺醒,非常駐,B,9390,812,538,105,15,50,15,0,
-29303,unit_icon_0142_1_3.png,시리(바람),,風,攻擊,5,未覺醒,非常駐,B,9555,790,549,105,15,50,15,0,
-29302,unit_icon_0142_1_2.png,시리(불),,火,攻擊,4,未覺醒,非常駐,C,9060,714,494,105,15,50,15,0,
-29304,unit_icon_0142_1_4.png,시리(빛),,光,攻擊,5,未覺醒,非常駐,B,9720,769,560,105,15,50,15,0,
-29305,unit_icon_0142_1_5.png,시리(어둠),,暗,攻擊,4,未覺醒,非常駐,C,9555,692,483,105,15,50,15,0,
-32201,unit_icon_0169_1_1.png,아가츠마 젠이츠(물),,水,攻擊,5,未覺醒,非常駐,B,9390,769,582,105,15,50,15,0,
-32203,unit_icon_0169_1_3.png,아가츠마 젠이츠(바람),,風,攻擊,5,未覺醒,非常駐,B,9060,769,604,105,15,50,15,0,
-32202,unit_icon_0169_1_2.png,아가츠마 젠이츠(불),,火,攻擊,4,未覺醒,非常駐,C,8400,681,571,105,15,50,15,0,
-32204,unit_icon_0169_1_4.png,아가츠마 젠이츠(빛),,光,攻擊,4,未覺醒,非常駐,C,8235,703,560,105,15,50,15,0,
-32205,unit_icon_0169_1_5.png,아가츠마 젠이츠(어둠),,暗,攻擊,5,未覺醒,非常駐,B,9225,758,604,105,15,50,15,0,
-27304,unit_icon_0111_1_4.png,알타이어(빛),,光,攻擊,5,未覺醒,非常駐,B,8730,823,571,97,15,50,15,0,
-26501,unit_icon_0090_1_1.png,에스프레소맛 쿠키(물),,水,攻擊,4,未覺醒,非常駐,C,9225,703,494,100,15,50,15,0,
-26503,unit_icon_0090_1_3.png,에스프레소맛 쿠키(바람),,風,攻擊,4,未覺醒,非常駐,C,8565,714,527,100,15,50,15,0,
-26502,unit_icon_0090_1_2.png,에스프레소맛 쿠키(불),,火,攻擊,4,未覺醒,非常駐,C,8730,736,494,100,15,50,15,0,
-26504,unit_icon_0090_1_4.png,에스프레소맛 쿠키(빛),,光,攻擊,4,未覺醒,非常駐,C,9060,714,494,100,15,50,15,0,
-26505,unit_icon_0090_1_5.png,에스프레소맛 쿠키(어둠),,暗,攻擊,4,未覺醒,非常駐,C,8565,725,516,100,15,50,15,0,
-27701,unit_icon_0107_1_1.png,에이보르(물),,水,支援,5,未覺醒,非常駐,B,9555,670,670,102,15,50,15,0,
-27703,unit_icon_0107_1_3.png,에이보르(바람),,風,支援,4,未覺醒,非常駐,C,9225,593,604,102,15,50,15,0,
-27702,unit_icon_0107_1_2.png,에이보르(불),,火,體力,4,未覺醒,非常駐,C,10545,615,494,102,15,50,15,0,
-27704,unit_icon_0107_1_4.png,에이보르(빛),,光,攻擊,5,未覺醒,非常駐,B,9060,812,560,102,15,50,15,0,
-27705,unit_icon_0107_1_5.png,에이보르(어둠),,暗,體力,5,未覺醒,非常駐,B,11040,681,560,102,15,50,15,0,
-27401,unit_icon_0109_1_1.png,에지오(물),,水,攻擊,5,未覺醒,非常駐,B,9060,834,538,97,15,50,15,0,
-27403,unit_icon_0109_1_3.png,에지오(바람),,風,攻擊,4,未覺醒,非常駐,C,8400,725,527,97,15,50,15,0,
-27402,unit_icon_0109_1_2.png,에지오(불),,火,攻擊,5,未覺醒,非常駐,B,9060,823,549,97,15,50,15,0,
-27404,unit_icon_0109_1_4.png,에지오(빛),,光,攻擊,5,未覺醒,非常駐,B,9555,812,527,97,15,50,15,0,
-27405,unit_icon_0109_1_5.png,에지오(어둠),,暗,攻擊,4,未覺醒,非常駐,C,8565,736,505,97,15,50,15,0,
-29401,unit_icon_0143_1_1.png,예니퍼(물),,水,攻擊,5,未覺醒,非常駐,B,10050,747,560,102,15,50,15,0,
-29403,unit_icon_0143_1_3.png,예니퍼(바람),,風,攻擊,4,未覺醒,非常駐,C,9885,604,549,102,15,50,15,0,
-29402,unit_icon_0143_1_2.png,예니퍼(불),,火,支援,5,未覺醒,非常駐,B,10545,659,615,102,15,50,15,0,
-29404,unit_icon_0143_1_4.png,예니퍼(빛),,光,支援,4,未覺醒,非常駐,C,9390,615,571,102,15,50,15,0,
-29405,unit_icon_0143_1_5.png,예니퍼(어둠),,暗,攻擊,5,未覺醒,非常駐,B,9885,769,549,102,15,50,15,0,
-26203,unit_icon_0089_1_3.png,용감한 쿠키,,風,攻擊,5,未覺醒,非常駐,B,8895,758,626,94,15,50,15,0,
-30401,unit_icon_0155_1_1.png,이타도리 유지(물),,水,攻擊,5,未覺醒,非常駐,B,9555,758,582,103,15,50,15,0,
-30403,unit_icon_0155_1_3.png,이타도리 유지(바람),,風,攻擊,4,未覺醒,非常駐,C,8400,703,549,103,15,50,15,0,
-30402,unit_icon_0155_1_2.png,이타도리 유지(불),,火,攻擊,5,未覺醒,非常駐,B,9060,801,571,103,15,50,15,0,
-30404,unit_icon_0155_1_4.png,이타도리 유지(빛),,光,攻擊,4,未覺醒,非常駐,C,8895,692,527,103,15,50,15,0,
-30405,unit_icon_0155_1_5.png,이타도리 유지(어둠),,暗,攻擊,5,未覺醒,非常駐,B,9390,790,560,103,15,50,15,0,
-24401,unit_icon_0062_1_1.png,춘리(물),,水,攻擊,4,未覺醒,非常駐,C,9225,703,494,104,15,50,15,0,
-24403,unit_icon_0062_1_3.png,춘리(바람),,風,攻擊,4,未覺醒,非常駐,C,9225,659,538,104,15,50,15,0,
-24402,unit_icon_0062_1_2.png,춘리(불),,火,支援,4,未覺醒,非常駐,C,10215,615,516,104,15,50,15,0,
-24404,unit_icon_0062_1_4.png,춘리(빛),,光,攻擊,4,未覺醒,非常駐,C,9555,670,505,104,15,50,15,0,
-24405,unit_icon_0062_1_5.png,춘리(어둠),,暗,支援,4,未覺醒,非常駐,C,9390,615,571,104,15,50,15,0,
-31901,unit_icon_0168_1_1.png,카마도 네즈코(물),,水,體力,5,未覺醒,非常駐,B,11040,593,648,100,15,50,15,0,
-31903,unit_icon_0168_1_3.png,카마도 네즈코(바람),,風,支援,4,未覺醒,非常駐,C,9225,604,593,100,15,50,15,0,
-31902,unit_icon_0168_1_2.png,카마도 네즈코(불),,火,支援,5,未覺醒,非常駐,B,10050,659,648,100,15,50,15,0,
-31904,unit_icon_0168_1_4.png,카마도 네즈코(빛),,光,攻擊,4,未覺醒,非常駐,C,8565,725,516,100,15,50,15,0,
-31905,unit_icon_0168_1_5.png,카마도 네즈코(어둠),,暗,支援,5,未覺醒,非常駐,B,10050,637,670,100,15,50,15,0,
-31801,unit_icon_0167_1_1.png,카마도 탄지로(물),,水,攻擊,4,未覺醒,非常駐,C,9060,681,527,102,15,50,15,0,
-31803,unit_icon_0167_1_3.png,카마도 탄지로(바람),,風,攻擊,5,未覺醒,非常駐,B,9555,790,549,102,15,50,15,0,
-31802,unit_icon_0167_1_2.png,카마도 탄지로(불),,火,攻擊,5,未覺醒,非常駐,B,9720,780,549,102,15,50,15,0,
-31804,unit_icon_0167_1_4.png,카마도 탄지로(빛),,光,攻擊,5,未覺醒,非常駐,B,9390,790,560,102,15,50,15,0,
-31805,unit_icon_0167_1_5.png,카마도 탄지로(어둠),,暗,攻擊,4,未覺醒,非常駐,C,9225,670,527,102,15,50,15,0,
-27601,unit_icon_0108_1_1.png,카산드라(물),,水,支援,4,未覺醒,非常駐,C,9390,615,571,99,15,50,15,0,
-27603,unit_icon_0108_1_3.png,카산드라(바람),,風,攻擊,5,未覺醒,非常駐,B,9060,780,593,99,15,50,15,0,
-27602,unit_icon_0108_1_2.png,카산드라(불),,火,攻擊,5,未覺醒,非常駐,B,9225,801,560,99,15,50,15,0,
-27604,unit_icon_0108_1_4.png,카산드라(빛),,光,支援,4,未覺醒,非常駐,C,9060,648,560,99,15,50,15,0,
-27605,unit_icon_0108_1_5.png,카산드라(어둠),,暗,攻擊,5,未覺醒,非常駐,B,8565,834,571,99,15,50,15,0,
-33101,unit_icon_0187_1_1.png,카자마 진(물),,水,攻擊,4,未覺醒,非常駐,C,9060,648,560,102,15,50,15,0,
-33103,unit_icon_0187_1_3.png,카자마 진(바람),,風,攻擊,5,未覺醒,非常駐,B,9390,780,571,102,15,50,15,0,
-33102,unit_icon_0187_1_2.png,카자마 진(불),,火,體力,5,未覺醒,非常駐,B,10545,670,604,102,15,50,15,0,
-33104,unit_icon_0187_1_4.png,카자마 진(빛),,光,支援,4,未覺醒,非常駐,C,9225,604,593,102,15,50,15,0,
-33105,unit_icon_0187_1_5.png,카자마 진(어둠),,暗,攻擊,5,未覺醒,非常駐,B,9555,747,593,102,15,50,15,0,
-24102,unit_icon_0060_1_2.png,켄(불),,火,攻擊,5,未覺醒,非常駐,B,9390,747,604,102,15,50,15,0,
-30601,unit_icon_0156_1_1.png,쿠기사키 노바라(물),,水,攻擊,5,未覺醒,非常駐,B,9885,703,615,101,15,50,15,0,
-30603,unit_icon_0156_1_3.png,쿠기사키 노바라(바람),,風,體力,5,未覺醒,非常駐,B,10875,626,626,101,15,50,15,0,
-30602,unit_icon_0156_1_2.png,쿠기사키 노바라(불),,火,體力,4,未覺醒,非常駐,C,10380,560,560,101,15,50,15,0,
-30604,unit_icon_0156_1_4.png,쿠기사키 노바라(빛),,光,體力,5,未覺醒,非常駐,B,11040,593,648,101,15,50,15,0,
-30605,unit_icon_0156_1_5.png,쿠기사키 노바라(어둠),,暗,攻擊,4,未覺醒,非常駐,C,9060,692,516,101,15,50,15,0,
-29501,unit_icon_0144_1_1.png,트리스(물),,水,支援,4,未覺醒,非常駐,C,9885,549,604,100,15,50,15,0,
-29503,unit_icon_0144_1_3.png,트리스(바람),,風,支援,4,未覺醒,非常駐,C,9720,549,615,100,15,50,15,0,
-29502,unit_icon_0144_1_2.png,트리스(불),,火,攻擊,5,未覺醒,非常駐,B,9885,790,527,100,15,50,15,0,
-29504,unit_icon_0144_1_4.png,트리스(빛),,光,支援,5,未覺醒,非常駐,B,10545,637,637,100,15,50,15,0,
-29505,unit_icon_0144_1_5.png,트리스(어둠),,暗,攻擊,5,未覺醒,非常駐,B,9555,812,527,100,15,50,15,0,
-33301,unit_icon_0186_1_1.png,폴 피닉스(물),,水,體力,5,未覺醒,非常駐,B,10710,659,604,101,15,50,15,0,
-33303,unit_icon_0186_1_3.png,폴 피닉스(바람),,風,體力,5,未覺醒,非常駐,B,11040,637,604,101,15,50,15,0,
-33302,unit_icon_0186_1_2.png,폴 피닉스(불),,火,體力,5,未覺醒,非常駐,B,11205,637,593,101,15,50,15,0,
-33304,unit_icon_0186_1_4.png,폴 피닉스(빛),,光,體力,4,未覺醒,非常駐,C,10215,582,549,101,15,50,15,0,
-33305,unit_icon_0186_1_5.png,폴 피닉스(어둠),,暗,體力,4,未覺醒,非常駐,C,10050,593,549,101,15,50,15,0,
-26301,unit_icon_0093_1_1.png,퓨어바닐라 쿠키(물),,水,支援,5,未覺醒,非常駐,B,9885,670,648,95,15,50,15,0,
-26303,unit_icon_0093_1_3.png,퓨어바닐라 쿠키(바람),,風,支援,5,未覺醒,非常駐,B,10380,626,659,95,15,50,15,0,
-26302,unit_icon_0093_1_2.png,퓨어바닐라 쿠키(불),,火,支援,5,未覺醒,非常駐,B,10050,637,670,95,15,50,15,0,
-26304,unit_icon_0093_1_4.png,퓨어바닐라 쿠키(빛),,光,支援,5,未覺醒,非常駐,B,10215,604,692,95,15,50,15,0,
-26305,unit_icon_0093_1_5.png,퓨어바닐라 쿠키(어둠),,暗,支援,5,未覺醒,非常駐,B,9720,692,637,95,15,50,15,0,
-26401,unit_icon_0092_1_1.png,홀리베리 쿠키(물),,水,防禦,5,未覺醒,非常駐,B,9555,604,736,100,15,50,15,0,
-26403,unit_icon_0092_1_3.png,홀리베리 쿠키(바람),,風,防禦,5,未覺醒,非常駐,B,9060,604,769,100,15,50,15,0,
-26402,unit_icon_0092_1_2.png,홀리베리 쿠키(불),,火,防禦,5,未覺醒,非常駐,B,8895,560,823,100,15,50,15,0,
-26404,unit_icon_0092_1_4.png,홀리베리 쿠키(빛),,光,防禦,5,未覺醒,非常駐,B,9225,571,790,100,15,50,15,0,
-26405,unit_icon_0092_1_5.png,홀리베리 쿠키(어둠),,暗,防禦,5,未覺醒,非常駐,B,9390,615,736,100,15,50,15,0,
-33201,unit_icon_0185_1_1.png,화랑(물),,水,攻擊,5,未覺醒,非常駐,B,9885,703,615,103,15,50,15,0,
-33203,unit_icon_0185_1_3.png,화랑(바람),,風,攻擊,5,未覺醒,非常駐,B,10050,692,615,103,15,50,15,0,
-33202,unit_icon_0185_1_2.png,화랑(불),,火,攻擊,4,未覺醒,非常駐,C,8895,659,560,103,15,50,15,0,
-33204,unit_icon_0185_1_4.png,화랑(빛),,光,攻擊,5,未覺醒,非常駐,B,9885,714,604,103,15,50,15,0,
-33205,unit_icon_0185_1_5.png,화랑(어둠),,暗,攻擊,4,未覺醒,非常駐,C,9060,637,571,103,15,50,15,0,
-30501,unit_icon_0157_1_1.png,후시구로 메구미(물),,水,支援,4,未覺醒,非常駐,C,9225,604,593,100,15,50,15,0,
-30503,unit_icon_0157_1_3.png,후시구로 메구미(바람),,風,支援,5,未覺醒,非常駐,B,10050,648,659,100,15,50,15,0,
-30502,unit_icon_0157_1_2.png,후시구로 메구미(불),,火,支援,5,未覺醒,非常駐,B,9885,681,637,100,15,50,15,0,
-30504,unit_icon_0157_1_4.png,후시구로 메구미(빛),,光,支援,4,未覺醒,非常駐,C,9390,604,582,100,15,50,15,0,
-30505,unit_icon_0157_1_5.png,후시구로 메구미(어둠),,暗,支援,5,未覺醒,非常駐,B,9720,681,648,100,15,50,15,0,
-31703,unit_icon_0171_1_3.png,히메지마 교메이(바람),,風,防禦,5,未覺醒,非常駐,B,9555,593,747,98,15,50,15,0,

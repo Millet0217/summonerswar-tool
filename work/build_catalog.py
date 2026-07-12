@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import json, csv, os
+import json, csv, os, re
 ROOT = r"D:\AI用的\魔靈Json分析"
 WORK = os.path.join(ROOT, "work")
 TAB  = os.path.join(ROOT, "對照表")
@@ -68,6 +68,16 @@ def is_dummy(m):
     n = m["name"]
     return ("더미" in n) or ("dummy" in n.lower()) or ("형상아이템" in n)
 obt = [m for m in sw if m.get("arch") != "none" and not is_dummy(m)]
+# 排除已知廢棄的平行家族：SWARFARM 保留的舊版 Ifrit(family 17100，10 筆全 obtainable:false)，
+# 與正版 Ifrit(family 19200) 同名不同圖，會在圖鑑造成整組重複
+OBSOLETE_FAMILIES = {17100}
+obt = [m for m in obt if m.get("family") not in OBSOLETE_FAMILIES]
+# 去除韓文名重複：部分聯動角色的未覺醒形態 SWARFARM 尚未英化，name 仍是韓文，
+# 與英文的覺醒形態共用同一 icon → 只要有同 img 的英文條目，就刪掉韓文那筆(保留無英文對應的孤兒)
+_HANGUL = re.compile("[가-힣]")
+_is_kor = lambda m: bool(_HANGUL.search(m["name"]))
+_eng_imgs = {m["img"] for m in obt if not _is_kor(m) and m.get("img")}
+obt = [m for m in obt if not (_is_kor(m) and m.get("img") in _eng_imgs)]
 def sk(m):
     return (ELEM_ORDER.get(ELEM.get(m["element"],""),9), -m["ns"], m["name"])
 obt.sort(key=sk)
@@ -153,6 +163,13 @@ print("meta 強怪未對到名字:", unmatched)
 from collections import Counter as _C
 print("tier 分佈:", dict(sorted(_C(tier_map.values()).items())))
 
+# 圖鑑去重：同一張 icon 只留一張卡(未覺醒與覺醒共用同圖時，留 可召喚>已覺醒>較小mid 者)
+def _rank(m): return (1 if m.get("obtainable") else 0, m["aw"], -int(m["mid"]))
+_best = {}
+for m in obt:
+    if m["img"] not in _best or _rank(m) > _rank(_best[m["img"]]): _best[m["img"]] = m
+catalog_src = [m for m in obt if _best[m["img"]] is m]
+
 catalog = [{
     "mid": str(m["mid"]),
     "en": m["name"],
@@ -165,7 +182,7 @@ catalog = [{
     "tier": tier_map[str(m["mid"])],
     "rp": rp_map.get(str(m["mid"]), 0),
     "img": m["img"],
-} for m in obt]
+} for m in catalog_src]
 with open(os.path.join(WORK,"catalog.json"),"w",encoding="utf-8") as f:
     json.dump(catalog, f, ensure_ascii=False, separators=(",",":"))
 
