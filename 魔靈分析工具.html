@@ -267,6 +267,12 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         </div>
       </div>
     </template>
+    <div class="controls" style="margin-bottom:12px">
+      <span class="muted">模式：</span>
+      <button type="button" class="btn fModeBtn active" data-fmode="fit">單/多魔靈配裝</button>
+      <button type="button" class="btn2 fModeBtn" data-fmode="cap">套組產能分析</button>
+    </div>
+    <div id="fitModeFit">
     <div class="card">
       <div id="fMons"></div>
       <div class="controls" style="margin-top:8px">
@@ -277,6 +283,25 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
       <small class="note">可加入多隻魔靈一起配裝；<b>清單由上到下＝優先序</b>，排前面的先挑最佳解，用掉的符文後面的魔靈不會再用（同一顆符文不重複套用）。<br>每隻各自設定：引擎從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選可納入全帳號符文）。四件套可選「無」；二件套最多三組（可重複，例如元氣×2＝四洞元氣）；未被套裝佔用的洞為自由洞，依目標挑最佳符文。<br>「優先屬性」可依序加入多個屬性（1.&gt;2.&gt;3. 加權遞減），滿足套裝後優先挑這些屬性高的符文；「額外門檻」以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。<br>勾「含無形符文」時，六顆最多 1 顆無形，可補足缺 1 件的套裝（例：3 顆暴走＋1 顆無形＝視同暴走 4 件套）；未勾選則無形符文完全不參與配裝。</small>
     </div>
     <div id="fResults"><span class="muted">選好條件後按「計算最佳配裝」</span></div>
+    </div><!-- /fitModeFit -->
+    <div id="fitModeCap" style="display:none">
+      <div class="card">
+        <div class="controls">
+          <label>4件套 <select id="capSet4"></select></label>
+          <label>2件套 <select id="capSet2"></select></label>
+          <label>速度門檻 ≥ <input type="number" id="capSpd" value="180" style="width:80px"></label>
+          <label>假設基礎速 <input type="number" id="capBase" value="100" style="width:80px"></label>
+          <label>2洞主屬 <select id="capMain2"><option value="">不限</option><option value="spd">攻擊速度</option></select></label>
+        </div>
+        <div class="controls" style="margin-top:6px">
+          <label title="只用倉庫閒置(未裝備)的符文；不勾則全帳號6★符文(含已裝)都納入資源池"><input type="checkbox" id="capSpares"> 只用倉庫閒置符文</label>
+          <label title="每組最多1顆無形符文，可補足缺1件的套裝(例:3暴走+1無形=視同暴走4件套)"><input type="checkbox" id="capUseInt"> 含無形符文(補位)</label>
+          <button class="btn" id="capRun" type="button">計算最多可配組數</button>
+        </div>
+        <small class="note">回答「用整個符文池最多能同時湊出幾組符合條件的套裝」。每組須：4件<b id="capN4">暴走</b>＋2件<b id="capN2">意志</b>、每洞一顆、最終速度≥門檻（速度只計符文＋自身套裝加成，不含神器/全隊型套）。組間符文不共用。<br>演算法＝貪婪最省（每組剛好踩線、不浪費快符文）＋局部交換優化，盡量避免「前面把快符文用光導致總組數變少」。基礎速為假設值（同型怪基礎速相同才準）；暫不含無形符文。</small>
+      </div>
+      <div id="capResults"><span class="muted">設定條件後按「計算最多可配組數」</span></div>
+    </div>
   </section>
 
   <section id="overview" class="tab">
@@ -22726,6 +22751,169 @@ $('#fRun').onclick=()=>{
     out+=`<div class="fitmon">${head}<div class="fitbox"><div class="card"><h3 style="margin-top:0">推薦配裝</h3>${resultHtml}</div><div class="card"><h3 style="margin-top:0">符文加成合計</h3>${statsHtml}</div></div></div>`;
   });
   $('#fResults').innerHTML=out||'<span class="muted">請至少加入一隻魔靈</span>';
+};
+
+// ---------- 套組產能分析（用整個符文池最多能配出幾組達標套裝）----------
+$('#capSet4').innerHTML=fSet4OptsHtml; $('#capSet4').value='暴走';
+$('#capSet2').innerHTML=twoNamesHtml; $('#capSet2').value='意志';
+// 模式切換：配裝 ⇄ 產能
+$$('.fModeBtn').forEach(b=>b.onclick=()=>{
+  const m=b.dataset.fmode;
+  $$('.fModeBtn').forEach(x=>{const on=x===b; x.className='fModeBtn '+(on?'btn active':'btn2');});
+  $('#fitModeFit').style.display = m==='fit'?'':'none';
+  $('#fitModeCap').style.display = m==='cap'?'':'none';
+});
+// 套裝速度%加成(只有迅速4件套=+25% SPD)
+function capSetSpdPct(s4,s2){
+  const SS={}; for(const k in IMP_setName){ if(IMP_setName[k])SS[IMP_setName[k]]=+k; }
+  let pct=0; const add=(name,pc)=>{ const sb=SET_BONUS[SS[name]]; if(sb&&sb.st==='SPD%'&&sb.n<=pc)pct+=sb.v; };
+  if(s4)add(s4,4); if(s2)add(s2,2); return pct;
+}
+const capRuneSpd=r=>parseStats(r)['SPD']||0;
+// 6洞裡挑2洞當2件套(其餘4洞當4件套)的所有組合(0-indexed)
+const CAP_C62=(()=>{const a=[];for(let i=0;i<6;i++)for(let j=i+1;j<6;j++)a.push([i,j]);return a;})();
+// 單組最省選擇：slotCands[0..5]=各洞候選(已依 _spd 升冪)，need=符文須提供的速度；回傳{runes,total}或 null(該分洞無法達標)
+function capMinGroup(slotCands, need){
+  for(const c of slotCands) if(!c.length) return null;
+  const lows=slotCands.map(cs=>cs[0]);                       // [0]=最省(升冪)
+  const baseTotal=lows.reduce((a,r)=>a+r._spd,0);
+  if(baseTotal>=need) return {runes:lows.slice(), total:baseTotal};   // 全用最省已達標→零浪費
+  const deficit=need-baseTotal;
+  const addMax=slotCands.map(cs=>cs[cs.length-1]._spd-cs[0]._spd);    // 各洞最多能再加多少速
+  if(addMax.reduce((a,b)=>a+b,0)<deficit) return null;               // 全開到最快也不夠
+  const bigAdd=Math.max(...addMax), cap=deficit+bigAdd;               // 上限：無需超過 deficit+單洞最大增量
+  // 多選擇背包：每洞挑一顆，最小化 Σ(spd−low) 且 ≥deficit；狀態=addSum→各洞選擇陣列
+  let states=new Map(); states.set(0, lows.slice());
+  for(let sl=0; sl<6; sl++){
+    const next=new Map();
+    for(const [sum,pick] of states){
+      for(const r of slotCands[sl]){
+        const ns=Math.min(sum+(r._spd-lows[sl]._spd), cap);
+        if(!next.has(ns)){ const np=pick.slice(); np[sl]=r; next.set(ns,np); }
+      }
+    }
+    states=next;
+  }
+  let best=null,bestSum=Infinity;
+  for(const [sum,pick] of states){ if(sum>=deficit && sum<bestSum){ bestSum=sum; best=pick; } }
+  return best ? {runes:best, total:baseTotal+bestSum} : null;
+}
+// 從 leftover 池挑「最省的一組」(遍歷15種分洞，取總速最小=浪費最少者)
+function capFormGroup(pool, need, S2){
+  const roleArr=(sl,isS2)=> isS2 ? (S2?pool.s2[sl]:pool.any[sl]) : pool.s4[sl];
+  const hasInt = pool.int && pool.int.some(a=>a.length);
+  let best=null;
+  for(const [a,b] of CAP_C62){
+    // intSlot=-1 不用無形；0..5=該洞改用無形補位(計為該洞角色的套裝件，每組至多1顆)
+    const intOpts=[-1]; if(hasInt){ for(let k=0;k<6;k++) if(pool.int[k].length) intOpts.push(k); }
+    for(const iSlot of intOpts){
+      const cands=[]; let ok=true;
+      for(let sl=0; sl<6; sl++){
+        const arr = sl===iSlot ? pool.int[sl] : roleArr(sl, sl===a||sl===b);
+        if(!arr.length){ ok=false; break; }
+        cands.push(arr);
+      }
+      if(!ok) continue;
+      const g=capMinGroup(cands, need);
+      if(g && (!best || g.total<best.total)) best={total:g.total, runes:g.runes.slice(), s2slots:[a,b], intSlot:iSlot};
+    }
+  }
+  return best;
+}
+function capSolve(opts){
+  const S4=opts.s4, S2=opts.s2, threshold=opts.threshold, baseSpd=opts.baseSpd, main2=opts.main2, sparesOnly=opts.sparesOnly, useInt=opts.useInt;
+  const pct=capSetSpdPct(S4,S2);
+  const need = threshold - baseSpd*(1+pct/100);   // 符文須提供的速度
+  // 建池：6★、(選)倉庫閒置；一般池(非無形)含 any(全套裝，供2件套留空時的自由洞)；無形另建 int 池(勾選才有)
+  const okBase=r=> r.st==6 && r.sid!==INT_SID && (!sparesOnly || r.eq==0);
+  const okInt =r=> r.st==6 && r.sid===INT_SID && (!sparesOnly || r.eq==0);
+  const pool={s4:[],s2:[],any:[],int:[]};
+  for(let sl=0;sl<6;sl++){ pool.s4[sl]=[]; pool.s2[sl]=[]; pool.any[sl]=[]; pool.int[sl]=[]; }
+  const main2ok=(r)=> !(r.sl===2 && main2==='spd' && r.mt!==8);   // 2洞限速度主屬時過濾
+  RUNES.forEach(r=>{
+    if(!main2ok(r)) return;
+    const sl=r.sl-1; if(r._spd==null)r._spd=capRuneSpd(r);
+    if(okBase(r)){ pool.any[sl].push(r); if(r.set===S4)pool.s4[sl].push(r); if(S2&&r.set===S2)pool.s2[sl].push(r); }
+    else if(useInt && okInt(r)){ pool.int[sl].push(r); }
+  });
+  const sortAsc=a=>a.sort((x,y)=>x._spd-y._spd);
+  for(let sl=0;sl<6;sl++){ sortAsc(pool.s4[sl]); sortAsc(pool.s2[sl]); sortAsc(pool.any[sl]); sortAsc(pool.int[sl]); }
+  const supply0=snapSupply(pool);           // 初始各洞供給量(渲染瓶頸用)
+  const removeRune=r=>{ const sl=r.sl-1; [pool.s4[sl],pool.s2[sl],pool.any[sl],pool.int[sl]].forEach(a=>{const i=a.findIndex(x=>x.id===r.id); if(i>=0)a.splice(i,1);}); };
+  const addBack=r=>{ const sl=r.sl-1; const ins=a=>{ a.push(r); sortAsc(a); }; if(r.sid===INT_SID){ ins(pool.int[sl]); return; } ins(pool.any[sl]); if(r.set===S4)ins(pool.s4[sl]); if(S2&&r.set===S2)ins(pool.s2[sl]); };
+  // 貪婪：反覆挑最省的一組
+  const groups=[];
+  for(;;){ const g=capFormGroup(pool,need,S2); if(!g)break; g.runes.forEach(removeRune); groups.push(g); }
+  // 局部交換優化：把各組多餘快符文換成 leftover 慢符文(同洞同套、換後仍達標)→快符文回流 leftover→再嘗試多湊一組
+  let guard=0;
+  for(;;){
+    if(guard++>500)break;
+    // 反覆執行「釋放速度最多」的可行 down-swap，直到沒有
+    for(;;){
+      let bs=null;
+      groups.forEach(g=>{
+        for(let sl=0;sl<6;sl++){
+          let arr;
+          if(g.intSlot===sl) arr=pool.int[sl];                      // 無形洞：只在無形池內換
+          else { const isS2=g.s2slots.includes(sl); arr=isS2?(S2?pool.s2[sl]:pool.any[sl]):pool.s4[sl]; }
+          if(!arr.length)continue;
+          const cur=g.runes[sl], low=arr[0];
+          if(low._spd>=cur._spd)continue;
+          if(g.total-cur._spd+low._spd < need)continue;      // 換後仍要達標
+          const gain=cur._spd-low._spd;
+          if(!bs||gain>bs.gain)bs={g,sl,cur,low,gain};
+        }
+      });
+      if(!bs)break;
+      removeRune(bs.low); addBack(bs.cur);
+      bs.g.runes[bs.sl]=bs.low; bs.g.total=bs.g.total-bs.cur._spd+bs.low._spd;
+    }
+    const ng=capFormGroup(pool,need,S2);
+    if(!ng)break;
+    ng.runes.forEach(removeRune); groups.push(ng);
+  }
+  return {groups, need, pct, baseSpd, threshold, S4, S2, supply0, supplyLeft:snapSupply(pool)};
+}
+// 各洞剩餘供給量快照
+function snapSupply(pool){ const s={s4:[],s2:[],any:[],int:[]}; for(let sl=0;sl<6;sl++){ s.s4[sl]=pool.s4[sl].length; s.s2[sl]=pool.s2[sl].length; s.any[sl]=pool.any[sl].length; s.int[sl]=(pool.int&&pool.int[sl]?pool.int[sl].length:0); } return s; }
+// 渲染產能結果
+function renderCap(res){
+  const {groups,need,pct,baseSpd,threshold,S4,S2}=res;
+  const finOf=g=>Math.round(baseSpd*(1+pct/100)+g.total);
+  const setTag=r=> r.sid===INT_SID?'<span style="color:var(--warn)">無形<span class="muted">(補位)</span></span>':(r.set===S4?'<span style="color:var(--acc)">'+r.set+'</span>':(S2&&r.set===S2?'<span style="color:var(--good)">'+r.set+'</span>':'<span class="muted">'+(r.set||'?')+'</span>'));
+  const intTot=(res.supply0.int||[]).reduce((a,b)=>a+b,0);
+  const head=`<div class="card"><div style="font-size:15px;margin-bottom:6px">最多可配 <b style="font-size:26px;color:var(--acc)">${groups.length}</b> 組</div>
+    <div class="muted" style="font-size:12.5px">條件：4件<b>${S4}</b>＋2件<b>${S2||'（自由洞）'}</b>、最終速度 ≥ <b>${threshold}</b>（假設基礎速 ${baseSpd}${pct?` ＋套裝 +${pct}% 速`:''}）。<br>
+    每組符文須提供速度 ≥ <b>${Math.max(0,Math.round(need*10)/10)}</b>。速度只計符文＋自身套裝，未含神器/全隊型套；${intTot>0?`可用無形符文 <b>${intTot}</b> 顆（每組至多1顆補位）`:'未含無形符文'}。</div></div>`;
+  // 瓶頸：哪個洞的可用符文最少(4件套/2件套分別)
+  const sup=res.supply0;
+  const bnRows=[];
+  for(let sl=0;sl<6;sl++){
+    const s2txt=S2?`｜2件套(${S2}) ${sup.s2[sl]}`:`｜自由洞 ${sup.any[sl]}`;
+    bnRows.push(`<div class="slotline"><span>${sl+1} 洞</span><span class="muted">4件套(${S4}) ${sup.s4[sl]}${s2txt}</span></div>`);
+  }
+  const bottleneck=`<div class="card"><h3 style="margin-top:0">各洞可用符文（瓶頸判斷）</h3>${bnRows.join('')}<small class="note">組數通常卡在「某洞可用的 4 件套或 2 件套符文最少」的那個洞。</small></div>`;
+  let cards='';
+  groups.forEach((g,i)=>{
+    const lines=g.runes.map((r,sl)=>`<div class="slotline"><span>${sl+1} 洞 ${setTag(r)} <span class="muted">${r.m}</span></span><span>速 <b>${r._spd}</b> <span class="muted">ef${r.ef}</span></span></div>`).join('');
+    cards+=`<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><b>組 ${i+1}</b><span>最終速度 <b style="color:var(--acc)">${finOf(g)}</b>（符文 ${g.total}）</span></div>${lines}</div>`;
+  });
+  if(!groups.length) cards=`<div class="card muted">此條件下一組都湊不出來。可降低速度門檻、提高假設基礎速，或改用「不限」2洞主屬。</div>`;
+  $('#capResults').innerHTML=head+bottleneck+cards;
+}
+$('#capRun').onclick=()=>{
+  const s4=$('#capSet4').value, s2=$('#capSet2').value;
+  if(!s4){ $('#capResults').innerHTML='<div class="card muted">請選擇 4 件套。</div>'; return; }
+  $('#capN4').textContent=s4; $('#capN2').textContent=s2||'（自由洞）';
+  const res=capSolve({
+    s4, s2,
+    threshold:parseFloat($('#capSpd').value)||0,
+    baseSpd:parseFloat($('#capBase').value)||0,
+    main2:$('#capMain2').value,
+    sparesOnly:$('#capSpares').checked,
+    useInt:$('#capUseInt').checked
+  });
+  renderCap(res);
 };
 
 // ---------- 總覽 ----------
