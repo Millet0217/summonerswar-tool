@@ -10,6 +10,8 @@
 
 ## 快速開始
 
+> **線上版**：<https://millet0217.github.io/summonerswar-tool/>（push 到 `main` 由 GitHub Actions 自動部署，見下方「部署」）。開啟後點右上「📥 匯入新JSON」載入自己的 `smw*.json` 即可使用。
+
 1. 直接用瀏覽器開啟 **`魔靈分析工具.html`**（單一檔、離線、資料已內嵌）。
 2. **要換一份新帳號資料**：點右上角 **「📥 匯入新JSON」**，直接選新的 `smw*.json`，五個分頁即時刷新，**免跑任何腳本**；header 的玩家名稱會跟著匯入檔的 `wizard_info.wizard_name` 更新（未匯入前為空白）。旁邊 **「🗑️ 清除資料」** 可先清空目前匯入的怪物與符文（僅清畫面、不刪檔），方便換一份乾淨的新檔。
    - 符文配裝頁的 **「單/多魔靈配裝」** 與 **「套組產能分析」** 各有獨立的 **「🗑️ 清空」** 鈕，只重置該模式的清單與結果，**不會移除已匯入的 JSON**。
@@ -206,4 +208,17 @@ icons/*.png(本機圖示)                                 魔靈分析工具.htm
 
 ## ⚠️ 安全提醒
 
-`smw20260710.json` 內含帳號個資與 `session_key` 等憑證欄位。目前僅本機 git 版本控管；**若日後要推上遠端（GitHub 等），請先把原始 JSON 加入 `.gitignore` 或移除敏感欄位**，避免外洩。
+`smw20260710.json` 內含帳號個資與 `session_key` 等憑證欄位，已於 `.gitignore` 排除、**不會**被推上遠端或部署到線上版。線上版開啟後為空白，需各自匯入自己的 `smw*.json`（僅在瀏覽器本機解析，不上傳）。
+
+---
+
+## 部署（GitHub Pages 自動化）
+
+線上版透過 **GitHub Actions** 自動部署到 GitHub Pages，每次 `git push` 到 `main` 即自動重新上線。
+
+- Workflow：`.github/workflows/deploy.yml`
+- 流程：checkout → 把 `魔靈分析工具.html` 複製成 `index.html`（Pages 入口）→ 上傳整站（含 `icons/`）→ 部署。
+- 網址：<https://millet0217.github.io/summonerswar-tool/>
+- **一次性前置設定**（只能在 GitHub 網頁操作）：repo **Settings → Pages → Build and deployment → Source** 選 **GitHub Actions**。
+
+你平常只需維護 `魔靈分析工具.html`，push 後 Actions 會自動生成 `index.html` 並部署，無需手動改動。
