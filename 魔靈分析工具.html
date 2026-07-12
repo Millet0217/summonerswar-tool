@@ -99,6 +99,11 @@ tr.clk{cursor:pointer}
 .mstats div{background:var(--panel2);border-radius:7px;padding:6px 8px;font-size:12px}
 .mstats div span{color:var(--dim);display:block;font-size:11px}
 .mstats div b{font-size:14px}
+.msetfx{font-size:12px;color:var(--dim);margin:2px 0 8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.msetfx .fxset{background:var(--panel2);border-radius:6px;padding:2px 8px;cursor:help}
+.msetfx .fxset b{color:var(--good)}
+.teambonus{margin-top:8px;font-size:12px;color:var(--dim);background:var(--panel2);border-radius:7px;padding:6px 9px}
+.teambonus b{color:var(--good)}
 .mgore{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin:12px 0;font-size:12.5px}
 .mgore b{color:var(--good)}
 .runegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:12px;margin-top:8px}
@@ -21993,6 +21998,7 @@ function openUnitModal(u){
   const tot={}; runes.forEach(r=>{const st=parseStats(r);for(const k in st)tot[k]=(tot[k]||0)+st[k];});
   const sidCount={}; runes.forEach(r=>{if(r.sid!=null)sidCount[r.sid]=(sidCount[r.sid]||0)+1;});
   const fin=(typeof computeFinal==='function')?computeFinal(u.mid,tot,sidCount):null;
+  const setFx=(typeof effectSetHtml==='function')?effectSetHtml(sidCount,fin):'';
   const efs=runes.map(r=>r.ef); const avg=efs.length?(efs.reduce((a,b)=>a+b,0)/efs.length).toFixed(1):'0';
   // 符文卡（精簡：洞位/套裝 + 主屬 + 可點擊合併磨刀的副屬，跟符文庫一致）
   let cards='';
@@ -22010,6 +22016,7 @@ function openUnitModal(u){
     <h2>${u.n} <span class="pill ${attrClass[u.at]}">${u.at}</span> ${u.s}★</h2>
     <div class="msub">${u.en||''}　·　${u.ar}　·　Lv${u.lv}　·　目前套裝：${u.rs||'—'}　·　符文平均效率 <b class="${effCls(avg)}">${avg}%</b></div>
     <div class="mstats" id="uStats" title="點擊：切換 基礎+符文 ⇄ 加總" style="cursor:pointer"></div>
+    ${setFx}
     <div class="runegrid">${cards}</div>`;
   renderUStats(u,fin);
   $('#uStats').onclick=()=>{uStatMerged=!uStatMerged;renderUStats(u,fin);};
@@ -22290,17 +22297,36 @@ function parseStats(r){ // 回傳 {STAT:val}
   const o={}; const add=(t,v)=>{o[t]=(o[t]||0)+(+v||0);};
   const mm=r.m.match(/^(.+?)\+(\d+)/); if(mm)add(mm[1],mm[2]);
   if(r.pf){const pm=r.pf.match(/^(.+?)\+(\d+)/);if(pm)add(pm[1],pm[2]);}
-  (r.sub||'').split(' / ').forEach(s=>{const m=s.replace('(前)','').match(/^(.+?)\+(\d+)/);if(m)add(m[1].trim(),m[2]);});
+  (r.sub||'').split(' / ').forEach(s=>{const m=s.replace('(前)','').match(/^(.+?)\+(\d+)(?:\+(\d+)磨)?/);if(m)add(m[1].trim(),(+m[2])+(m[3]?+m[3]:0));}); // 副屬含磨刀值(+N磨)一併計入
   _psCache.set(r,o); return o;
 }
-// 套裝加成(依 set_id，個人體質類套裝)：{sid:{st:目標%欄, v:每套加成, n:件數}}
-const SET_BONUS={1:{st:'HP%',v:15,n:2},2:{st:'DEF%',v:15,n:2},4:{st:'CRate%',v:12,n:2},6:{st:'ACC%',v:20,n:2},7:{st:'RES%',v:20,n:2},3:{st:'SPD%',v:25,n:4},5:{st:'CDmg%',v:40,n:4},8:{st:'ATK%',v:35,n:4}};
+// 套裝加成(依 set_id，體質類套裝)：{sid:{st:目標%欄, v:每套加成, n:件數}}
+// 自身型：祝福/守護/迅速/刀刃/激怒/集中/忍耐/猛攻。全隊型(含自己→單隻只算自己裝的)：鬥志/決心/剛毅/命中/韌性。
+// 保護(16)雖屬體質類(15%體力護盾)但不計入體質，故不列入此表。
+const SET_BONUS={
+  1:{st:'HP%',v:15,n:2},2:{st:'DEF%',v:15,n:2},4:{st:'CRate%',v:12,n:2},6:{st:'ACC%',v:20,n:2},7:{st:'RES%',v:20,n:2},
+  3:{st:'SPD%',v:25,n:4},5:{st:'CDmg%',v:40,n:4},8:{st:'ATK%',v:35,n:4},
+  19:{st:'ATK%',v:8,n:2,team:1},20:{st:'DEF%',v:8,n:2,team:1},21:{st:'HP%',v:8,n:2,team:1},22:{st:'ACC%',v:10,n:2,team:1},23:{st:'RES%',v:10,n:2,team:1}};
+// 由 sidCount 統計「全隊型」套裝加成(19~23)→{st:%}，供多魔靈配裝跨隊彙總(所有隊員含自己都吃)
+function teamBonusOf(sidCount){
+  const tb={}; for(const sid in (sidCount||{})){ const sb=SET_BONUS[sid]; if(!sb||!sb.team)continue; const c=Math.floor(sidCount[sid]/sb.n); if(c>0)tb[sb.st]=(tb[sb.st]||0)+sb.v*c; } return tb;
+}
+// 效果類套裝(依 set_id)：p=單套發動機率(無=非機率型)、pc=成套件數、d=精簡說明。用於詳細彈窗精簡顯示，不計入體質。
+const SET_EFFECT={
+  10:{n:'絕望',p:0.25,pc:2,d:'暈眩'},13:{n:'暴走',p:0.22,pc:4,d:'追加回合'},
+  17:{n:'反擊',p:0.15,pc:2,d:'反擊'},24:{n:'封印',p:0.25,pc:2,d:'封印'},
+  11:{n:'吸血',pc:4,d:'吸血(傷害35%回復)'},14:{n:'應報',pc:2,d:'受7%HP傷→+4%攻擊條'},
+  15:{n:'意志',pc:2,d:'免疫1回合'},18:{n:'破壞',pc:2,d:'破壞HP上限(傷害30%,最多-60%)'},
+  16:{n:'保護',pc:2,d:'15%HP護盾3回合(全隊含自己)'}};
 // 由 mid 的體質 + 符文加總(tot) + 套裝件數(sidCount) 算最終數值
-function computeFinal(mid, tot, sidCount){
+// teamBonus(可選)：跨隊全隊型套裝加成{st:%}。給定時，全隊型套裝改由 teamBonus 統一計入(避免與自身 sidCount 重複)；
+// 不給時(單隻彈窗/單隻配裝)則照舊由自身 sidCount 計算全隊型套(只算自己裝的)。
+function computeFinal(mid, tot, sidCount, teamBonus){
   const b=(typeof BASE_STATS!=='undefined'&&BASE_STATS[''+mid]); if(!b)return null;
   const set={HP:0,ATK:0,DEF:0,SPD:0,'HP%':0,'ATK%':0,'DEF%':0,'SPD%':0,'CRate%':0,'CDmg%':0,'RES%':0,'ACC%':0};
   const g=k=>tot[k]||0;
-  for(const sid in (sidCount||{})){ const sb=SET_BONUS[sid]; if(!sb)continue; const c=Math.floor(sidCount[sid]/sb.n); if(c>0)set[sb.st]+=sb.v*c; }
+  for(const sid in (sidCount||{})){ const sb=SET_BONUS[sid]; if(!sb)continue; if(sb.team&&teamBonus)continue; const c=Math.floor(sidCount[sid]/sb.n); if(c>0)set[sb.st]+=sb.v*c; }
+  if(teamBonus){ for(const st in teamBonus)set[st]=(set[st]||0)+teamBonus[st]; }
   const r=v=>Math.round(v);
   return {
     hp : r(b.h*(1+(g('HP%')+set['HP%'])/100)+g('HP')),
@@ -22313,6 +22339,22 @@ function computeFinal(mid, tot, sidCount){
     ac : b.ac+g('ACC%')+set['ACC%'],
     base:b
   };
+}
+// 效果類套裝精簡顯示：由 sidCount 找出已成套的效果套，機率型算「至少發生一次」機率(多套=1-(1-p)^套數)
+function effectSetHtml(sidCount,fin){
+  if(!sidCount)return '';
+  const items=[];
+  for(const sid in sidCount){
+    const e=SET_EFFECT[sid]; if(!e)continue;
+    const c=Math.floor(sidCount[sid]/e.pc); if(c<1)continue;   // 成套組數
+    let tag;
+    if(e.p!=null){ const pr=Math.round((1-Math.pow(1-e.p,c))*100); tag=`${e.n} <b>${pr}%</b>`; } // 至少一次機率
+    else if(+sid===16&&fin){ tag=`${e.n} <b>${Math.round(fin.hp*0.15)}</b> 護盾`; }               // 保護：15%最終HP護盾值
+    else tag=e.n;
+    items.push(`<span class="fxset" title="${e.d}">${tag}</span>`);
+  }
+  if(!items.length)return '';
+  return `<div class="msetfx">效果套裝：${items.join('')}</div>`;
 }
 // 新條件用的屬性定義：對應 computeFinal 的最終欄位(fk)與 BASE_STATS 欄位(bk)
 const STAT_KEYS=[
@@ -22554,7 +22596,7 @@ document.getElementById('fMons').innerHTML=''; // renderAll 會重跑此段，�
 $('#fResults').innerHTML='<span class="muted">選好條件後按「計算最佳配裝」</span>';
 addMonRow(); // 預設一列
 // 由 solveFit 結果 + 該列設定 產生「推薦配裝」與「符文加成合計」兩段 HTML
-function renderFitCards(solved,cfg){
+function renderFitCards(solved,cfg,teamBonus){
   const p=solved.p, diag=solved.diag, sel=solved.sel;
   const s4=cfg.s4, twos=cfg.twos||[];
   let setCount={}; Object.values(p).forEach(r=>{if(r){setCount[r.set]=(setCount[r.set]||0)+1;}});
@@ -22609,7 +22651,11 @@ function renderFitCards(solved,cfg){
   // 最終體質 = 怪物基礎值 + 符文% + 符文固定 + 套裝%
   const sidCount={}; Object.values(p).forEach(r=>{if(r&&r.sid!=null)sidCount[r.sid]=(sidCount[r.sid]||0)+1;});
   if(diag&&diag.intFill&&diag.intFill.sid!=null)sidCount[diag.intFill.sid]=(sidCount[diag.intFill.sid]||0)+1; // 無形補位視同該套裝+1件
-  const fin=sel?computeFinal(sel.mid, tot, sidCount):null;
+  const fin=sel?computeFinal(sel.mid, tot, sidCount, teamBonus):null;
+  if(teamBonus&&Object.keys(teamBonus).length){
+    statsHtml+='<div class="teambonus">🤝 全隊型套裝加成（跨隊彙總，全員含自己）：'+
+      Object.entries(teamBonus).map(([st,v])=>`${st} <b>+${v}</b>`).join('　')+'</div>';
+  }
   if(fin){
     const rows=[['HP','hp','h'],['ATK','atk','a'],['DEF','def','d'],['SPD','spd','s'],
       ['暴率%','cr','cr'],['暴傷%','cd','cd'],['抵抗%','re','re'],['命中%','ac','ac']];
@@ -22629,15 +22675,26 @@ function renderFitCards(solved,cfg){
 $('#fRun').onclick=()=>{
   const includeAll=$('#fPool').checked;
   const used=new Set(); // 已被前面魔靈用掉的符文 id，後面的魔靈不可再用
-  let out='';
+  // 第一段：依序解每隻(符文互斥)，同時彙總全隊型套裝加成(整隊含自己都吃)
+  const solvedList=[]; const team={};
   $$('#fMons .fMonRow').forEach((row,i)=>{
     const cfg=readMonRow(row); if(!cfg.uid)return;
     const solved=solveFit(cfg.uid,cfg.s4,'',cfg.wantMain,includeAll,
       {prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:used,useInt:cfg.useInt});
     Object.values(solved.p).forEach(r=>{if(r)used.add(r.id);});
+    // 這隻的成套統計(含無形補位)→加進全隊型加成
+    const sc={}; Object.values(solved.p).forEach(r=>{if(r&&r.sid!=null)sc[r.sid]=(sc[r.sid]||0)+1;});
+    if(solved.diag&&solved.diag.intFill&&solved.diag.intFill.sid!=null)sc[solved.diag.intFill.sid]=(sc[solved.diag.intFill.sid]||0)+1;
+    const tb=teamBonusOf(sc); for(const st in tb)team[st]=(team[st]||0)+tb[st];
+    solvedList.push({solved,cfg,idx:i});
+  });
+  // 第二段：把全隊型加成套到每一隻身上再渲染
+  const multi=solvedList.length>1; // 單隻時 team 即自己→computeFinal 照舊即可，不必外掛
+  let out='';
+  solvedList.forEach(({solved,cfg,idx})=>{
     const sel=solved.sel;
-    const {resultHtml,statsHtml}=renderFitCards(solved,cfg);
-    const head=`<div class="fitmonhead">${sel?unitIcon(sel.en||sel.n,sel.mid):''}<span>#${i+1}　${sel?sel.n:'(未選)'}</span></div>`;
+    const {resultHtml,statsHtml}=renderFitCards(solved,cfg,multi?team:null);
+    const head=`<div class="fitmonhead">${sel?unitIcon(sel.en||sel.n,sel.mid):''}<span>#${idx+1}　${sel?sel.n:'(未選)'}</span></div>`;
     out+=`<div class="fitmon">${head}<div class="fitbox"><div class="card"><h3 style="margin-top:0">推薦配裝</h3>${resultHtml}</div><div class="card"><h3 style="margin-top:0">符文加成合計</h3>${statsHtml}</div></div></div>`;
   });
   $('#fResults').innerHTML=out||'<span class="muted">請至少加入一隻魔靈</span>';
