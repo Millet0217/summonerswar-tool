@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>魔靈召喚 帳號分析工具 — 九濤峰</title>
+<title>魔靈召喚 帳號分析工具</title>
 <style>
 :root{--bg:#0f1220;--panel:#1a1f35;--panel2:#232a45;--line:#2f3860;--txt:#e6e9f5;--dim:#9aa3c7;--acc:#6ea8ff;--good:#37d67a;--warn:#ffb020;--bad:#ff5470;
 --water:#3b9dff;--fire:#ff6b4a;--wind:#ffd23f;--light:#f2f2f2;--dark:#b06bff;}
@@ -166,7 +166,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
 <body>
 <header>
   <h1>⚔️ 魔靈召喚 帳號分析工具</h1>
-  <span class="stat">玩家 <b>九濤峰</b></span>
+  <span class="stat">玩家 <b id="hPlayer"></b></span>
   <span class="stat">怪物 <b id="hUnits">0</b></span>
   <span class="stat">符文 <b id="hRunes">0</b></span>
   <span class="stat">平均效率 <b id="hEff">0%</b></span>
@@ -279,6 +279,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         <button class="btn2" id="fAddMon" type="button">＋ 新增魔靈</button>
         <label><input type="checkbox" id="fPool"> 含裝在別隻的符文</label>
         <button class="btn" id="fRun">計算最佳配裝</button>
+        <button class="btn2" id="fClear" type="button" title="清空魔靈清單與配裝結果，保留已匯入的JSON">🗑️ 清空</button>
       </div>
       <small class="note">可加入多隻魔靈一起配裝；<b>清單由上到下＝優先序</b>，排前面的先挑最佳解，用掉的符文後面的魔靈不會再用（同一顆符文不重複套用）。<br>每隻各自設定：引擎從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選可納入全帳號符文）。四件套可選「無」；二件套最多三組（可重複，例如元氣×2＝四洞元氣）；未被套裝佔用的洞為自由洞，依目標挑最佳符文。<br>「優先屬性」可依序加入多個屬性（1.&gt;2.&gt;3. 加權遞減），滿足套裝後優先挑這些屬性高的符文；「額外門檻」以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。<br>勾「含無形符文」時，六顆最多 1 顆無形，可補足缺 1 件的套裝（例：3 顆暴走＋1 顆無形＝視同暴走 4 件套）；未勾選則無形符文完全不參與配裝。</small>
     </div>
@@ -297,6 +298,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
           <label title="只用倉庫閒置(未裝備)的符文；不勾則全帳號6★符文(含已裝)都納入資源池"><input type="checkbox" id="capSpares"> 只用倉庫閒置符文</label>
           <label title="每組最多1顆無形符文，可補足缺1件的套裝(例:3暴走+1無形=視同暴走4件套)"><input type="checkbox" id="capUseInt"> 含無形符文(補位)</label>
           <button class="btn" id="capRun" type="button">計算最多可配組數</button>
+          <button class="btn2" id="capClear" type="button" title="清空產能分析結果，保留已匯入的JSON">🗑️ 清空</button>
         </div>
         <small class="note">回答「用整個符文池最多能同時湊出幾組符合條件的套裝」。每組須：4件<b id="capN4">暴走</b>＋2件<b id="capN2">意志</b>、每洞一顆、最終速度≥門檻（速度只計符文＋自身套裝加成，不含神器/全隊型套）。組間符文不共用。<br>演算法＝貪婪最省（每組剛好踩線、不浪費快符文）＋局部交換優化，盡量避免「前面把快符文用光導致總組數變少」。基礎速為假設值（同型怪基礎速相同才準）；暫不含無形符文。</small>
       </div>
@@ -21912,6 +21914,12 @@ function impLoadFile(file){
         throw new Error('這不是魔靈召喚帳號匯出檔（缺 unit_list / runes）');
       const {units, runes}=parseSmw(d);
       UNITS=units; RUNES=runes;
+      const pname=(d.wizard_info&&(d.wizard_info.wizard_name||d.wizard_info.name))||'';
+      if(pname){
+        const pe=document.getElementById('hPlayer');
+        if(pe) pe.textContent=pname;
+        document.title='魔靈召喚 帳號分析工具 — '+pname;
+      }
       renderAll();
       impSetStatus(`已匯入 ${file.name}：怪物 ${units.length}、符文 ${runes.length}`);
     }catch(err){ impSetStatus('匯入失敗：'+err.message, true); }
@@ -21921,6 +21929,11 @@ function impLoadFile(file){
 }
 function impClear(){
   UNITS=[]; RUNES=[];
+  const pe=document.getElementById('hPlayer');
+  if(pe) pe.textContent='';
+  document.title='魔靈召喚 帳號分析工具';
+  const capR=document.getElementById('capResults');
+  if(capR) capR.innerHTML='<span class="muted">設定條件後按「計算最多可配組數」</span>';
   if(typeof closeUnitModal==='function') closeUnitModal();
   renderAll();
   impSetStatus('已清除匯入的資料，可匯入新的 JSON');
@@ -22645,6 +22658,11 @@ function readMonRow(row){
   return {uid,s4,twos,wantMain,prios:fReadPrios(row),thresholds:fReadConds(row),useInt:row.querySelector('.fUseInt').checked};
 }
 $('#fAddMon').onclick=()=>addMonRow();
+$('#fClear').onclick=()=>{
+  document.getElementById('fMons').innerHTML='';
+  $('#fResults').innerHTML='<span class="muted">選好條件後按「計算最佳配裝」</span>';
+  addMonRow();
+};
 document.getElementById('fMons').innerHTML=''; // renderAll 會重跑此段，先清空避免累積
 $('#fResults').innerHTML='<span class="muted">選好條件後按「計算最佳配裝」</span>';
 addMonRow(); // 預設一列
@@ -22914,6 +22932,9 @@ $('#capRun').onclick=()=>{
     useInt:$('#capUseInt').checked
   });
   renderCap(res);
+};
+$('#capClear').onclick=()=>{
+  $('#capResults').innerHTML='<span class="muted">設定條件後按「計算最多可配組數」</span>';
 };
 
 // ---------- 總覽 ----------
