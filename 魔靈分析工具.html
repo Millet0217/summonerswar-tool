@@ -21910,6 +21910,8 @@ function parseSmw(d){
 
   const raw=[];                 // {u, runeCount, rids}
   const idDisp={};              // unit_id -> 顯示名
+  const idMid={};               // unit_id -> master_id
+  const idEn={};                // unit_id -> 英文名
   for(const u of (d.unit_list||[])){
     const ru=(u.runes||[]).filter(x=>x&&x.rune_id);
     const rids=[];
@@ -21920,6 +21922,8 @@ function parseSmw(d){
     const zh=(typeof ZH_NAMES!=='undefined'&&ZH_NAMES[mid]&&(''+ZH_NAMES[mid]).trim())?(''+ZH_NAMES[mid]).trim():'';
     const disp=zh||en;
     idDisp[''+u.unit_id]=disp;
+    idMid[''+u.unit_id]=mid;
+    idEn[''+u.unit_id]=en;
     raw.push({u, runeCount:ru.length, rids, en, disp, arch:meta.arch||'?', ns:meta.stars||0});
   }
 
@@ -21930,7 +21934,9 @@ function parseSmw(d){
     id:''+r.rune_id, sl:r.slot, st:r.stars, anc:r.ancient?1:0, set:r.set, sid:r.set_id,
     q:r.quality, lv:r.level, m:r.main, mt:r.main_type, mv:r.main_val, pf:r.prefix,
     sub:r.subs, sty:r.sub_types, ef:r.eff, eq:r.equipped?1:0,
-    ow: r.owner!=null ? (idDisp[''+r.owner]||'') : ''
+    ow: r.owner!=null ? (idDisp[''+r.owner]||'') : '',
+    owmid: r.owner!=null ? (idMid[''+r.owner]||'') : '',
+    owen: r.owner!=null ? (idEn[''+r.owner]||'') : ''
   }));
 
   const units=raw.map(o=>{
@@ -22272,7 +22278,7 @@ function renderRunes(){
     <td>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'}</td>
     <td>${r.set||''}</td><td><b>${r.m}</b></td><td class="muted">${r.pf||''}</td>
     <td class="subcell" data-ri="${r._i}" title="點擊：磨刀值加總" style="white-space:normal;min-width:280px">${fmtSub(r.sub,subMerge.has(r._i))}</td><td>+${r.lv}</td>
-    <td>${r.ow?'<span class="own">'+r.ow+'</span>':'<span class="muted">倉庫</span>'}</td></tr>`).join('');
+    <td>${r.ow?(unitIcon(r.owen,r.owmid,'uico')||'<span class="own">'+r.ow+'</span>'):'<span class="muted">倉庫</span>'}</td></tr>`).join('');
   $('#rTable').innerHTML=h+'</tbody>';
   if(rows.length>600)$('#rCount').textContent+='（顯示前600）';
   $$('#rTable th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;rSort.dir=rSort.k==k?-rSort.dir:(k=='gv'?1:-1);rSort.k=k;renderRunes();});
