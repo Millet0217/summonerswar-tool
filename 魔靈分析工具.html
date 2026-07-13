@@ -252,7 +252,15 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
       <select id="rAnc"><option value="">一般+上古</option><option value="1">僅上古</option></select>
       <label>效率≥<input id="rEff" type="number" value="0" min="0" max="130" style="width:64px"></label>
       <input id="rOwner" placeholder="裝在誰身上…" style="width:150px">
+      <button class="btn2" id="rMergeAll" type="button" title="把目前表格所有符文的磨刀值一鍵加總／還原">磨刀：全部加總／還原</button>
       <span class="muted" id="rCount"></span>
+    </div>
+    <div class="controls" id="rSubPrio" style="margin-top:-4px">
+      <span class="muted">副屬優先排序：</span>
+      <span id="rPrioRows"></span>
+      <button class="btn2" id="rPrioAdd" type="button">＋ 副屬</button>
+      <button class="btn2" id="rPrioClear" type="button">清除</button>
+      <span class="muted" id="rPrioHint">（最多5個；選了副屬＝必須含該副屬，填最小值再加門檻；依序由大到小，含前綴）</span>
     </div>
     <div class="tablewrap"><table id="rTable"></table></div>
   </section>
@@ -301,6 +309,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         <button class="btn2" id="fAddMon" type="button">＋ 新增魔靈</button>
         <label><input type="checkbox" id="fPool"> 含裝在別隻的符文</label>
         <button class="btn" id="fRun">計算最佳配裝</button>
+        <button class="btn2 fitMergeBtn" type="button" title="配裝結果的副屬：磨刀值分開／加總 一鍵切換">磨刀：分開 ⇄ 加總</button>
         <button class="btn2" id="fClear" type="button" title="清空魔靈清單與配裝結果，保留已匯入的JSON">🗑️ 清空</button>
         <span style="margin-left:auto;display:inline-flex;gap:6px;align-items:center">
           <select id="fPlanSel" style="max-width:180px"><option value="">— 已存方案 —</option></select>
@@ -337,6 +346,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         <div class="controls">
           <label>地下城 <select id="dungSel"></select></label>
           <label><input type="checkbox" id="dOwnedOnly"> 只顯示我有的角色</label>
+          <button class="btn2 fitMergeBtn" type="button" title="就地配裝結果的副屬：磨刀值分開／加總 一鍵切換">磨刀：分開 ⇄ 加總</button>
           <span class="muted">綠=已擁有　紅=缺少</span>
         </div>
         <small class="note">選一個地下城查看推薦隊伍；每個已擁有角色可就地「自動配裝」。按「＋ 帶入配裝清單」把整隊已擁有角色一次加入「單/多魔靈配裝」清單再一起計算。</small>
@@ -22108,10 +22118,14 @@ function openUnitModal(u){
     <div class="msub">${u.en||''}　·　${u.ar}　·　Lv${u.lv}　·　目前套裝：${u.rs||'—'}　·　符文平均效率 <b class="${effCls(avg)}">${avg}%</b></div>
     <div class="mstats" id="uStats" title="點擊：切換 基礎+符文 ⇄ 加總" style="cursor:pointer"></div>
     ${setFx}
+    <div class="controls" style="margin:2px 0"><button type="button" class="btn2" id="uMergeAll" title="一次把六顆符文的磨刀值加總／還原">磨刀：全部加總／還原</button></div>
     <div class="runegrid">${cards}</div>`;
   renderUStats(u,fin);
   $('#uStats').onclick=()=>{uStatMerged=!uStatMerged;renderUStats(u,fin);};
   $$('#uModalBody .subcell').forEach(td=>td.onclick=()=>{const i=+td.dataset.ri;subMerge.has(i)?subMerge.delete(i):subMerge.add(i);td.innerHTML=fmtSubLines(RUNES[i].sub,subMerge.has(i));});
+  $('#uMergeAll').onclick=()=>{ const idxs=runes.map(r=>r._i); const allMerged=idxs.every(i=>subMerge.has(i));
+    idxs.forEach(i=>{ allMerged?subMerge.delete(i):subMerge.add(i); });
+    $$('#uModalBody .subcell').forEach(td=>{const i=+td.dataset.ri;td.innerHTML=fmtSubLines(RUNES[i].sub,subMerge.has(i));}); };
   $('#uModal').classList.add('open');
 }
 function closeUnitModal(){$('#uModal').classList.remove('open');}
@@ -22167,8 +22181,15 @@ function runeRolls(sub){
     if(m){ const mx=BIG6[m[1]]; if(mx)n+=(+m[2]+(m[3]?+m[3]:0))/mx; } });
   return Math.round(n*10)/10;
 }
-// 預先算好每顆符文的 評級(gr/gv) 與 有效roll(rl)，供排序/篩選
-RUNES.forEach((r,i)=>{ r.gr=runeGrade(r.ef); r.gv=GR_RANK[r.gr]; r.rl=runeRolls(r.sub); r._i=i; });
+// 副屬取值表：{stat:基底+磨刀}，含前綴(前)、不含主屬；供副屬優先排序/門檻用
+function subValMap(sub){
+  const o={};
+  (sub||'').split(' / ').forEach(s=>{ const t=s.replace('(前)',''); const m=t.match(/^(.+?)\+(\d+)(?:\+(\d+)磨)?/);
+    if(m)o[m[1].trim()]=(o[m[1].trim()]||0)+(+m[2])+(m[3]?+m[3]:0); });
+  return o;
+}
+// 預先算好每顆符文的 評級(gr/gv)、有效roll(rl)、副屬值表(_sv)，供排序/篩選
+RUNES.forEach((r,i)=>{ r.gr=runeGrade(r.ef); r.gv=GR_RANK[r.gr]; r.rl=runeRolls(r.sub); r._sv=subValMap(r.sub); r._i=i; });
 // 副屬顯示：merged=true 時把磨刀值加總進基底值並改色，未磨刀者維持原樣
 const subMerge=new Set();
 function fmtSub(sub,merged){
@@ -22207,9 +22228,41 @@ function rFilter(){
   return RUNES.filter(r=>(!set||r.set==set)&&(!sl||r.sl==+sl)&&(!mn||r.m.startsWith(mn))&&(!gd||r.gr==gd)
     &&(eq===''||r.eq==+eq)&&(!anc||r.anc==1)&&r.ef>=ef&&(!ow||(r.ow||'').toLowerCase().includes(ow)));
 }
+// ── 副屬優先排序面板 ──
+const SUB_STATS=Object.values(IMP_effName); // HP,HP%,ATK,ATK%,DEF,DEF%,SPD,CRate%,CDmg%,RES%,ACC%
+const subStatOpts='<option value="">— 選副屬 —</option>'+SUB_STATS.map(s=>`<option>${s}</option>`).join('');
+function readPrios(){ // 讀面板→[{stat,min}]（依畫面順序＝優先序，忽略未選副屬）
+  return $$('#rPrioRows .prioRow').map(row=>({stat:row.querySelector('.pStat').value,min:row.querySelector('.pMin').value.trim()})).filter(p=>p.stat);
+}
+// 已在其他列選過的副屬→灰階不可選，避免重複
+function refreshPrioOpts(){
+  const rows=$$('#rPrioRows .prioRow'); const chosen=rows.map(r=>r.querySelector('.pStat').value);
+  rows.forEach((row,ri)=>{ const sel=row.querySelector('.pStat');
+    [...sel.options].forEach(o=>{ o.disabled=!!o.value && chosen.some((c,ci)=>ci!==ri && c===o.value); }); });
+}
+function addPrioRow(){
+  if($$('#rPrioRows .prioRow').length>=5)return;
+  const span=document.createElement('span'); span.className='prioRow'; span.style.cssText='display:inline-flex;gap:2px;align-items:center;margin-right:6px';
+  span.innerHTML=`<select class="pStat">${subStatOpts}</select><input class="pMin" type="number" placeholder="最小值" style="width:74px" min="0">`+
+    `<button class="btn2 pDel" type="button" title="移除">✕</button>`;
+  $('#rPrioRows').appendChild(span);
+  span.querySelector('.pStat').oninput=()=>{refreshPrioOpts();renderRunes();};
+  span.querySelector('.pMin').oninput=renderRunes;
+  span.querySelector('.pDel').onclick=()=>{span.remove();refreshPrioOpts();renderRunes();};
+  $('#rPrioAdd').disabled=$$('#rPrioRows .prioRow').length>=5;
+  refreshPrioOpts();
+}
 function renderRunes(){
   let rows=rFilter();
-  rows.sort((a,b)=>{let x=a[rSort.k],y=b[rSort.k];if(typeof x=='string')return rSort.dir*(''+x).localeCompare(''+y);return rSort.dir*(x-y);});
+  const prios=readPrios();
+  // 選了副屬＝符文必須含該副屬(含前綴)；有填最小值則再加 ≥ 門檻
+  prios.forEach(p=>{ const need=p.min!==''?+p.min:null;
+    rows=rows.filter(r=>{ const v=r._sv[p.stat]||0; return v>0 && (need===null || v>=need); }); });
+  if(prios.length){ // 依優先序逐級由大到小（字典序）
+    rows.sort((a,b)=>{ for(const p of prios){ const d=(b._sv[p.stat]||0)-(a._sv[p.stat]||0); if(d)return d; } return 0; });
+  }else{
+    rows.sort((a,b)=>{let x=a[rSort.k],y=b[rSort.k];if(typeof x=='string')return rSort.dir*(''+x).localeCompare(''+y);return rSort.dir*(x-y);});
+  }
   $('#rCount').textContent=rows.length+' 個';
   let h='<thead><tr>'+rCols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('')+'</tr></thead><tbody>';
   h+=rows.slice(0,600).map(r=>`<tr>
@@ -22226,6 +22279,12 @@ function renderRunes(){
   $$('#rTable .subcell').forEach(td=>td.onclick=()=>{const i=+td.dataset.ri;subMerge.has(i)?subMerge.delete(i):subMerge.add(i);td.innerHTML=fmtSub(RUNES[i].sub,subMerge.has(i));});
 }
 ['rSet','rSlot','rMain','rGrade','rEq','rAnc','rEff','rOwner'].forEach(id=>$('#'+id).oninput=renderRunes);
+$('#rPrioAdd').onclick=addPrioRow;
+$('#rPrioClear').onclick=()=>{$('#rPrioRows').innerHTML='';$('#rPrioAdd').disabled=false;renderRunes();};
+$('#rMergeAll').onclick=()=>{ const tds=$$('#rTable .subcell'); const idxs=tds.map(td=>+td.dataset.ri);
+  const allMerged=idxs.length&&idxs.every(i=>subMerge.has(i));
+  idxs.forEach(i=>{ allMerged?subMerge.delete(i):subMerge.add(i); });
+  tds.forEach(td=>{const i=+td.dataset.ri;td.innerHTML=fmtSub(RUNES[i].sub,subMerge.has(i));}); };
 renderRunes();
 
 // ---------- 地下城 meta DB ----------
@@ -22357,6 +22416,7 @@ function renderDungRef(){
   $('#dungRef').innerHTML=`<div class="card dcard"><h3>${d.n}</h3><div class="sub">${d.sub}</div>${teams}</div>`;
 }
 $('#dungSel').onchange=renderDungRef;
+$$('.fitMergeBtn').forEach(b=>b.onclick=toggleFitMerge);
 $('#dOwnedOnly').onchange=renderDungRef;
 renderDungRef();
 // 一鍵帶入：把該隊已擁有角色新增為配裝列並帶入建議套裝，再切到「單/多魔靈配裝」模式
@@ -22652,6 +22712,13 @@ function fitDerived(sel,p){
   const fin=sel?computeFinal(sel.mid,tot,sidCount):null;
   return {tot,sidCount,setCount,fin};
 }
+// 配裝結果副屬「磨刀加總」全域切換（純顯示，不重算）；由 .fitMergeBtn 觸發
+let FIT_MERGE=false;
+function toggleFitMerge(){
+  FIT_MERGE=!FIT_MERGE;
+  $$('.fitsub').forEach(el=>{ el.innerHTML=fmtSub((el.dataset.sub||'').replace(/&quot;/g,'"'),FIT_MERGE); });
+  $$('.fitMergeBtn').forEach(b=>b.textContent=FIT_MERGE?'磨刀：已加總 ⇄ 還原':'磨刀：分開 ⇄ 加總');
+}
 // ── 共用渲染核心：由 sel+p(+opts) 導出 6洞明細/套裝統計/加成合計/最終體質 各段 HTML ──
 // 供 renderDFit(地下城就地配裝)與 renderFitCards(fit分頁)共用，避免三處重複。
 // opts={editable,monIdx,teamBonus,intFill,missing,emptyTxt}
@@ -22666,7 +22733,7 @@ function renderBuildDetail(sel,p,opts){
     const btns=opts.editable?`<span class="slotbtns"><button type="button" class="slotbtn" data-act="pick" data-mi="${opts.monIdx}" data-sl="${sl}" title="更換符文">✎</button><button type="button" class="slotbtn" data-act="del" data-mi="${opts.monIdx}" data-sl="${sl}" title="移除符文"${r?'':' disabled'}>✕</button></span>`:'';
     if(r){totalEff+=r.ef;n++;
       const loc=r.ow?`<span class="own">${r.ow}</span>`:'<span class="muted">倉庫</span>';
-      slotsHtml+=`<div class="slotline"><span><b>${sl}洞</b> <span class="setbadge">${r.set}</span> ${r.m}　<span class="muted">${r.sub}</span></span><span>${r.anc?'<span class="anc">A</span> ':''}<b class="${effCls(r.ef)}">${r.ef}%</b> ${loc}${btns}</span></div>`;
+      slotsHtml+=`<div class="slotline"><span><b>${sl}洞</b> <span class="setbadge">${r.set}</span> ${r.m}${r.pf?` <span class="muted">前 ${r.pf}</span>`:''}　<span class="muted fitsub" data-sub="${(r.sub||'').replace(/"/g,'&quot;')}">${fmtSub(r.sub,FIT_MERGE)}</span></span><span>${r.anc?'<span class="anc">A</span> ':''}<b class="${effCls(r.ef)}">${r.ef}%</b> ${loc}${btns}</span></div>`;
     }else{
       const miss=opts.missing&&opts.missing[sl];
       slotsHtml+=`<div class="slotline"><span><b>${sl}洞</b> <span class="noown">${miss?`符文已消失（原：${miss}）`:(opts.emptyTxt||'找不到符合條件的符文')}</span></span><span>${btns}</span></div>`;
