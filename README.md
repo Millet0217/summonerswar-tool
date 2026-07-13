@@ -15,7 +15,17 @@
 1. 直接用瀏覽器開啟 **`魔靈分析工具.html`**（單一檔、離線、資料已內嵌）。
 2. **要換一份新帳號資料**：點右上角 **「📥 匯入新JSON」**，直接選新的 `smw*.json`，五個分頁即時刷新，**免跑任何腳本**；header 的玩家名稱會跟著匯入檔的 `wizard_info.wizard_name` 更新（未匯入前為空白）。旁邊 **「🗑️ 清除資料」** 可先清空目前匯入的怪物與符文（僅清畫面、不刪檔），方便換一份乾淨的新檔。
    - 符文配裝頁的 **「單/多魔靈配裝」** 與 **「套組產能分析」** 各有獨立的 **「🗑️ 清空」** 鈕，只重置該模式的清單與結果，**不會移除已匯入的 JSON**。
-3. 想把怪物顯示成中文名 → 編輯 `對照表\怪物.csv` 的「中文」欄，再執行 `更新工具.ps1` 重建（重建後匯入的新檔也會套用中文名）。
+3. 想把怪物顯示成中文名 → 編輯 `對照表\怪物.csv` 的「中文」欄（⚠️ `更新工具.ps1` 已廢棄不可再跑，中文對照需直接改成品 HTML 內嵌的 `ZH_NAMES` 資料段）。
+
+---
+
+## 開發模式（重要）
+
+**成品 `魔靈分析工具.html` 是唯一真相（single source of truth），所有功能直接改在成品上。**
+
+- `work/app.js`、`work/tool_template.html`、`work/importer.js` 已 **DEPRECATED**：近期功能（符文配裝引擎 `solveFit`、套組產能分析、beam search 等）只存在成品 HTML，未同步回這些 source 檔。
+- `work/build.ps1` 與 `更新工具.ps1` 已加擋板停用：執行會用過時模板覆寫成品、把配裝引擎整個回退。
+- `work/` 其餘腳本（extract / analyze / gen_payload / fetch_swarfarm / build_catalog 等）仍可用於產生資料，但產出的資料要更新進成品時，需直接替換成品 HTML 內對應的單行 `const` 資料宣告（日後有需要再寫 `update_data.ps1` 專門做資料段替換）。
 
 ---
 
@@ -41,7 +51,7 @@
 魔靈Json分析/
 ├─ smw20260710.json        原始帳號匯出檔（資料來源，勿改）
 ├─ 魔靈分析工具.html         ★成品：單一離線分析工具
-├─ 更新工具.ps1             編輯對照表後，一鍵重建工具
+├─ 更新工具.ps1             【已廢棄】舊：一鍵重建工具（會回退成品，已加擋板停用）
 ├─ README.md               本文件
 │
 ├─ icons/                   怪物圖示 PNG（2032 檔，涵蓋 2171 隻真魔靈，來源 SWARFARM CDN）
@@ -70,10 +80,10 @@
    ├─ build_dungeon_fit.py 地下城 meta 隊伍 × 持有魔靈 × 全帳號6★符文自動配裝 → 地下城/*.csv
    ├─ swranking_meta.json  swranking 當前版本(S37/V9.2.3) RTA 統計[mid,繁中名,出場率,禁用率,勝率,首選率]，供強度 tier 校正
 │   ├─ gen_payload.ps1      套用對照表 → 產出精簡內嵌資料(p_units / p_runes；已含 mid)
-│   ├─ build.ps1            把資料+app.js+catalog+icon_map 注入 tool_template.html → 成品
-│   ├─ tool_template.html   工具的 HTML/CSS 骨架
-│   ├─ app.js               工具的全部前端邏輯（含怪物圖鑑、地下城 meta DB）
-│   ├─ importer.js          瀏覽器端 smw JSON 解析器（供「匯入新JSON」即時重算，含 mid）
+│   ├─ build.ps1            【已廢棄】舊 build 流程（會回退成品，已加擋板停用）
+│   ├─ tool_template.html   【已廢棄】舊 HTML/CSS 骨架（成品已自行演進）
+│   ├─ app.js               【已廢棄】舊前端邏輯（缺配裝引擎等近期功能，勿參考）
+│   ├─ importer.js          【已廢棄】舊解析器（最新版在成品 HTML 內）
 │   ├─ serve.ps1            本機靜態伺服器(驗證用, port 8791)
 │   ├─ monster_db.json      SWARFARM 抓的 3070 隻怪對照(com2us_id→英文名)
 │   ├─ swarfarm_all.json    SWARFARM 全怪原始欄位(圖示/屬性/職業/基礎值/取得方式)
@@ -105,12 +115,9 @@ p_units.json / p_runes.json                  （精簡、內嵌用）
 魔靈分析工具.html                              ★成品
 ```
 
-> 換一份新的帳號匯出檔時，**兩種方式擇一**：
-> - **最快**：直接在工具內按「📥 匯入新JSON」選新檔——`importer.js` 在瀏覽器端重跑 extract＋命名（用 build 時烤進去的 `monster_db` 與怪物中文對照），即時重繪，不需任何腳本。
-> - **走管線**（要重新產出中間檔或更新對照表時）：改各腳本開頭的來源路徑，依序跑 `extract → analyze → make_maps(如需) → 更新工具.ps1`。
-> 只改了對照表中文名：直接跑 `更新工具.ps1`（= gen_payload + build）。
+> 換一份新的帳號匯出檔：直接在工具內按「📥 匯入新JSON」選新檔——內建解析器在瀏覽器端重跑 extract＋命名（用內嵌的 `monster_db` 與怪物中文對照），即時重繪，不需任何腳本。
 >
-> 注意：瀏覽器匯入用的是**上次 build 時內嵌的**怪物中文對照與 `monster_db`；填新中文名或更新魔靈庫後需重跑 `build.ps1` 才會反映到「匯入」功能。
+> ⚠️ 上圖管線的最後一步（build.ps1 重建成品）**已廢棄**；管線腳本僅用於產生中間資料，資料要進成品需直接替換成品 HTML 內的對應 `const` 資料段（見「開發模式」）。
 
 ---
 
@@ -161,7 +168,7 @@ work/catalog.json(真魔靈圖鑑2022，每icon一張) + icon_map.json(mid→圖
 icons/*.png(本機圖示)                                 魔靈分析工具.html(圖鑑分頁)
 ```
 
-> 要更新圖鑑資料集（新怪上線）：依序跑 `fetch_swarfarm.ps1` → `build_catalog.py` → `download_icons.ps1`，再跑 `更新工具.ps1` 重建。
+> 要更新圖鑑資料集（新怪上線）：依序跑 `fetch_swarfarm.ps1` → `build_catalog.py` → `download_icons.ps1`，再把產出資料替換進成品 HTML 的 `CATALOG`/`ICONS`/`LINKS` 資料段（`更新工具.ps1` 已廢棄）。
 > ICON 以 `master_id` 對應：工具用 `icon_map` 查已持有怪的圖示、用 `catalog` 畫圖鑑；持有判定＝帳號 `unit_master_id`（payload 的 `mid`），再經 `links` 展開成「覺醒鏈群組」——持有群組內任一形態即整組亮起。等價圖由 SWARFARM 的 `awakens_from/awakens_to/transforms_to`（內部 id，需以 id→mid 解析）建無向圖取連通分量而得。
 
 ### 地下城配裝 CSV（build_dungeon_fit.py）
@@ -182,7 +189,7 @@ icons/*.png(本機圖示)                                 魔靈分析工具.htm
 3. **swranking 版本校正**：`work/swranking_meta.json`＝swranking 當前版本 RTA 出場率/禁用率/首選率；出場率≥12%、禁用率≥35% 或首選率≥6%→S 等三 signal 取最強，反映「這版誰強」。（已以 ID 比對驗證：swranking 的屬性/圖示與本庫 159/159 全一致，底層資料無誤，故僅校正強度、不動名稱。）
 4. 使用者 `對照表/強度.csv` 的「覆蓋」欄可最終覆寫任一隻。
 
-> **版本更新後怎麼刷新 swranking 資料**：線上遊戲會不斷改動，`swranking_meta.json` 需定期更新。它抓自 `m.swranking.com` 的 `GET /api/monster/statistical?season=<季>&version=<版本>&pageSize=500&sortField=pickRate`（需該站登入 session，只能在瀏覽器內同源 fetch 取得）。回傳每隻 `monsterId(=com2us_id)`、`monsterNameZho(繁中名)`、`pickRate/winRate/banRate/firstPickRate`。更新此檔後重跑 `build_catalog.py` → `更新工具.ps1` 即套用新版本強度。
+> **版本更新後怎麼刷新 swranking 資料**：線上遊戲會不斷改動，`swranking_meta.json` 需定期更新。它抓自 `m.swranking.com` 的 `GET /api/monster/statistical?season=<季>&version=<版本>&pageSize=500&sortField=pickRate`（需該站登入 session，只能在瀏覽器內同源 fetch 取得）。回傳每隻 `monsterId(=com2us_id)`、`monsterNameZho(繁中名)`、`pickRate/winRate/banRate/firstPickRate`。更新此檔後重跑 `build_catalog.py`，再把產出替換進成品 HTML 的 `CATALOG` 資料段即套用新版本強度（`更新工具.ps1` 已廢棄）。
 > 附帶：該 API 的 `monsterNameZho` 是官方繁中名，未來要補怪物中文名可由此取。
 
 ## 技術備註（踩過的坑）

@@ -161,6 +161,34 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
 .uname{display:inline-flex;align-items:center;gap:4px}
 .uname .uok{font-size:11px;font-weight:700}
 .fithead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+/* ── 隊伍總覽面板 ── */
+.fitrow{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--panel);overflow:hidden}
+.fitrow.locked{border-color:var(--warn)}
+.fitsum{display:flex;align-items:center;gap:12px;padding:8px 12px;cursor:pointer;flex-wrap:wrap}
+.fitsum:hover{background:#1e2440}
+.fitsum-l{display:inline-flex;align-items:center;gap:8px;min-width:180px}
+.fitsum-sets{color:var(--dim);font-size:12.5px;min-width:150px}
+.fitsum-st{font-size:12.5px;color:var(--dim);flex:1}
+.fitsum-st b{color:var(--txt)}
+.fitsum-btns{display:inline-flex;align-items:center;gap:6px;margin-left:auto}
+.fitbtn{padding:3px 8px;font-size:12px}
+.fitbtn:disabled{opacity:.35;cursor:not-allowed}
+.fitcaret{color:var(--dim);width:14px;text-align:center}
+.lockmark{font-size:12px}
+.fitdetail{border-top:1px solid var(--line);padding:12px}
+/* ── 6洞明細列的 更換/移除 鈕 ── */
+.slotbtns{display:inline-flex;gap:4px;margin-left:8px}
+.slotbtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:5px;font-size:11px;padding:1px 6px;cursor:pointer}
+.slotbtn:hover{border-color:var(--acc);color:var(--acc)}
+.slotbtn:disabled{opacity:.3;cursor:not-allowed}
+/* ── 符文選擇器 modal ── */
+#rPicker .modal{max-width:860px}
+.rpk-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.rpk-list{max-height:52vh;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.rpk-item{display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:12.5px;cursor:pointer;flex-wrap:wrap}
+.rpk-item:hover{background:#1e2440}
+.rpk-item .inuse{color:var(--warn);font-weight:600}
+.rpk-cur{background:rgba(110,168,255,.12)}
 </style>
 </head>
 <body>
@@ -280,6 +308,12 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         <label><input type="checkbox" id="fPool"> 含裝在別隻的符文</label>
         <button class="btn" id="fRun">計算最佳配裝</button>
         <button class="btn2" id="fClear" type="button" title="清空魔靈清單與配裝結果，保留已匯入的JSON">🗑️ 清空</button>
+        <span style="margin-left:auto;display:inline-flex;gap:6px;align-items:center">
+          <select id="fPlanSel" style="max-width:180px"><option value="">— 已存方案 —</option></select>
+          <button class="btn2" id="fPlanLoad" type="button" title="載入選定方案（覆蓋目前清單與結果）">📂 載入</button>
+          <button class="btn2" id="fPlanSave" type="button" title="把目前配裝結果存成方案">💾 存方案</button>
+          <button class="btn2" id="fPlanDel" type="button" title="刪除選定方案">✕ 刪除</button>
+        </span>
       </div>
       <small class="note">可加入多隻魔靈一起配裝；<b>清單由上到下＝優先序</b>，排前面的先挑最佳解，用掉的符文後面的魔靈不會再用（同一顆符文不重複套用）。<br>每隻各自設定：引擎從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選可納入全帳號符文）。四件套可選「無」；二件套最多三組（可重複，例如元氣×2＝四洞元氣）；未被套裝佔用的洞為自由洞，依目標挑最佳符文。<br>「優先屬性」可依序加入多個屬性（1.&gt;2.&gt;3. 加權遞減），滿足套裝後優先挑這些屬性高的符文；「額外門檻」以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。<br>勾「含無形符文」時，六顆最多 1 顆無形，可補足缺 1 件的套裝（例：3 顆暴走＋1 顆無形＝視同暴走 4 件套）；未勾選則無形符文完全不參與配裝。</small>
     </div>
@@ -312,6 +346,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
 </main>
 
 <div class="overlay" id="uModal"><div class="modal"><button class="x" id="uModalX">✕</button><div id="uModalBody"></div></div></div>
+<div class="overlay" id="rPicker"><div class="modal"><button class="x" id="rPickerX">✕</button><div id="rPickerBody"></div></div></div>
 
 <script>
 let UNITS = []
@@ -21956,6 +21991,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 </script>
 <script>
+// ── fit 配裝結果持久狀態（放 renderAll 之外，重匯 JSON 重跑 renderAll 後由它重建畫面）──
+// list[i]={uid, cfg, plan:{1..6:runeId|null}, runeDesc:{sl:'套裝 主屬 效率%'}, intFill, locked, diag}
+// 一律存 runeId（重匯後 RUNES 物件全換新，渲染時經 runeById 現查；嚴禁 cache 符文物件）
+window.FIT_STATE={list:[], expanded:new Set()};
+</script>
+<script>
 // 匯入新 JSON 後由 importer.js 重新呼叫本函式即可整頁重繪
 function renderAll(){
 // ---------- 共用 ----------
@@ -22270,24 +22311,14 @@ const DUNGEONS=[
      ['Megan','攻buff+回能','迅速/集中'],
      ['Spectra','多段','暴走/刀刃']]}]}
 ];
-// 地下城卡片內就地展開自動配裝
+// 地下城卡片內就地展開自動配裝（薄包裝：共用 renderBuildDetail）
 function renderDFit(sel,p,s4,s2){
-  const {setCount,fin}=fitDerived(sel,p);
-  const setTxt=Object.entries(setCount).map(([k,v])=>`${k}×${v}`).join('　')||'—';
-  let totalEff=0,n=0,lines='';
-  for(let sl=1;sl<=6;sl++){const r=p[sl];
-    if(r){totalEff+=r.ef;n++;
-      const loc=r.ow?`<span class="own">${r.ow}</span>`:'<span class="muted">倉庫</span>';
-      lines+=`<div class="slotline"><span><b>${sl}洞</b> <span class="setbadge">${r.set}</span> ${r.m} <span class="muted">${r.sub}</span></span><span>${r.anc?'<span class="anc">A</span> ':''}<b class="${effCls(r.ef)}">${r.ef}%</b> ${loc}</span></div>`;
-    } else lines+=`<div class="slotline"><span><b>${sl}洞</b> <span class="noown">缺符合套裝的符文</span></span></div>`;
-  }
-  const head=`<div class="muted" style="margin:4px 0 6px">目標 <b>${s4}(4)+${s2}(2)</b>　達成 <b style="color:var(--good)">${setTxt}</b>　平均效率 <b class="${effCls(totalEff/Math.max(n,1))}">${(totalEff/Math.max(n,1)).toFixed(1)}%</b>（湊 ${n}/6）</div>`;
-  let stat='';
-  if(fin){
-    const rows=[['速度','spd','s'],['HP','hp','h'],['ATK','atk','a'],['DEF','def','d'],['暴率%','cr','cr'],['暴傷%','cd','cd'],['抵抗%','re','re'],['命中%','ac','ac']];
-    stat='<div class="fingrid" style="margin-top:6px">'+rows.map(([lab,fk,bk])=>{const bv=fin.base[bk],fv=fin[fk],up=fv-bv;const upTxt=up>0?`<span class="fup">+${up}</span>`:'';return `<div class="fcell"><span class="flab">${lab}</span><span class="fbase">${bv}</span><span class="farr">→</span><span class="ffin">${fv}</span>${upTxt}</div>`;}).join('')+'</div><small class="note">配後速度即第一格；最終值＝基礎體質×(1＋屬性%＋套裝%)＋固定值，未計領導技/塔/神器/銘刻。</small>';
-  } else stat='<small class="note muted">查無此魔靈體質基礎資料，無法算最終數值。</small>';
-  return head+lines+stat;
+  const d=renderBuildDetail(sel,p,{emptyTxt:'缺符合套裝的符文'});
+  const head=`<div class="muted" style="margin:4px 0 6px">目標 <b>${s4}(4)+${s2}(2)</b>　達成 <b style="color:var(--good)">${d.setTxt}</b>　平均效率 <b class="${effCls(d.avgEff)}">${d.avgEff.toFixed(1)}%</b>（湊 ${d.n}/6）</div>`;
+  const stat=d.fin
+    ? d.finGridHtml+'<small class="note">最終值＝基礎體質×(1＋屬性%＋套裝%)＋固定值，未計領導技/塔/神器/銘刻。</small>'
+    : '<small class="note muted">查無此魔靈體質基礎資料，無法算最終數值。</small>';
+  return head+d.slotsHtml+stat;
 }
 window.dFit=function(btn,en,setStr){
   const box=btn.closest('.unitwrap').querySelector('.dfitbox');
@@ -22591,6 +22622,47 @@ function fitDerived(sel,p){
   const fin=sel?computeFinal(sel.mid,tot,sidCount):null;
   return {tot,sidCount,setCount,fin};
 }
+// ── 共用渲染核心：由 sel+p(+opts) 導出 6洞明細/套裝統計/加成合計/最終體質 各段 HTML ──
+// 供 renderDFit(地下城就地配裝)與 renderFitCards(fit分頁)共用，避免三處重複。
+// opts={editable,monIdx,teamBonus,intFill,missing,emptyTxt}
+//  editable+monIdx：每洞加 ✎更換/✕移除 鈕(data-act/data-mi/data-sl，由 #fResults 事件委派接手)
+//  intFill：solver 無形補位(視同該套裝+1件)；missing：{sl:描述} 載入方案後符文已消失的洞
+function renderBuildDetail(sel,p,opts){
+  opts=opts||{};
+  // 6洞明細
+  let totalEff=0,n=0,slotsHtml='';
+  for(let sl=1;sl<=6;sl++){
+    const r=p[sl];
+    const btns=opts.editable?`<span class="slotbtns"><button type="button" class="slotbtn" data-act="pick" data-mi="${opts.monIdx}" data-sl="${sl}" title="更換符文">✎</button><button type="button" class="slotbtn" data-act="del" data-mi="${opts.monIdx}" data-sl="${sl}" title="移除符文"${r?'':' disabled'}>✕</button></span>`:'';
+    if(r){totalEff+=r.ef;n++;
+      const loc=r.ow?`<span class="own">${r.ow}</span>`:'<span class="muted">倉庫</span>';
+      slotsHtml+=`<div class="slotline"><span><b>${sl}洞</b> <span class="setbadge">${r.set}</span> ${r.m}　<span class="muted">${r.sub}</span></span><span>${r.anc?'<span class="anc">A</span> ':''}<b class="${effCls(r.ef)}">${r.ef}%</b> ${loc}${btns}</span></div>`;
+    }else{
+      const miss=opts.missing&&opts.missing[sl];
+      slotsHtml+=`<div class="slotline"><span><b>${sl}洞</b> <span class="noown">${miss?`符文已消失（原：${miss}）`:(opts.emptyTxt||'找不到符合條件的符文')}</span></span><span>${btns}</span></div>`;
+    }
+  }
+  const avgEff=totalEff/Math.max(n,1);
+  // 套裝統計
+  const setCount={}; Object.values(p).forEach(r=>{if(r)setCount[r.set]=(setCount[r.set]||0)+1;});
+  let setTxt=Object.entries(setCount).map(([k,v])=>`${k}×${v}`).join('　')||'—';
+  if(opts.intFill&&opts.intFill.set)setTxt+=`　<span class="fok">（無形補位→${opts.intFill.set}視同+1件）</span>`;
+  // 加成合計(主屬+前綴+副屬含磨刀)
+  const tot={}; Object.values(p).forEach(r=>{if(!r)return;const st=parseStats(r);for(const k in st)tot[k]=(tot[k]||0)+st[k];});
+  const order=['ATK%','ATK','HP%','HP','DEF%','DEF','SPD','CRate%','CDmg%','RES%','ACC%'];
+  const statsumHtml='<div class="statsum">'+order.filter(k=>tot[k]).map(k=>`<div>${k} <b>+${tot[k]}</b></div>`).join('')+'</div>'+
+    '<small class="note">上方為六件符文主屬+前綴+副屬的加總(不含怪物基礎值與套裝%效果)。</small>';
+  // 最終體質(含無形補位視同+1件、全隊型套裝加成)
+  const sidCount={}; Object.values(p).forEach(r=>{if(r&&r.sid!=null)sidCount[r.sid]=(sidCount[r.sid]||0)+1;});
+  if(opts.intFill&&opts.intFill.sid!=null)sidCount[opts.intFill.sid]=(sidCount[opts.intFill.sid]||0)+1;
+  const fin=sel?computeFinal(sel.mid,tot,sidCount,opts.teamBonus):null;
+  let finGridHtml='';
+  if(fin){
+    const rows=[['HP','hp','h'],['ATK','atk','a'],['DEF','def','d'],['SPD','spd','s'],['暴率%','cr','cr'],['暴傷%','cd','cd'],['抵抗%','re','re'],['命中%','ac','ac']];
+    finGridHtml='<div class="fingrid">'+rows.map(([lab,fk,bk])=>{const bv=fin.base[bk],fv=fin[fk],up=fv-bv;const upTxt=up>0?`<span class="fup">+${up}</span>`:'';return `<div class="fcell"><span class="flab">${lab}</span><span class="fbase">${bv}</span><span class="farr">→</span><span class="ffin">${fv}</span>${upTxt}</div>`;}).join('')+'</div>';
+  }
+  return {slotsHtml,avgEff,n,setCount,setTxt,tot,sidCount,statsumHtml,fin,finGridHtml};
+}
 // 解析地下城建議套裝字串(如「刀刃/激怒」)→ [4件套, 2件套]；4件套依 FOUR4 判定
 function parseSetPair(str){
   const parts=String(str||'').split(/[\/／]/).map(s=>s.trim()).filter(Boolean);
@@ -22660,6 +22732,7 @@ function readMonRow(row){
 $('#fAddMon').onclick=()=>addMonRow();
 $('#fClear').onclick=()=>{
   document.getElementById('fMons').innerHTML='';
+  FIT_STATE.list=[]; FIT_STATE.expanded=new Set();
   $('#fResults').innerHTML='<span class="muted">選好條件後按「計算最佳配裝」</span>';
   addMonRow();
 };
@@ -22667,24 +22740,22 @@ document.getElementById('fMons').innerHTML=''; // renderAll 會重跑此段，�
 $('#fResults').innerHTML='<span class="muted">選好條件後按「計算最佳配裝」</span>';
 addMonRow(); // 預設一列
 // 由 solveFit 結果 + 該列設定 產生「推薦配裝」與「符文加成合計」兩段 HTML
-function renderFitCards(solved,cfg,teamBonus){
+// edOpts：透傳給 renderBuildDetail 的 {editable,monIdx,missing}（隊伍面板展開編輯用）
+function renderFitCards(solved,cfg,teamBonus,edOpts){
   const p=solved.p, diag=solved.diag, sel=solved.sel;
   const s4=cfg.s4, twos=cfg.twos||[];
-  let setCount={}; Object.values(p).forEach(r=>{if(r){setCount[r.set]=(setCount[r.set]||0)+1;}});
-  let setTxt=Object.entries(setCount).map(([k,v])=>`${k}×${v}`).join('　');
-  if(diag&&diag.intFill&&diag.intFill.set)setTxt+=`　<span class="fok">（無形補位→${diag.intFill.set}視同+1件）</span>`;
-  let totalEff=0,n=0;
+  const d=renderBuildDetail(sel,p,Object.assign({teamBonus,intFill:diag&&diag.intFill},edOpts||{}));
   const selIc=sel?unitIcon(sel.en||sel.n,sel.mid,'big'):'';
   const tgtParts=[]; if(s4)tgtParts.push(`${s4}(4)`); twos.forEach(t=>tgtParts.push(`${t}(2)`));
   const tgtTxt=tgtParts.length?tgtParts.join(' + '):'不限套裝（自由配）';
-  let html=`<div class="fithead">${selIc}<div><div class="muted">目標：<b>${tgtTxt}</b></div><div class="muted">達成套裝：<b style="color:var(--good)">${setTxt}</b></div></div></div>`;
+  let html=`<div class="fithead">${selIc}<div><div class="muted">目標：<b>${tgtTxt}</b></div><div class="muted">達成套裝：<b style="color:var(--good)">${d.setTxt}</b></div></div></div>`;
   // 新條件目標／達標狀態
   if(diag && ((diag.prios&&diag.prios.length) || (diag.thresholds&&diag.thresholds.length) || diag.intFill)){
     let g='';
     if(diag.prios&&diag.prios.length){
       g+='<div>🎯 優先屬性：'+diag.prios.map((fk,i)=>{
-        const d=STAT_KEYS.find(x=>x.fk===fk), lab=d?d.lab:fk;
-        const v=diag.fin?diag.fin[fk]:null;
+        const sk=STAT_KEYS.find(x=>x.fk===fk), lab=sk?sk.lab:fk;
+        const v=(d.fin||diag.fin)?(d.fin||diag.fin)[fk]:null;
         return `<b>${i+1}.${lab}</b>${v!=null?`（配出 ${v}）`:''}`;
       }).join('　')+'</div>';
     }
@@ -22695,8 +22766,8 @@ function renderFitCards(solved,cfg,teamBonus){
     }
     if(diag.thresholds&&diag.thresholds.length){
       g+='<div style="margin-top:3px">📋 額外門檻：'+diag.thresholds.map(t=>{
-        const d=STAT_KEYS.find(x=>x.fk===t.fk), lab=d?d.lab:t.fk;
-        const v=diag.fin?diag.fin[t.fk]:null;
+        const sk=STAT_KEYS.find(x=>x.fk===t.fk), lab=sk?sk.lab:t.fk;
+        const v=(d.fin||diag.fin)?(d.fin||diag.fin)[t.fk]:null;
         if(v==null)return `<span class="fwarn">${lab}≥${t.min}(無基礎值)</span>`;
         const ok=v>=t.min;
         return `<span class="${ok?'fok':'fwarn'}">${lab} ${v}/${t.min} ${ok?'✓':'✗'}</span>`;
@@ -22706,69 +22777,269 @@ function renderFitCards(solved,cfg,teamBonus){
     else if(diag.unmet&&diag.unmet.length) g+=`<div class="fwarn" style="margin-top:3px">⚠ 有 ${diag.unmet.length} 項門檻在保留套裝的前提下配不出來，以下為最佳嘗試。</div>`;
     html+=`<div class="fgoal">${g}</div>`;
   }
-  for(let sl=1;sl<=6;sl++){
-    const r=p[sl];
-    if(r){totalEff+=r.ef;n++;
-      const loc=r.ow?`<span class="own">${r.ow}</span>`:'<span class="muted">倉庫</span>';
-      html+=`<div class="slotline"><span><b>${sl}洞</b> <span class="setbadge">${r.set}</span> ${r.m}　<span class="muted">${r.sub}</span></span><span>${r.anc?'<span class="anc">A</span> ':''}<b class="${effCls(r.ef)}">${r.ef}%</b> ${loc}</span></div>`;
-    } else html+=`<div class="slotline"><span><b>${sl}洞</b> <span class="noown">找不到符合條件的符文</span></span></div>`;
-  }
-  html+=`<div class="kv" style="margin-top:10px"><div><span>平均效率</span><b class="eff-hi">${(totalEff/Math.max(n,1)).toFixed(1)}%</b></div><div><span>湊齊洞數</span><b>${n}/6</b></div></div>`;
-  // 加成合計
-  const tot={}; Object.values(p).forEach(r=>{if(!r)return;const st=parseStats(r);for(const k in st)tot[k]=(tot[k]||0)+st[k];});
-  const order=['ATK%','ATK','HP%','HP','DEF%','DEF','SPD','CRate%','CDmg%','RES%','ACC%'];
-  let statsHtml='<div class="statsum">'+order.filter(k=>tot[k]).map(k=>`<div>${k} <b>+${tot[k]}</b></div>`).join('')+'</div>'+
-    '<small class="note">上方為六件符文主屬+前綴+副屬的加總(不含怪物基礎值與套裝%效果)。</small>';
-  // 最終體質 = 怪物基礎值 + 符文% + 符文固定 + 套裝%
-  const sidCount={}; Object.values(p).forEach(r=>{if(r&&r.sid!=null)sidCount[r.sid]=(sidCount[r.sid]||0)+1;});
-  if(diag&&diag.intFill&&diag.intFill.sid!=null)sidCount[diag.intFill.sid]=(sidCount[diag.intFill.sid]||0)+1; // 無形補位視同該套裝+1件
-  const fin=sel?computeFinal(sel.mid, tot, sidCount, teamBonus):null;
+  html+=d.slotsHtml;
+  html+=`<div class="kv" style="margin-top:10px"><div><span>平均效率</span><b class="eff-hi">${d.avgEff.toFixed(1)}%</b></div><div><span>湊齊洞數</span><b>${d.n}/6</b></div></div>`;
+  // 加成合計＋全隊型加成＋最終體質（皆出自 renderBuildDetail）
+  let statsHtml=d.statsumHtml;
   if(teamBonus&&Object.keys(teamBonus).length){
     statsHtml+='<div class="teambonus">🤝 全隊型套裝加成（跨隊彙總，全員含自己）：'+
       Object.entries(teamBonus).map(([st,v])=>`${st} <b>+${v}</b>`).join('　')+'</div>';
   }
-  if(fin){
-    const rows=[['HP','hp','h'],['ATK','atk','a'],['DEF','def','d'],['SPD','spd','s'],
-      ['暴率%','cr','cr'],['暴傷%','cd','cd'],['抵抗%','re','re'],['命中%','ac','ac']];
-    const cells=rows.map(([lab,fk,bk])=>{
-      const bv=fin.base[bk], fv=fin[fk], up=fv-bv;
-      const upTxt=up>0?`<span class="fup">+${up}</span>`:'';
-      return `<div class="fcell"><span class="flab">${lab}</span><span class="fbase">${bv}</span><span class="farr">→</span><span class="ffin">${fv}</span>${upTxt}</div>`;
-    }).join('');
+  if(d.fin){
     statsHtml+=`<div class="finhead">📊 ${unitIcon(sel.en||sel.n,sel.mid)}${sel.n} 配裝後最終體質<span class="muted">（基礎值 SWARFARM 6★滿級 → 套上上方符文＋套裝%後）</span></div>
-      <div class="fingrid">${cells}</div>
+      ${d.finGridHtml}
       <small class="note">最終值＝基礎體質 ×(1＋屬性%＋套裝%)＋固定值。暴率/暴傷/抵抗/命中為加法。未計入領導技/塔/神器/銘刻等額外加成。</small>`;
   } else if(sel){
     statsHtml+=`<div class="finhead muted">查無 ${sel.n} 的體質基礎資料（mid ${sel.mid}），無法計算最終數值。</div>`;
   }
   return {resultHtml:html, statsHtml};
 }
+// ---- FIT_STATE 存取輔助（狀態只存 runeId，這裡經 runeById 現查）----
+function runeDescOf(r){ return `${r.set}${r.anc?'(古)':''} ${r.m} ${r.ef}%`; }
+function entryFromSolved(cfg,solved){
+  const plan={},runeDesc={};
+  for(let sl=1;sl<=6;sl++){ const r=solved.p[sl]; plan[sl]=r?r.id:null; if(r)runeDesc[sl]=runeDescOf(r); }
+  return {uid:cfg.uid,cfg,plan,runeDesc,intFill:(solved.diag&&solved.diag.intFill)||null,locked:false,diag:solved.diag};
+}
+function fitPlanRunes(e){ // plan(id)→符文物件；查無(已賣/改造)記 missing
+  const p={},missing={}; let hasMiss=false;
+  for(let sl=1;sl<=6;sl++){
+    const id=e.plan[sl];
+    if(id==null){p[sl]=null;continue;}
+    const r=runeById[id];
+    if(r)p[sl]=r; else{p[sl]=null;missing[sl]=(e.runeDesc&&e.runeDesc[sl])||('id '+id);hasMiss=true;}
+  }
+  return {p,missing:hasMiss?missing:null};
+}
+function fitUsedIds(exceptIdx){ // 全隊占用符文 id（排除第 exceptIdx 隻）
+  const s=new Set();
+  FIT_STATE.list.forEach((e,i)=>{ if(i===exceptIdx)return; for(let sl=1;sl<=6;sl++){ if(e.plan[sl]!=null)s.add(e.plan[sl]); } });
+  return s;
+}
+function fitTeamBonus(){ // 全隊型套裝加成跨隊彙總；單隻時維持舊行為(不外掛)
+  if(FIT_STATE.list.length<=1)return null;
+  const team={};
+  FIT_STATE.list.forEach(e=>{
+    const {p}=fitPlanRunes(e);
+    const sc={}; Object.values(p).forEach(r=>{if(r&&r.sid!=null)sc[r.sid]=(sc[r.sid]||0)+1;});
+    if(e.intFill&&e.intFill.sid!=null)sc[e.intFill.sid]=(sc[e.intFill.sid]||0)+1;
+    const tb=teamBonusOf(sc); for(const st in tb)team[st]=(team[st]||0)+tb[st];
+  });
+  return team;
+}
+// ---- 隊伍總覽面板：每隻一列摘要，點擊展開 6 洞明細(可編輯)，支援鎖定/單隻重配 ----
+function renderTeamPanel(){
+  const list=FIT_STATE.list;
+  if(!list.length){ $('#fResults').innerHTML='<span class="muted">選好條件後按「計算最佳配裝」</span>'; return; }
+  const team=fitTeamBonus();
+  let out='';
+  list.forEach((e,i)=>{
+    const sel=unitById[e.uid];
+    const {p,missing}=fitPlanRunes(e);
+    const d=renderBuildDetail(sel,p,{teamBonus:team,intFill:e.intFill,missing});
+    const exp=FIT_STATE.expanded.has(i);
+    const ic=sel?unitIcon(sel.en||sel.n,sel.mid):'';
+    const st=d.fin
+      ?`SPD <b>${d.fin.spd}</b>　HP <b>${d.fin.hp}</b>　ATK <b>${d.fin.atk}</b>　DEF <b>${d.fin.def}</b>　暴 <b>${d.fin.cr}/${d.fin.cd}</b>`
+      :'<span class="muted">無基礎資料</span>';
+    const missN=missing?Object.keys(missing).length:0;
+    let detail='';
+    if(exp){
+      const diag=Object.assign({},e.diag||{},{intFill:e.intFill});
+      const solvedLike={p,diag,sel};
+      const {resultHtml,statsHtml}=renderFitCards(solvedLike,e.cfg,team,{editable:true,monIdx:i,missing});
+      detail=`<div class="fitdetail"><div class="fitbox"><div class="card"><h3 style="margin-top:0">推薦配裝</h3>${resultHtml}</div><div class="card"><h3 style="margin-top:0">符文加成合計</h3>${statsHtml}</div></div></div>`;
+    }
+    out+=`<div class="fitrow${e.locked?' locked':''}">
+      <div class="fitsum" data-act="toggle" data-mi="${i}">
+        <span class="fitsum-l">${ic}<b>#${i+1}　${sel?sel.n:'(未知魔靈)'}</b>${e.locked?' <span class="lockmark">🔒</span>':''}</span>
+        <span class="fitsum-sets">${d.setTxt}</span>
+        <span class="fitsum-st">${st}${missN?` <span class="fwarn">⚠符文缺${missN}</span>`:''}</span>
+        <span class="fitsum-btns">
+          <button type="button" class="btn2 fitbtn" data-act="lock" data-mi="${i}">${e.locked?'🔓解鎖':'🔒鎖定'}</button>
+          <button type="button" class="btn2 fitbtn" data-act="refit" data-mi="${i}"${e.locked?' disabled':''}>♻重配這隻</button>
+          <span class="fitcaret">${exp?'▾':'▸'}</span>
+        </span>
+      </div>${detail}</div>`;
+  });
+  $('#fResults').innerHTML=out;
+}
+function refitOne(i){ // 只重配第 i 隻：排除其他所有隻目前占用的符文
+  const e=FIT_STATE.list[i]; if(!e||e.locked)return;
+  const cfg=e.cfg;
+  const solved=solveFit(e.uid,cfg.s4,'',cfg.wantMain,!!cfg.includeAll,
+    {prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:fitUsedIds(i),useInt:cfg.useInt});
+  const ne=entryFromSolved(cfg,solved); ne.locked=false;
+  FIT_STATE.list[i]=ne;
+  renderTeamPanel();
+}
+// ---- 手動刪改單顆符文 ----
+function removeManualRune(mi,sl){
+  const e=FIT_STATE.list[mi]; if(!e||e.plan[sl]==null)return;
+  e.plan[sl]=null; if(e.runeDesc)delete e.runeDesc[sl];
+  if(e.intFill&&e.intFill.sl===sl)e.intFill=null; // 動到無形補位洞→取消補位推斷
+  renderTeamPanel();
+}
+function applyManualRune(mi,sl,runeId){
+  const e=FIT_STATE.list[mi]; const r=runeById[runeId]; if(!e||!r)return;
+  // 若該符文已被本隊任何魔靈(含自己他洞)占用→先自原處卸下
+  FIT_STATE.list.forEach(o=>{
+    for(let s=1;s<=6;s++){ if(o.plan[s]===r.id){ o.plan[s]=null; if(o.runeDesc)delete o.runeDesc[s]; if(o.intFill&&o.intFill.sl===s)o.intFill=null; } }
+  });
+  e.plan[sl]=r.id; e.runeDesc=e.runeDesc||{}; e.runeDesc[sl]=runeDescOf(r);
+  if(e.intFill&&e.intFill.sl===sl)e.intFill=null; // 手動放入的無形按實際件數計，不做補位推斷
+  closeRunePicker();
+  renderTeamPanel();
+}
+// ---- 符文選擇器 modal ----
+let rpkCtx=null;
+function closeRunePicker(){ $('#rPicker').classList.remove('open'); rpkCtx=null; }
+$('#rPickerX').onclick=closeRunePicker;
+$('#rPicker').onclick=ev=>{ if(ev.target.id==='rPicker')closeRunePicker(); };
+function openRunePicker(mi,sl){
+  const e=FIT_STATE.list[mi]; if(!e)return;
+  const sel=unitById[e.uid];
+  rpkCtx={mi,sl,q:'',sort:'ef',free:false};
+  $('#rPickerBody').innerHTML=`<h3 style="margin-top:0">${sel?unitIcon(sel.en||sel.n,sel.mid)+' '+sel.n:''}　第 <b>${sl}</b> 洞　更換符文</h3>
+    <div class="rpk-filters">
+      <input id="rpkQ" placeholder="搜尋：套裝 / 主屬 / 副屬 / 裝備者" style="flex:1;min-width:220px">
+      <select id="rpkSort"><option value="ef">效率 高→低</option><option value="spd">速度 高→低</option><option value="mainv">主屬數值 高→低</option></select>
+      <label style="font-size:12.5px"><input type="checkbox" id="rpkFree"> 只看未被本隊占用</label>
+    </div>
+    <div class="rpk-list" id="rpkList"></div>
+    <small class="note">點一顆即替換到第 ${sl} 洞。「⚔ 本隊使用中」的符文點選後會自對方卸下（該洞變空）。</small>`;
+  $('#rpkQ').oninput=()=>{ rpkCtx.q=$('#rpkQ').value; renderRpkList(); };
+  $('#rpkSort').onchange=()=>{ rpkCtx.sort=$('#rpkSort').value; renderRpkList(); };
+  $('#rpkFree').onchange=()=>{ rpkCtx.free=$('#rpkFree').checked; renderRpkList(); };
+  renderRpkList();
+  $('#rPicker').classList.add('open');
+  setTimeout(()=>{const q=$('#rpkQ'); if(q)q.focus();},0);
+}
+function renderRpkList(){
+  if(!rpkCtx)return;
+  const {mi,sl}=rpkCtx, e=FIT_STATE.list[mi];
+  const q=(rpkCtx.q||'').trim().toLowerCase();
+  const usedBy={}; FIT_STATE.list.forEach((o,oi)=>{ for(let s=1;s<=6;s++){ const id=o.plan[s]; if(id!=null)usedBy[id]=oi; } });
+  let list=RUNES.filter(r=>r.sl===sl&&(!q||(`${r.set} ${r.m} ${r.pf||''} ${r.sub||''} ${r.ow||''}`).toLowerCase().includes(q)));
+  if(rpkCtx.free)list=list.filter(r=>usedBy[r.id]==null||r.id===e.plan[sl]);
+  const spdOf=r=>parseStats(r)['SPD']||0, mainvOf=r=>{const m=r.m.match(/\+(\d+)/);return m?+m[1]:0;};
+  list.sort(rpkCtx.sort==='spd'?(a,b)=>spdOf(b)-spdOf(a):rpkCtx.sort==='mainv'?(a,b)=>mainvOf(b)-mainvOf(a):(a,b)=>b.ef-a.ef);
+  const total=list.length; list=list.slice(0,300);
+  $('#rpkList').innerHTML=(list.map(r=>{
+    const ub=usedBy[r.id], cur=r.id===e.plan[sl];
+    const tag=cur?'<span class="fok">✓ 目前配置</span>'
+      :(ub!=null?`<span class="inuse">⚔ 本隊 #${ub+1} 使用中</span>`
+      :(r.ow?`<span class="muted">裝於 ${r.ow}</span>`:'<span class="muted">倉庫</span>'));
+    return `<div class="rpk-item${cur?' rpk-cur':''}" data-rid="${r.id}"><span><span class="setbadge">${r.set}</span>${r.anc?' <span class="anc">A</span>':''} <b>${r.m}</b> <span class="muted">${r.pf||''}</span> <span class="muted">${r.sub||''}</span></span><span><b class="${effCls(r.ef)}">${r.ef}%</b> ${tag}</span></div>`;
+  }).join('')||'<div class="rpk-item"><span class="muted">查無符合的符文</span></div>')
+  +(total>300?`<div class="rpk-item"><span class="muted">共 ${total} 顆，僅顯示前 300，請用搜尋縮小範圍</span></div>`:'');
+}
+$('#rPickerBody').onclick=ev=>{
+  const it=ev.target.closest('.rpk-item'); if(!it||it.dataset.rid==null||!rpkCtx)return;
+  const r=runeById[it.dataset.rid]; if(!r)return;
+  const {mi,sl}=rpkCtx;
+  const e=FIT_STATE.list[mi];
+  if(r.id===e.plan[sl]){ closeRunePicker(); return; } // 點目前配置→視同取消
+  let ub=null; FIT_STATE.list.forEach((o,oi)=>{ for(let s=1;s<=6;s++){ if(o.plan[s]===r.id&&!(oi===mi&&s===sl))ub=oi; } });
+  if(ub!=null&&!confirm(`此符文目前配給本隊 #${ub+1}，確定搶過來？（對方該洞將變空）`))return;
+  applyManualRune(mi,sl,r.id);
+};
+// ---- 配裝方案存檔（localStorage，多方案命名保存/載入/刪除）----
+const PLAN_KEY='swfit_plans_v1';
+const escH=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function planReadAll(){ try{ return JSON.parse(localStorage.getItem(PLAN_KEY)||'{}')||{}; }catch(e){ return {}; } }
+function planWriteAll(o){
+  try{ localStorage.setItem(PLAN_KEY,JSON.stringify(o)); return true; }
+  catch(e){ alert('無法寫入 localStorage（file:// 開啟或隱私模式可能被瀏覽器封鎖）：'+e.message); return false; }
+}
+function planRefreshSelect(){
+  const sel=$('#fPlanSel'), cur=sel.value, all=planReadAll();
+  sel.innerHTML='<option value="">— 已存方案 —</option>'+Object.keys(all).sort().map(n=>`<option value="${escH(n)}">${escH(n)}</option>`).join('');
+  if(all[cur])sel.value=cur;
+}
+// 回填一列魔靈設定（readMonRow 的反向）
+function writeMonRow(row,cfg){
+  const d=fUnitData.find(x=>x.id==cfg.uid);
+  row.querySelector('.fUnit').value=cfg.uid||'';
+  row.querySelector('.fUnitSearch').value=d?d.label:(cfg.uid?('uid '+cfg.uid):'');
+  row.querySelector('.fSet4').value=cfg.s4||'';
+  fSyncSets(row);
+  ['.fSet2','.fSet2b','.fSet2c'].forEach((c,i)=>{ const el=row.querySelector(c); if(!el.disabled)el.value=(cfg.twos&&cfg.twos[i])||''; });
+  [2,4,6].forEach(s=>{ row.querySelector('.fS'+s).value=(cfg.wantMain&&cfg.wantMain[s])||''; });
+  (cfg.prios||[]).forEach(fk=>fAddPrio(row,fk));
+  (cfg.thresholds||[]).forEach(t=>fAddCond(row,t.fk,t.min));
+  row.querySelector('.fUseInt').checked=!!cfg.useInt;
+}
+$('#fPlanSave').onclick=()=>{
+  if(!FIT_STATE.list.length){ alert('目前沒有配裝結果可存，請先按「計算最佳配裝」。'); return; }
+  const name=(prompt('方案名稱：',$('#fPlanSel').value||'')||'').trim();
+  if(!name)return;
+  const all=planReadAll();
+  if(all[name]&&!confirm(`方案「${name}」已存在，要覆蓋嗎？`))return;
+  all[name]={
+    savedAt:new Date().toISOString(),
+    wizard:($('#hPlayer').textContent||''),
+    mons:FIT_STATE.list.map(e=>({uid:e.uid,unitName:(unitById[e.uid]||{}).n||'',locked:!!e.locked,cfg:e.cfg,plan:e.plan,runeDesc:e.runeDesc,intFill:e.intFill}))
+  };
+  if(planWriteAll(all)){ planRefreshSelect(); $('#fPlanSel').value=name; }
+};
+$('#fPlanLoad').onclick=()=>{
+  const name=$('#fPlanSel').value; if(!name){ alert('請先在下拉選單選擇方案。'); return; }
+  if(!UNITS.length||!RUNES.length){ alert('請先匯入 JSON 再載入方案。'); return; }
+  const pl=planReadAll()[name]; if(!pl){ alert('方案不存在。'); planRefreshSelect(); return; }
+  const misses=[];
+  FIT_STATE.list=pl.mons.map(m=>{
+    if(!unitById[m.uid])misses.push(m.unitName||('uid '+m.uid));
+    return {uid:m.uid,cfg:m.cfg||{uid:m.uid},plan:m.plan||{},runeDesc:m.runeDesc||{},intFill:m.intFill||null,locked:!!m.locked,diag:null};
+  });
+  FIT_STATE.expanded=new Set();
+  document.getElementById('fMons').innerHTML='';
+  pl.mons.forEach(m=>{ const row=addMonRow(); writeMonRow(row,m.cfg||{uid:m.uid}); });
+  if(!pl.mons.length)addMonRow();
+  $('#fPool').checked=pl.mons.some(m=>m.cfg&&m.cfg.includeAll);
+  renderTeamPanel();
+  if(misses.length)alert('下列魔靈在目前匯入的帳號中不存在，將顯示為未知魔靈：\n'+misses.join('、'));
+};
+$('#fPlanDel').onclick=()=>{
+  const name=$('#fPlanSel').value; if(!name){ alert('請先在下拉選單選擇方案。'); return; }
+  if(!confirm(`確定刪除方案「${name}」？`))return;
+  const all=planReadAll(); delete all[name];
+  if(planWriteAll(all))planRefreshSelect();
+};
+planRefreshSelect();
+// #fResults 事件委派（單一 onclick，renderAll 重跑只覆寫不重複）
+$('#fResults').onclick=ev=>{
+  const t=ev.target.closest('[data-act]'); if(!t)return;
+  const act=t.dataset.act, mi=+t.dataset.mi;
+  if(act==='toggle'){ if(FIT_STATE.expanded.has(mi))FIT_STATE.expanded.delete(mi); else FIT_STATE.expanded.add(mi); renderTeamPanel(); }
+  else if(act==='lock'){ const e=FIT_STATE.list[mi]; if(e){e.locked=!e.locked; renderTeamPanel();} }
+  else if(act==='refit'){ refitOne(mi); }
+  else if(act==='del'){ removeManualRune(mi,+t.dataset.sl); }
+  else if(act==='pick'){ openRunePicker(mi,+t.dataset.sl); }
+};
 $('#fRun').onclick=()=>{
   const includeAll=$('#fPool').checked;
-  const used=new Set(); // 已被前面魔靈用掉的符文 id，後面的魔靈不可再用
-  // 第一段：依序解每隻(符文互斥)，同時彙總全隊型套裝加成(整隊含自己都吃)
-  const solvedList=[]; const team={};
-  $$('#fMons .fMonRow').forEach((row,i)=>{
-    const cfg=readMonRow(row); if(!cfg.uid)return;
+  const rows=$$('#fMons .fMonRow').map(readMonRow).filter(c=>c.uid);
+  if(!rows.length){ $('#fResults').innerHTML='<span class="muted">請至少加入一隻魔靈</span>'; FIT_STATE.list=[]; FIT_STATE.expanded=new Set(); return; }
+  // 鎖定者(依 uid 對應)保留原配裝並優先占用符文；其餘依序重解(符文互斥)
+  const lockMap=new Map();
+  FIT_STATE.list.forEach(e=>{ if(!e.locked)return; if(!lockMap.has(e.uid))lockMap.set(e.uid,[]); lockMap.get(e.uid).push(e); });
+  const used=new Set();
+  const picks=rows.map(cfg=>{
+    cfg.includeAll=includeAll;
+    const arr=lockMap.get(cfg.uid);
+    if(arr&&arr.length){ const e=arr.shift(); for(let sl=1;sl<=6;sl++){ if(e.plan[sl]!=null)used.add(e.plan[sl]); } return {cfg,lockedEntry:e}; }
+    return {cfg};
+  });
+  const newList=picks.map(({cfg,lockedEntry})=>{
+    if(lockedEntry){ lockedEntry.cfg=cfg; return lockedEntry; }
     const solved=solveFit(cfg.uid,cfg.s4,'',cfg.wantMain,includeAll,
       {prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:used,useInt:cfg.useInt});
     Object.values(solved.p).forEach(r=>{if(r)used.add(r.id);});
-    // 這隻的成套統計(含無形補位)→加進全隊型加成
-    const sc={}; Object.values(solved.p).forEach(r=>{if(r&&r.sid!=null)sc[r.sid]=(sc[r.sid]||0)+1;});
-    if(solved.diag&&solved.diag.intFill&&solved.diag.intFill.sid!=null)sc[solved.diag.intFill.sid]=(sc[solved.diag.intFill.sid]||0)+1;
-    const tb=teamBonusOf(sc); for(const st in tb)team[st]=(team[st]||0)+tb[st];
-    solvedList.push({solved,cfg,idx:i});
+    return entryFromSolved(cfg,solved);
   });
-  // 第二段：把全隊型加成套到每一隻身上再渲染
-  const multi=solvedList.length>1; // 單隻時 team 即自己→computeFinal 照舊即可，不必外掛
-  let out='';
-  solvedList.forEach(({solved,cfg,idx})=>{
-    const sel=solved.sel;
-    const {resultHtml,statsHtml}=renderFitCards(solved,cfg,multi?team:null);
-    const head=`<div class="fitmonhead">${sel?unitIcon(sel.en||sel.n,sel.mid):''}<span>#${idx+1}　${sel?sel.n:'(未選)'}</span></div>`;
-    out+=`<div class="fitmon">${head}<div class="fitbox"><div class="card"><h3 style="margin-top:0">推薦配裝</h3>${resultHtml}</div><div class="card"><h3 style="margin-top:0">符文加成合計</h3>${statsHtml}</div></div></div>`;
-  });
-  $('#fResults').innerHTML=out||'<span class="muted">請至少加入一隻魔靈</span>';
+  FIT_STATE.list=newList; FIT_STATE.expanded=new Set();
+  renderTeamPanel();
 };
 
 // ---------- 套組產能分析（用整個符文池最多能配出幾組達標套裝）----------
@@ -22959,6 +23230,8 @@ function ov(){
   $('#ovGrid').innerHTML=cards.join('');
 }
 ov();
+// 重匯 JSON 重跑 renderAll 後，由 FIT_STATE 重建配裝結果畫面（符文經 runeById 現查，已消失的洞會標示）
+if(window.FIT_STATE&&FIT_STATE.list.length)renderTeamPanel();
 } // end renderAll
 renderAll();
 

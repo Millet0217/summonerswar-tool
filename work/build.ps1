@@ -1,4 +1,11 @@
 ﻿$ErrorActionPreference="Stop"
+# ============================================================
+# 【已廢棄】此腳本已停用：work/app.js 嚴重過時（缺配裝引擎等近期功能），
+# 執行本腳本會用舊模板覆寫「魔靈分析工具.html」，把近期功能整個回退。
+# 成品 HTML 為唯一真相，請直接編輯「魔靈分析工具.html」。
+# ============================================================
+Write-Error "build.ps1 已廢棄：執行會回退成品近期功能（配裝引擎等）。請直接編輯 魔靈分析工具.html"
+exit 1
 $w="D:\AI用的\魔靈Json分析\work"
 $tpl=[IO.File]::ReadAllText("$w\tool_template.html",[Text.Encoding]::UTF8)
 $u=[IO.File]::ReadAllText("$w\p_units.json",[Text.Encoding]::UTF8).Trim()
