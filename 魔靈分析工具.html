@@ -52,8 +52,10 @@ tr:hover td{background:#1e2440}
 .btn2:hover{background:var(--acc);color:#08122b}
 .fcond{display:inline-flex;align-items:center;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:3px 6px;margin:2px 4px 2px 0}
 .fcond .fcondDel{border:none;background:transparent;color:var(--bad);cursor:pointer;font-size:13px;line-height:1;padding:0 2px}
-.fUnitBox{position:relative;display:inline-block}
+.fUnitBox{position:relative;display:inline-flex;align-items:center;gap:5px}
 .fUnitBox .fUnitSearch{min-width:220px}
+.fUnitIco:empty{display:none}
+.fUnitIco img.uico{width:24px;height:24px;flex:none;vertical-align:middle}
 .fUnitList{display:none;position:absolute;left:0;top:100%;z-index:60;min-width:240px;max-height:280px;overflow-y:auto;background:var(--panel2);border:1px solid var(--line);border-radius:7px;margin-top:2px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .fUnitBox.open .fUnitList{display:block}
 .fUnitList .fUopt{display:flex;align-items:center;gap:7px;padding:5px 10px;font-size:13px;cursor:pointer;white-space:nowrap}
@@ -266,7 +268,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
           <button type="button" class="btn2 fMonDel" title="移除此魔靈">✕ 移除</button>
         </div>
         <div class="controls">
-          <label>怪物 <span class="fUnitBox"><input type="hidden" class="fUnit"><input type="text" class="fUnitSearch" placeholder="搜尋怪物…" autocomplete="off"><div class="fUnitList"></div></span></label>
+          <label>怪物 <span class="fUnitBox"><input type="hidden" class="fUnit"><span class="fUnitIco"></span><input type="text" class="fUnitSearch" placeholder="搜尋怪物…" autocomplete="off"><div class="fUnitList"></div></span></label>
           <label>4件套 <select class="fSet4"></select></label>
           <label>2件套 <select class="fSet2"></select></label>
           <label>＋2件套 <select class="fSet2b"></select></label>
@@ -22365,6 +22367,7 @@ window.dungLoad=function(di,ti){
     const row=addMonRow();
     row.querySelector('.fUnit').value=unit.id;
     row.querySelector('.fUnitSearch').value=`${unit.n} (${unit.at}${unit.s}★)`;
+    setFUnitIco(row,unit.id);
     const parts=String(u[2]||'').split(/[\/／]/).map(s=>s.trim()).filter(Boolean);
     row.querySelector('.fSet4').value=parts.find(p=>FOUR4.includes(p))||'';
     fSyncSets(row);
@@ -22380,6 +22383,8 @@ const FOUR4=['暴走','迅速','激怒','猛攻','絕望','吸血'];
 const TWO2=['祝福','守護','刀刃','集中','忍耐','應報','意志','保護','反擊','鬥志','決心','剛毅','命中','韌性','封印','破壞']; // 無形非2件套(最多1顆,補位用)，改由「含無形符文」勾選框處理
 // 各下拉的選項字串(共用；供每一列魔靈設定塊填入)
 const fUnitData=UNITS.filter(u=>u.s>=5).sort((a,b)=>a.n.localeCompare(b.n)).map(u=>({id:u.id,label:`${u.n} (${u.at}${u.s}★)`,ic:unitIcon(u.en||u.n,u.mid,'')}));
+// 依選定的怪物 id 在搜尋框左側顯示魔靈小圖(未選則清空隱藏)
+function setFUnitIco(row,uid){ const h=row.querySelector('.fUnitIco'); if(!h)return; const u=unitById[uid]; h.innerHTML=u?unitIcon(u.en||u.n,u.mid,''):''; }
 // 怪物搜尋下拉(combobox)：預設空白，輸入即時過濾，支援鍵盤上下/Enter/Esc。選定值存於隱藏 .fUnit
 function initFUnit(row){
   const box=row.querySelector('.fUnitBox'), hid=row.querySelector('.fUnit'),
@@ -22390,9 +22395,9 @@ function initFUnit(row){
     items=q?fUnitData.filter(d=>d.label.toLowerCase().includes(q)):fUnitData; active=-1;
     list.innerHTML=items.length?items.map((d,i)=>`<div class="fUopt" data-i="${i}">${d.ic||''}${d.label}</div>`).join(''):'<div class="fUnone">查無怪物</div>';
   };
-  const pick=d=>{ hid.value=d.id; inp.value=d.label; box.classList.remove('open'); };
+  const pick=d=>{ hid.value=d.id; inp.value=d.label; setFUnitIco(row,d.id); box.classList.remove('open'); };
   inp.addEventListener('focus',()=>{ render(inp.value); box.classList.add('open'); });
-  inp.addEventListener('input',()=>{ hid.value=''; render(inp.value); box.classList.add('open'); });
+  inp.addEventListener('input',()=>{ hid.value=''; setFUnitIco(row,''); render(inp.value); box.classList.add('open'); });
   inp.addEventListener('keydown',e=>{
     if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); if(!items.length)return; active=(active+(e.key==='ArrowDown'?1:-1)+items.length)%items.length; upd(); }
     else if(e.key==='Enter'){ if(active>=0&&items[active]){ e.preventDefault(); pick(items[active]); } }
@@ -22986,6 +22991,7 @@ function writeMonRow(row,cfg){
   const d=fUnitData.find(x=>x.id==cfg.uid);
   row.querySelector('.fUnit').value=cfg.uid||'';
   row.querySelector('.fUnitSearch').value=d?d.label:(cfg.uid?('uid '+cfg.uid):'');
+  setFUnitIco(row,cfg.uid||'');
   row.querySelector('.fSet4').value=cfg.s4||'';
   fSyncSets(row);
   ['.fSet2','.fSet2b','.fSet2c'].forEach((c,i)=>{ const el=row.querySelector(c); if(!el.disabled)el.value=(cfg.twos&&cfg.twos[i])||''; });
