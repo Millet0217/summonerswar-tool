@@ -340,7 +340,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
           <input type="file" id="fPlanImpFile" accept=".json,application/json" style="display:none">
         </span>
       </div>
-      <small class="note">可加入多隻魔靈一起配裝；<b>清單由上到下＝優先序</b>，排前面的先挑最佳解，用掉的符文後面的魔靈不會再用（同一顆符文不重複套用）。<br>每隻各自設定：引擎從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選可納入全帳號符文）。四件套可選「無」；二件套最多三組（可重複，例如元氣×2＝四洞元氣）；未被套裝佔用的洞為自由洞，依目標挑最佳符文。<br>「優先屬性」可依序加入多個屬性（1.&gt;2.&gt;3. 加權遞減），滿足套裝後優先挑這些屬性高的符文；「額外門檻」以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。<br>勾「含無形符文」時，六顆最多 1 顆無形，可補足缺 1 件的套裝（例：3 顆暴走＋1 顆無形＝視同暴走 4 件套）；未勾選則無形符文完全不參與配裝。</small>
+      <small class="note">可加入多隻魔靈一起配裝；<b>清單由上到下＝優先序</b>，排前面的先挑最佳解，用掉的符文後面的魔靈不會再用（同一顆符文不重複套用）。<br>每隻各自設定：引擎從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選可納入全帳號符文）。四件套可選「無」；二件套最多三組（可重複，例如元氣×2＝四洞元氣）；未被套裝佔用的洞為自由洞，依目標挑最佳符文。<br>「優先屬性」可依序加入多個屬性（1.&gt;2.&gt;3. 加權遞減），滿足套裝後優先挑這些屬性高的符文；「額外門檻」可設下限(≥)與上限(≤)，只填一邊即可、留空＝該邊不限制；以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。<br>勾「含無形符文」時，六顆最多 1 顆無形，可補足缺 1 件的套裝（例：3 顆暴走＋1 顆無形＝視同暴走 4 件套）；未勾選則無形符文完全不參與配裝。</small>
     </div>
     <div id="fResults"><span class="muted">選好條件後按「計算最佳配裝」</span></div>
     </div><!-- /fitModeFit -->
@@ -22700,7 +22700,14 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
   // 線性 heuristic 用：複合項展開成組成屬性參與加權（供貪婪種子與候選排序的方向）
   const heurFks=[]; priosRaw.forEach(fk=>{const c=compByFk(fk); (c?c.parts:[fk]).forEach(k=>{if(!heurFks.includes(k))heurFks.push(k);});});
   const prios=heurFks.map(fk=>statByFk(fk)).filter(Boolean);
-  const thresholds=(opts.thresholds||[]).filter(t=>t&&t.fk&&t.min!=null&&!isNaN(t.min));
+  // 門檻正規化：min(≥)／max(≤) 皆可只填其一；兩者皆空視同未設定
+  const numOrNull=v=>(v==null||v===''||isNaN(v))?null:+v;
+  const thresholds=(opts.thresholds||[]).map(t=>{
+    if(!t||!t.fk)return null;
+    const mn=numOrNull(t.min), mx=numOrNull(t.max);
+    if(mn==null&&mx==null)return null;
+    return {fk:t.fk,min:mn,max:mx};
+  }).filter(Boolean);
   const sel=UNITS.find(u=>u.id==uid);
   wantMain=wantMain||{2:'',4:'',6:''};
   const base=(sel && typeof BASE_STATS!=='undefined')?BASE_STATS[''+sel.mid]:null;
@@ -22740,7 +22747,7 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
     if(extraSid!=null)sid[extraSid]=(sid[extraSid]||0)+1;  // 無形補位：視同該套裝多1件
     return sel?computeFinal(sel.mid,tot,sid):null;
   };
-  const deficitOf=fin=>{ if(!fin)return 0; let d=0; thresholds.forEach(t=>{const v=fin[t.fk]; if(v!=null&&v<t.min)d+=(t.min-v);}); return d; };
+  const deficitOf=fin=>{ if(!fin)return 0; let d=0; thresholds.forEach(t=>{const v=fin[t.fk]; if(v==null)return; if(t.min!=null&&v<t.min)d+=(t.min-v); if(t.max!=null&&v>t.max)d+=(v-t.max);}); return d; };
   const combos=(arr,k)=>{const res=[];(function rec(st,cur){if(cur.length===k){res.push(cur.slice());return;}for(let i=st;i<arr.length;i++){cur.push(arr[i]);rec(i+1,cur);cur.pop();}})(0,[]);return res;};
   const sumObj=p=>{let s=0;slots.forEach(sl=>{s+=objOf(p[sl]);});return s;};
   // 複合模式的 plan 級評分：各優先屬性最終值 ÷ 裸身(無符文)基準 正規化後依序加權(1, 0.5, 0.25..)
@@ -22784,13 +22791,17 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
       }
       // 單洞交換修不到門檻→小型 beam search：每洞保留多個候選(目標值前5＋各門檻屬性前3)做聯合搜尋
       if(deficitOf(finOf(plan))>0){
-        const thrDs=thresholds.map(t=>statByFk(t.fk)).filter(Boolean);
+        const thrDs=thresholds.map(t=>({d:statByFk(t.fk),t})).filter(x=>x.d);
         const candsOf=sl=>{
           const allowed=allowedOf(sl); if(!allowed.length)return [null];
           const seen=new Set(), out=[];
           const take=list=>{for(const r of list){if(!seen.has(r)){seen.add(r);out.push(r);}}};
           take(allowed.slice(0,5));
-          thrDs.forEach(d=>take(allowed.slice().sort((a,b)=>runeStatContrib(b,d,base)-runeStatContrib(a,d,base)).slice(0,3)));
+          thrDs.forEach(({d,t})=>{
+            const sorted=allowed.slice().sort((a,b)=>runeStatContrib(b,d,base)-runeStatContrib(a,d,base));
+            if(t.min!=null)take(sorted.slice(0,3));   // 要達下限→取貢獻最高
+            if(t.max!=null)take(sorted.slice(-3));    // 要壓上限→取貢獻最低
+          });
           return out;
         };
         let beam=[{plan:{},tot:{},sid:{},obj:0}];
@@ -22846,12 +22857,14 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
     const allowedOf=sl=>{ if(useI&&sl==intSl)return cand[sl].ints; const st=assign[sl]; return st?(cand[sl].bySet[st]||cand[sl].any):cand[sl].any; };
     // 每洞候選：線性 heuristic 前5 ＋ 複合組成屬性/門檻屬性 各前3，去重
     const extraDs=[...new Set(compFks.reduce((a,fk)=>a.concat(compByFk(fk).parts),[]).concat(thresholds.map(t=>t.fk)))].map(fk=>statByFk(fk)).filter(Boolean);
+    const capDs=thresholds.filter(t=>t.max!=null).map(t=>statByFk(t.fk)).filter(Boolean); // 有上限的屬性另取貢獻最低者
     const candsOf=sl=>{
       const allowed=allowedOf(sl); if(!allowed.length)return [null];
       const seen=new Set(),out=[];
       const take=list=>{for(const r of list){if(!seen.has(r)){seen.add(r);out.push(r);}}};
       take(allowed.slice(0,5));
       extraDs.forEach(d0=>take(allowed.slice().sort((a,b)=>runeStatContrib(b,d0,base)-runeStatContrib(a,d0,base)).slice(0,3)));
+      capDs.forEach(d0=>take(allowed.slice().sort((a,b)=>runeStatContrib(a,d0,base)-runeStatContrib(b,d0,base)).slice(0,3)));
       return out;
     };
     let beam=[{plan:{},tot:{},sid:{},obj:0}];
@@ -22889,7 +22902,8 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
       }
     }
   }
-  const unmet=(bestPlan.fin?thresholds:[]).map(t=>{const v=bestPlan.fin[t.fk];return {fk:t.fk,min:t.min,val:v};}).filter(x=>x.val==null||x.val<x.min);
+  const unmet=(bestPlan.fin?thresholds:[]).map(t=>{const v=bestPlan.fin[t.fk];return {fk:t.fk,min:t.min,max:t.max,val:v};})
+    .filter(x=>x.val==null||(x.min!=null&&x.val<x.min)||(x.max!=null&&x.val>x.max));
   const diag={prios:priosRaw,thresholds,base:!!base,noBaseButCond:(!base&&(thresholds.length||prios.length)),fin:bestPlan.fin,unmet,overflow,reqGroups,intFill:bestPlan.intFill||null};
   return {sel, p:bestPlan.plan, bestPlan, diag, alts};
 }
@@ -22960,19 +22974,25 @@ function parseSetPair(str){
 }
 // 額外條件 UI（每列魔靈各自一份，於該列 .fConds 內）
 const STAT_OPT_HTML=STAT_KEYS.map(d=>`<option value="${d.fk}">${d.lab}</option>`).join('');
-function fAddCond(row,fk,val){
+function fAddCond(row,fk,val,max){
   const sp=document.createElement('span'); sp.className='fcond';
-  sp.innerHTML=`<select class="fcondStat">${STAT_OPT_HTML}</select><span class="muted">≥</span><input type="number" class="fcondVal" style="width:132px"><button type="button" class="fcondDel" title="刪除">✕</button>`;
+  sp.innerHTML=`<select class="fcondStat">${STAT_OPT_HTML}</select>`
+    +`<span class="muted">≥</span><input type="number" class="fcondVal" style="width:78px" title="下限；留空＝不限制">`
+    +`<span class="muted">≤</span><input type="number" class="fcondMax" style="width:78px" title="上限；留空＝不限制">`
+    +`<button type="button" class="fcondDel" title="刪除">✕</button>`;
   if(fk)sp.querySelector('.fcondStat').value=fk;
   if(val!=null)sp.querySelector('.fcondVal').value=val;
+  if(max!=null)sp.querySelector('.fcondMax').value=max;
   sp.querySelector('.fcondDel').onclick=()=>sp.remove();
   row.querySelector('.fConds').appendChild(sp);
 }
 function fReadConds(row){
+  const num=v=>{const s=String(v==null?'':v).trim(); if(!s)return null; const n=parseFloat(s); return isNaN(n)?null:n;};
   return [...row.querySelectorAll('.fConds .fcond')].map(el=>({
     fk:el.querySelector('.fcondStat').value,
-    min:parseFloat(el.querySelector('.fcondVal').value)
-  })).filter(c=>c.fk && !isNaN(c.min));
+    min:num(el.querySelector('.fcondVal').value),
+    max:num(el.querySelector('.fcondMax').value)
+  })).filter(c=>c.fk && (c.min!=null||c.max!=null));  // 上下限皆空＝不限制，該列略過
 }
 // 優先屬性 UI（每列魔靈各自一份，於該列 .fPrios 內；順序=優先序）
 // 優先屬性可多選 EDPS/EHP 複合目標（門檻選單維持線性屬性）
@@ -23065,12 +23085,13 @@ function renderFitCards(solved,cfg,teamBonus,edOpts){
         : `<div style="margin-top:3px">♻ 無形符文：放第 <b>${diag.intFill.sl}</b> 洞（自由洞，未補位）</div>`;
     }
     if(diag.thresholds&&diag.thresholds.length){
+      const rngTxt=t=>[t.min!=null?'≥'+t.min:'',t.max!=null?'≤'+t.max:''].filter(Boolean).join(' 且 ');
       g+='<div style="margin-top:3px">📋 額外門檻：'+diag.thresholds.map(t=>{
         const sk=STAT_KEYS.find(x=>x.fk===t.fk), lab=sk?sk.lab:t.fk;
         const v=(d.fin||diag.fin)?(d.fin||diag.fin)[t.fk]:null;
-        if(v==null)return `<span class="fwarn">${lab}≥${t.min}(無基礎值)</span>`;
-        const ok=v>=t.min;
-        return `<span class="${ok?'fok':'fwarn'}">${lab} ${v}/${t.min} ${ok?'✓':'✗'}</span>`;
+        if(v==null)return `<span class="fwarn">${lab}${rngTxt(t)}(無基礎值)</span>`;
+        const ok=(t.min==null||v>=t.min)&&(t.max==null||v<=t.max);
+        return `<span class="${ok?'fok':'fwarn'}">${lab} ${v}／${rngTxt(t)} ${ok?'✓':'✗'}</span>`;
       }).join('　')+'</div>';
     }
     if(diag.noBaseButCond) g+=`<div class="fwarn" style="margin-top:3px">⚠ 查無此怪物基礎體質(mid ${sel?sel.mid:''})，優先屬性％類／門檻條件無法計算，已略過。</div>`;
@@ -23311,7 +23332,7 @@ function writeMonRow(row,cfg){
   ['.fSet2','.fSet2b','.fSet2c'].forEach((c,i)=>{ const el=row.querySelector(c); if(!el.disabled)el.value=(cfg.twos&&cfg.twos[i])||''; });
   [2,4,6].forEach(s=>{ row.querySelector('.fS'+s).value=(cfg.wantMain&&cfg.wantMain[s])||''; });
   (cfg.prios||[]).forEach(fk=>fAddPrio(row,fk));
-  (cfg.thresholds||[]).forEach(t=>fAddCond(row,t.fk,t.min));
+  (cfg.thresholds||[]).forEach(t=>fAddCond(row,t.fk,t.min,t.max));
   row.querySelector('.fUseInt').checked=!!cfg.useInt;
 }
 $('#fPlanSave').onclick=async()=>{
