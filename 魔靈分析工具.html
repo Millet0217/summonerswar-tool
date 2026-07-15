@@ -105,6 +105,23 @@ tr.clk{cursor:pointer}
 .modal .x{position:absolute;top:12px;right:14px;background:var(--panel2);border:1px solid var(--line);color:var(--txt);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:16px;line-height:1}
 .modal h2{margin:0 0 4px;font-size:20px}
 .modal .msub{color:var(--dim);font-size:12.5px;margin-bottom:12px}
+/* 通用確認/輸入彈窗（uxConfirm/uxPrompt/uxAlert）＋ toast */
+#uxModal{z-index:200}
+#uxModal .modal{max-width:440px;margin-top:12vh}
+.uxmMsg{font-size:13.5px;line-height:1.6;white-space:pre-wrap;margin:6px 0 14px}
+.uxmInput{width:100%;box-sizing:border-box;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px 10px;font-size:13.5px;margin:0 0 14px}
+.uxmBtns{display:flex;justify-content:flex-end;gap:8px}
+.btn.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
+.btn.danger{background:var(--bad);color:#fff}
+#toastHost{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:9px 16px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.45);max-width:min(560px,90vw);pointer-events:auto;border-left:4px solid var(--acc);animation:toastIn .18s ease-out}
+.toast.success{border-left-color:var(--good)}
+.toast.warn{border-left-color:var(--warn)}
+.toast.error{border-left-color:var(--bad)}
+.toast.out{opacity:0;transition:opacity .25s}
+@keyframes toastIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--dim);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
 .mstats{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px;margin:10px 0 4px}
 .mstats div{background:var(--panel2);border-radius:7px;padding:6px 8px;font-size:12px}
 .mstats div span{color:var(--dim);display:block;font-size:11px}
@@ -309,13 +326,18 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
         <button class="btn2" id="fAddMon" type="button">＋ 新增魔靈</button>
         <label><input type="checkbox" id="fPool"> 含裝在別隻的符文</label>
         <button class="btn" id="fRun">計算最佳配裝</button>
+        <span id="fRunStatus" class="muted" style="font-size:12.5px"></span>
         <button class="btn2 fitMergeBtn" type="button" title="配裝結果的副屬：磨刀值分開／加總 一鍵切換">磨刀：分開 ⇄ 加總</button>
         <button class="btn2" id="fClear" type="button" title="清空魔靈清單與配裝結果，保留已匯入的JSON">🗑️ 清空</button>
+        <button class="btn2" id="fUndo" type="button" disabled title="沒有可復原的步驟">↩ 復原</button>
         <span style="margin-left:auto;display:inline-flex;gap:6px;align-items:center">
           <select id="fPlanSel" style="max-width:180px"><option value="">— 已存方案 —</option></select>
           <button class="btn2" id="fPlanLoad" type="button" title="載入選定方案（覆蓋目前清單與結果）">📂 載入</button>
           <button class="btn2" id="fPlanSave" type="button" title="把目前配裝結果存成方案">💾 存方案</button>
           <button class="btn2" id="fPlanDel" type="button" title="刪除選定方案">✕ 刪除</button>
+          <button class="btn2" id="fPlanExp" type="button" title="把方案匯出成 JSON 檔備份（可攜到其他瀏覽器/裝置）">📤 匯出</button>
+          <button class="btn2" id="fPlanImp" type="button" title="從匯出的 JSON 檔匯入方案">📥 匯入</button>
+          <input type="file" id="fPlanImpFile" accept=".json,application/json" style="display:none">
         </span>
       </div>
       <small class="note">可加入多隻魔靈一起配裝；<b>清單由上到下＝優先序</b>，排前面的先挑最佳解，用掉的符文後面的魔靈不會再用（同一顆符文不重複套用）。<br>每隻各自設定：引擎從「倉庫未裝 ＋ 這隻目前的符文」中挑選（勾選可納入全帳號符文）。四件套可選「無」；二件套最多三組（可重複，例如元氣×2＝四洞元氣）；未被套裝佔用的洞為自由洞，依目標挑最佳符文。<br>「優先屬性」可依序加入多個屬性（1.&gt;2.&gt;3. 加權遞減），滿足套裝後優先挑這些屬性高的符文；「額外門檻」以最終體質（含基礎值＋套裝%）判斷，未達標時保留你選定的套裝、僅在同套內換副屬修補，仍達不到會顯示最佳嘗試並標紅。<br>勾「含無形符文」時，六顆最多 1 顆無形，可補足缺 1 件的套裝（例：3 顆暴走＋1 顆無形＝視同暴走 4 件套）；未勾選則無形符文完全不參與配裝。</small>
@@ -335,6 +357,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
           <label title="只用倉庫閒置(未裝備)的符文；不勾則全帳號6★符文(含已裝)都納入資源池"><input type="checkbox" id="capSpares"> 只用倉庫閒置符文</label>
           <label title="每組最多1顆無形符文，可補足缺1件的套裝(例:3暴走+1無形=視同暴走4件套)"><input type="checkbox" id="capUseInt"> 含無形符文(補位)</label>
           <button class="btn" id="capRun" type="button">計算最多可配組數</button>
+          <span id="capRunStatus" class="muted" style="font-size:12.5px"></span>
           <button class="btn2" id="capClear" type="button" title="清空產能分析結果，保留已匯入的JSON">🗑️ 清空</button>
         </div>
         <small class="note">回答「用整個符文池最多能同時湊出幾組符合條件的套裝」。每組須：4件<b id="capN4">暴走</b>＋2件<b id="capN2">意志</b>、每洞一顆、最終速度≥門檻（速度只計符文＋自身套裝加成，不含神器/全隊型套）。組間符文不共用。<br>演算法＝貪婪最省（每組剛好踩線、不浪費快符文）＋局部交換優化，盡量避免「前面把快符文用光導致總組數變少」。基礎速為假設值（同型怪基礎速相同才準）；暫不含無形符文。</small>
@@ -362,6 +385,8 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
 
 <div class="overlay" id="uModal"><div class="modal"><button class="x" id="uModalX">✕</button><div id="uModalBody"></div></div></div>
 <div class="overlay" id="rPicker"><div class="modal"><button class="x" id="rPickerX">✕</button><div id="rPickerBody"></div></div></div>
+<div class="overlay" id="uxModal"><div class="modal"><h2 id="uxmTitle"></h2><div class="uxmMsg" id="uxmMsg"></div><input class="uxmInput" id="uxmInput" type="text" style="display:none"><div class="uxmBtns"><button class="btn ghost" id="uxmCancel">取消</button><button class="btn" id="uxmOk">確定</button></div></div></div>
+<div id="toastHost"></div>
 
 <script>
 let UNITS = []
@@ -21977,6 +22002,7 @@ function impLoadFile(file){
         document.title='魔靈召喚 帳號分析工具 — '+pname;
       }
       renderAll();
+      if(typeof fitResetUndo==='function')fitResetUndo();
       impSetStatus(`已匯入 ${file.name}：怪物 ${units.length}、符文 ${runes.length}`);
     }catch(err){ impSetStatus('匯入失敗：'+err.message, true); }
   };
@@ -22001,9 +22027,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
     inp.onchange=()=>{ impLoadFile(inp.files[0]); inp.value=''; };
   }
   if(clr){
-    clr.onclick=()=>{
+    clr.onclick=async()=>{
       if((UNITS&&UNITS.length)||(RUNES&&RUNES.length)){
-        if(!confirm('確定清除目前已匯入的怪物與符文資料？此動作僅清空畫面，不會刪除任何檔案。')) return;
+        if(!await uxConfirm('確定清除目前已匯入的怪物與符文資料？此動作僅清空畫面，不會刪除任何檔案。',{danger:true,okText:'清除'})) return;
       }
       impClear();
     };
@@ -22016,10 +22042,88 @@ document.addEventListener('DOMContentLoaded', ()=>{
 // list[i]={uid, cfg, plan:{1..6:runeId|null}, runeDesc:{sl:'套裝 主屬 效率%'}, intFill, locked, diag}
 // 一律存 runeId（重匯後 RUNES 物件全換新，渲染時經 runeById 現查；嚴禁 cache 符文物件）
 window.FIT_STATE={list:[], expanded:new Set()};
+// 全域 document 監聽器登記表：renderAll 重跑時先 clearDocListeners()，避免重匯 JSON 後監聽累加
+window._docListeners=[];
+function addDocListener(type,fn){ document.addEventListener(type,fn); _docListeners.push([type,fn]); }
+function clearDocListeners(){ _docListeners.forEach(([t,f])=>document.removeEventListener(t,f)); _docListeners.length=0; }
+// ── 通用 UI：toast ＋ Promise-based modal（取代原生 alert/confirm/prompt）──
+function uxToast(msg,type,ms){
+  const host=document.getElementById('toastHost'); if(!host)return;
+  const el=document.createElement('div'); el.className='toast'+(type?' '+type:''); el.textContent=msg;
+  host.appendChild(el);
+  setTimeout(()=>{ el.classList.add('out'); setTimeout(()=>el.remove(),300); }, ms||3000);
+}
+// kind: confirm→resolve(true/false)、prompt→resolve(字串/null)、alert→resolve(true)
+function _uxOpen(kind,msg,o){
+  o=o||{};
+  return new Promise(res=>{
+    const ov=document.getElementById('uxModal'), t=document.getElementById('uxmTitle'),
+          m=document.getElementById('uxmMsg'), inp=document.getElementById('uxmInput'),
+          ok=document.getElementById('uxmOk'), cancel=document.getElementById('uxmCancel');
+    t.textContent=o.title||(kind==='confirm'?'請確認':kind==='prompt'?'請輸入':'訊息');
+    m.textContent=msg||'';
+    inp.style.display=kind==='prompt'?'':'none'; inp.value=o.defaultValue||'';
+    cancel.style.display=kind==='alert'?'none':'';
+    ok.textContent=o.okText||'確定'; cancel.textContent=o.cancelText||'取消';
+    ok.className='btn'+(o.danger?' danger':'');
+    // dismissValue：按 Esc/點背景 的回傳值；cancelValue：按取消鈕的回傳值（預設同 dismiss）
+    const dismissVal=('dismissValue' in o)?o.dismissValue:(kind==='prompt'?null:(kind==='alert'?true:false));
+    const cancelVal=('cancelValue' in o)?o.cancelValue:dismissVal;
+    const done=v=>{ ov.classList.remove('open'); document.removeEventListener('keydown',onKey,true); res(v); };
+    const onKey=e=>{
+      if(!ov.classList.contains('open'))return;
+      if(e.key==='Escape'){ e.stopPropagation(); done(dismissVal); }
+      else if(e.key==='Enter'){ e.stopPropagation(); done(kind==='prompt'?inp.value:true); }
+    };
+    ok.onclick=()=>done(kind==='prompt'?inp.value:true);
+    cancel.onclick=()=>done(cancelVal);
+    ov.onclick=e=>{ if(e.target===ov)done(dismissVal); };
+    document.addEventListener('keydown',onKey,true); // capture：搶在 uModal 的 Escape 監聽之前
+    ov.classList.add('open');
+    if(kind==='prompt'){ inp.focus(); inp.select(); } else ok.focus();
+  });
+}
+function uxConfirm(msg,o){ return _uxOpen('confirm',msg,o); }
+function uxPrompt(msg,o){ return _uxOpen('prompt',msg,o); }
+function uxAlert(msg,o){ return _uxOpen('alert',msg,o); }
+// ── fit 清單 dirty 判定＋undo 快照（欄位對齊方案存檔的 mons 映射；不含 diag/expanded）──
+window._fitUndoStack=[];        // [{label,snap}]，上限 5
+window._fitLastSyncedSnap='[]'; // 最近一次 存/載/清空 的快照，fitIsDirty 比對用
+function fitSnapshot(){
+  return JSON.stringify(FIT_STATE.list.map(e=>({uid:e.uid,cfg:e.cfg,plan:e.plan,runeDesc:e.runeDesc,intFill:e.intFill,locked:!!e.locked})));
+}
+function fitIsDirty(){ return fitSnapshot()!==_fitLastSyncedSnap; }
+function fitMarkSynced(){ _fitLastSyncedSnap=fitSnapshot(); }
+function fitUndoBtnSync(){
+  const b=document.getElementById('fUndo'); if(!b)return;
+  const top=_fitUndoStack[_fitUndoStack.length-1];
+  b.disabled=!top; b.title=top?('復原：'+top.label):'沒有可復原的步驟';
+}
+function fitPushUndo(label){
+  _fitUndoStack.push({label,snap:fitSnapshot()});
+  if(_fitUndoStack.length>5)_fitUndoStack.shift();
+  fitUndoBtnSync();
+}
+// 重匯 JSON 時呼叫：RUNES 全換新，舊快照的 runeId 可能失效
+function fitResetUndo(){ _fitUndoStack.length=0; _fitLastSyncedSnap=fitSnapshot(); fitUndoBtnSync(); }
+// ── 非同步計算輔助 ──
+// 雙 rAF：讓「計算中」狀態文字先上屏，下一輪才繼續跑重運算。
+// 背景分頁 rAF 會被瀏覽器凍結，加 setTimeout 保底，避免計算停擺
+function nextFrame(){ return new Promise(r=>{ let done=false; const f=()=>{ if(!done){done=true;r();} };
+  requestAnimationFrame(()=>requestAnimationFrame(f)); setTimeout(f,60); }); }
+// 計算期間鎖按鈕（防連點）；fn 內丟例外也保證解鎖
+async function withBusy(btns,fn){
+  btns=(btns||[]).filter(Boolean);
+  if(btns.some(b=>b.dataset.busy==='1'))return;
+  btns.forEach(b=>{b.dataset.busy='1'; b.disabled=true;});
+  try{ return await fn(); }
+  finally{ btns.forEach(b=>{b.dataset.busy=''; b.disabled=false;}); }
+}
 </script>
 <script>
 // 匯入新 JSON 後由 importer.js 重新呼叫本函式即可整頁重繪
 function renderAll(){
+clearDocListeners();
 // ---------- 共用 ----------
 const attrClass={'水':'water','火':'fire','風':'wind','光':'light','暗':'dark'};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -22137,7 +22241,7 @@ function openUnitModal(u){
 function closeUnitModal(){$('#uModal').classList.remove('open');}
 $('#uModalX').onclick=closeUnitModal;
 $('#uModal').onclick=e=>{if(e.target.id=='uModal')closeUnitModal();};
-document.addEventListener('keydown',e=>{if(e.key=='Escape')closeUnitModal();});
+addDocListener('keydown',e=>{if(e.key=='Escape')closeUnitModal();});
 ['uSearch','uAttr','uStar','uArch','uNat'].forEach(id=>$('#'+id).oninput=renderUnits);
 renderUnits();
 
@@ -22470,8 +22574,9 @@ function initFUnit(row){
     else if(e.key==='Escape'){ box.classList.remove('open'); }
   });
   list.addEventListener('mousedown',e=>{ const o=e.target.closest('.fUopt'); if(!o)return; e.preventDefault(); const d=items[+o.dataset.i]; if(d)pick(d); });
-  document.addEventListener('mousedown',e=>{ if(!box.contains(e.target))box.classList.remove('open'); });
 }
+// 下拉外點收合：全域委派一次即可（經 addDocListener 登記，renderAll 重跑會先清掉），不必每列各掛一個
+addDocListener('mousedown',e=>{ document.querySelectorAll('.fUnitBox.open').forEach(b=>{ if(!b.contains(e.target))b.classList.remove('open'); }); });
 const fSet4OptsHtml='<option value="">無（不需要四件套）</option>'+FOUR4.map(s=>`<option>${s}</option>`).join('');
 const twoNamesHtml='<option value="">無</option>'+TWO2.map(s=>`<option>${s}</option>`).join('');
 const mainOpts={2:['ATK%','DEF%','HP%','SPD'],4:['ATK%','DEF%','HP%','CRate%','CDmg%'],6:['ATK%','DEF%','HP%','RES%','ACC%']};
@@ -22561,6 +22666,21 @@ const STAT_KEYS=[
   {lab:'命中%',fk:'ac',pct:'ACC%',flat:null,bk:'ac',mult:false},
 ];
 const statByFk=fk=>STAT_KEYS.find(d=>d.fk===fk);
+// 複合目標屬性（非線性：需整組 plan 過 computeFinal 才有值；只供「優先屬性」選用，門檻不適用）
+const COMP_KEYS=[
+  {lab:'有效輸出EDPS',fk:'edps',parts:['atk','cr','cd']},
+  {lab:'有效血量EHP',fk:'ehp',parts:['hp','def']},
+];
+const compByFk=fk=>COMP_KEYS.find(d=>d.fk===fk);
+const statLabOf=fk=>{const d=statByFk(fk)||compByFk(fk);return d?d.lab:fk;};
+// fin→優先屬性值：線性直接取欄位；複合套公式
+// EDPS＝ATK×(1＋min(暴率,100)/100×暴傷/100)；EHP＝HP×(1140＋3.5×DEF)/1000（SW 標準減傷公式）
+function compValOf(fk,fin){
+  if(!fin)return null;
+  if(fk==='edps')return Math.round(fin.atk*(1+Math.min(fin.cr,100)/100*fin.cd/100));
+  if(fk==='ehp')return Math.round(fin.hp*(1140+3.5*fin.def)/1000);
+  return fin[fk]!=null?fin[fk]:null;
+}
 // 單一符文對某屬性「最終值」的貢獻(可加總，供優先屬性計分用)
 function runeStatContrib(r,d,b){
   const st=parseStats(r); let v=0;
@@ -22573,7 +22693,11 @@ function runeStatContrib(r,d,b){
 const INT_SID=25; // 無形符文 set_id(對照表\符文.csv)：六顆最多1顆，可補足缺1件的套裝
 function solveFit(uid, s4, s2, wantMain, includeAll, opts){
   opts=opts||{};
-  const prios=(opts.prios||[]).map(fk=>statByFk(fk)).filter(Boolean);
+  const priosRaw=(opts.prios||[]).filter(fk=>statByFk(fk)||compByFk(fk)); // 使用者原始優先序（可含複合項）
+  const compFks=priosRaw.filter(fk=>compByFk(fk));
+  // 線性 heuristic 用：複合項展開成組成屬性參與加權（供貪婪種子與候選排序的方向）
+  const heurFks=[]; priosRaw.forEach(fk=>{const c=compByFk(fk); (c?c.parts:[fk]).forEach(k=>{if(!heurFks.includes(k))heurFks.push(k);});});
+  const prios=heurFks.map(fk=>statByFk(fk)).filter(Boolean);
   const thresholds=(opts.thresholds||[]).filter(t=>t&&t.fk&&t.min!=null&&!isNaN(t.min));
   const sel=UNITS.find(u=>u.id==uid);
   wantMain=wantMain||{2:'',4:'',6:''};
@@ -22617,6 +22741,10 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
   const deficitOf=fin=>{ if(!fin)return 0; let d=0; thresholds.forEach(t=>{const v=fin[t.fk]; if(v!=null&&v<t.min)d+=(t.min-v);}); return d; };
   const combos=(arr,k)=>{const res=[];(function rec(st,cur){if(cur.length===k){res.push(cur.slice());return;}for(let i=st;i<arr.length;i++){cur.push(arr[i]);rec(i+1,cur);cur.pop();}})(0,[]);return res;};
   const sumObj=p=>{let s=0;slots.forEach(sl=>{s+=objOf(p[sl]);});return s;};
+  // 複合模式的 plan 級評分：各優先屬性最終值 ÷ 裸身(無符文)基準 正規化後依序加權(1, 0.5, 0.25..)
+  const baseFin=(compFks.length&&sel&&base)?computeFinal(sel.mid,{},{}):null;
+  const compNorm=priosRaw.map(fk=>{const v=baseFin?compValOf(fk,baseFin):null; return v&&v>0?v:1;});
+  const planScoreOf=fin=>{ if(!fin)return 0; let s=0; for(let i=0;i<priosRaw.length;i++)s+=Math.pow(0.5,i)*(compValOf(priosRaw[i],fin)||0)/compNorm[i]; return s; };
   let bestPlan=null;
   // assign: {sl:套裝名 或 null(自由洞)}；intSl: 強制放無形符文的洞(null=不用無形)
   const evaluate=(assign,intSl)=>{
@@ -22683,9 +22811,9 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
     }
     const fin=canCond?finOf(plan):null;
     const deficit=fin?deficitOf(fin):(thresholds.length?1e9:0);
-    const objSum=sumObj(plan);
+    const objSum=(compFks.length&&fin)?planScoreOf(fin):sumObj(plan); // 複合模式改用真實複合值比較 assignment
     // 排序：先滿足門檻(deficit小)，再湊齊套裝(okc)，再目標值(objSum)
-    const c2={plan,okc,objSum,deficit,fin,intFill:useI?{sl:intSl,set:intSet,sid:extraSid}:null};
+    const c2={plan,okc,objSum,deficit,fin,intFill:useI?{sl:intSl,set:intSet,sid:extraSid}:null,assign:Object.assign({},assign),intSl:useI?intSl:null};
     const better=!bestPlan
       || c2.deficit<bestPlan.deficit-1e-9
       || (Math.abs(c2.deficit-bestPlan.deficit)<=1e-9 && (c2.okc>bestPlan.okc
@@ -22706,9 +22834,62 @@ function solveFit(uid, s4, s2, wantMain, includeAll, opts){
       place(gi+1,remaining.filter(sl=>!pick.includes(sl)),na);
     }
   })(0,slots.slice(),{});
+  // 複合目標/門檻情境：以貪婪解為種子，對勝出的套裝分配跑 beam search 收尾；beam 其餘名次留作候選方案
+  const alts=[];
+  if(base&&sel&&bestPlan&&(compFks.length||thresholds.length)){
+    const assign=bestPlan.assign||{}, intSl=bestPlan.intSl, useI=intSl!=null;
+    const intSet=useI?(assign[intSl]||''):'';
+    const extraSid=intSet?SET_SID[intSet]:null;
+    const finOf=p=>planFin(p,extraSid);
+    const allowedOf=sl=>{ if(useI&&sl==intSl)return cand[sl].ints; const st=assign[sl]; return st?(cand[sl].bySet[st]||cand[sl].any):cand[sl].any; };
+    // 每洞候選：線性 heuristic 前5 ＋ 複合組成屬性/門檻屬性 各前3，去重
+    const extraDs=[...new Set(compFks.reduce((a,fk)=>a.concat(compByFk(fk).parts),[]).concat(thresholds.map(t=>t.fk)))].map(fk=>statByFk(fk)).filter(Boolean);
+    const candsOf=sl=>{
+      const allowed=allowedOf(sl); if(!allowed.length)return [null];
+      const seen=new Set(),out=[];
+      const take=list=>{for(const r of list){if(!seen.has(r)){seen.add(r);out.push(r);}}};
+      take(allowed.slice(0,5));
+      extraDs.forEach(d0=>take(allowed.slice().sort((a,b)=>runeStatContrib(b,d0,base)-runeStatContrib(a,d0,base)).slice(0,3)));
+      return out;
+    };
+    let beam=[{plan:{},tot:{},sid:{},obj:0}];
+    for(const sl of slots){
+      const cs=candsOf(sl), next=[];
+      for(const st0 of beam)for(const r of cs){
+        const tot=Object.assign({},st0.tot), sid=Object.assign({},st0.sid);
+        if(r){const ps=parseStats(r); for(const k in ps)tot[k]=(tot[k]||0)+ps[k]; if(r.sid!=null)sid[r.sid]=(sid[r.sid]||0)+1;}
+        next.push({plan:Object.assign({},st0.plan,{[sl]:r}),tot,sid,obj:st0.obj+objOf(r)});
+      }
+      next.forEach(s=>{
+        const sx=Object.assign({},s.sid); if(extraSid!=null)sx[extraSid]=(sx[extraSid]||0)+1;
+        const fin=computeFinal(sel.mid,s.tot,sx);
+        s._d=deficitOf(fin); s._sc=priosRaw.length?planScoreOf(fin):s.obj;
+      });
+      next.sort((a,b)=>(a._d-b._d)||(b._sc-a._sc));
+      beam=next.slice(0,50);
+    }
+    if(beam.length){
+      const seedFin=finOf(bestPlan.plan);
+      const seedD=deficitOf(seedFin), seedSc=priosRaw.length?planScoreOf(seedFin):sumObj(bestPlan.plan);
+      const top=beam[0];
+      if(top._d<seedD-1e-9||(Math.abs(top._d-seedD)<=1e-9&&top._sc>seedSc+1e-9)){
+        bestPlan.plan=top.plan; bestPlan.fin=canCond?finOf(top.plan):null;
+        bestPlan.deficit=top._d; bestPlan.objSum=top._sc;
+      }
+      // 次佳候選：與最終採用方案不同的 beam 前 2 名（存 runeId，供隊伍面板比較/套用）
+      const sig=p=>slots.map(sl=>{const r=p[sl];return r?r.id:'-';}).join(',');
+      const seen=new Set([sig(bestPlan.plan)]);
+      for(const b2 of beam){
+        const s2=sig(b2.plan); if(seen.has(s2))continue; seen.add(s2);
+        const ap={}; slots.forEach(sl=>{ap[sl]=b2.plan[sl]?b2.plan[sl].id:null;});
+        alts.push({plan:ap,intFill:useI?bestPlan.intFill:null});
+        if(alts.length>=2)break;
+      }
+    }
+  }
   const unmet=(bestPlan.fin?thresholds:[]).map(t=>{const v=bestPlan.fin[t.fk];return {fk:t.fk,min:t.min,val:v};}).filter(x=>x.val==null||x.val<x.min);
-  const diag={prios:prios.map(d=>d.fk),thresholds,base:!!base,noBaseButCond:(!base&&(thresholds.length||prios.length)),fin:bestPlan.fin,unmet,overflow,reqGroups,intFill:bestPlan.intFill||null};
-  return {sel, p:bestPlan.plan, bestPlan, diag};
+  const diag={prios:priosRaw,thresholds,base:!!base,noBaseButCond:(!base&&(thresholds.length||prios.length)),fin:bestPlan.fin,unmet,overflow,reqGroups,intFill:bestPlan.intFill||null};
+  return {sel, p:bestPlan.plan, bestPlan, diag, alts};
 }
 // 由 plan 導出加成合計/套裝件數/最終體質
 function fitDerived(sel,p){
@@ -22792,10 +22973,12 @@ function fReadConds(row){
   })).filter(c=>c.fk && !isNaN(c.min));
 }
 // 優先屬性 UI（每列魔靈各自一份，於該列 .fPrios 內；順序=優先序）
+// 優先屬性可多選 EDPS/EHP 複合目標（門檻選單維持線性屬性）
+const PRIO_OPT_HTML=STAT_OPT_HTML+COMP_KEYS.map(d=>`<option value="${d.fk}">${d.lab}</option>`).join('');
 function fRenumPrios(row){ row.querySelectorAll('.fPrios .fprioN').forEach((el,i)=>el.textContent=(i+1)+'.'); }
 function fAddPrio(row,fk){
   const sp=document.createElement('span'); sp.className='fcond fprio';
-  sp.innerHTML=`<b class="fprioN muted"></b><select class="fprioStat">${STAT_OPT_HTML}</select><button type="button" class="fprioDel" title="刪除">✕</button>`;
+  sp.innerHTML=`<b class="fprioN muted"></b><select class="fprioStat">${PRIO_OPT_HTML}</select><button type="button" class="fprioDel" title="刪除">✕</button>`;
   if(fk)sp.querySelector('.fprioStat').value=fk;
   sp.querySelector('.fprioDel').onclick=()=>{sp.remove();fRenumPrios(row);};
   row.querySelector('.fPrios').appendChild(sp); fRenumPrios(row);
@@ -22833,11 +23016,23 @@ function readMonRow(row){
   return {uid,s4,twos,wantMain,prios:fReadPrios(row),thresholds:fReadConds(row),useInt:row.querySelector('.fUseInt').checked};
 }
 $('#fAddMon').onclick=()=>addMonRow();
-$('#fClear').onclick=()=>{
+$('#fClear').onclick=async()=>{
+  if(FIT_STATE.list.length&&fitIsDirty()){
+    if(!await uxConfirm('目前清單有尚未儲存的變更，清空後將無法找回。確定清空？',{danger:true,okText:'清空'}))return;
+  }
   document.getElementById('fMons').innerHTML='';
   FIT_STATE.list=[]; FIT_STATE.expanded=new Set();
   $('#fResults').innerHTML='<span class="muted">選好條件後按「計算最佳配裝」</span>';
+  fitMarkSynced();
 };
+$('#fUndo').onclick=()=>{
+  const it=_fitUndoStack.pop(); if(!it)return;
+  FIT_STATE.list=JSON.parse(it.snap).map(m=>({uid:m.uid,cfg:m.cfg,plan:m.plan||{},runeDesc:m.runeDesc||{},intFill:m.intFill||null,locked:!!m.locked,diag:null}));
+  renderTeamPanel();
+  fitUndoBtnSync();
+  uxToast('已復原：'+it.label,'success');
+};
+fitUndoBtnSync();
 document.getElementById('fMons').innerHTML=''; // renderAll 會重跑此段，先清空避免累積
 $('#fResults').innerHTML='<span class="muted">選好條件後按「計算最佳配裝」</span>';
 // 配裝清單預設空白：由使用者自行「＋ 新增魔靈」或從「地下城參考隊」帶入
@@ -22856,8 +23051,9 @@ function renderFitCards(solved,cfg,teamBonus,edOpts){
     let g='';
     if(diag.prios&&diag.prios.length){
       g+='<div>🎯 優先屬性：'+diag.prios.map((fk,i)=>{
-        const sk=STAT_KEYS.find(x=>x.fk===fk), lab=sk?sk.lab:fk;
-        const v=(d.fin||diag.fin)?(d.fin||diag.fin)[fk]:null;
+        const lab=statLabOf(fk);
+        const fin0=d.fin||diag.fin;
+        const v=fin0?compValOf(fk,fin0):null;
         return `<b>${i+1}.${lab}</b>${v!=null?`（配出 ${v}）`:''}`;
       }).join('　')+'</div>';
     }
@@ -22901,7 +23097,8 @@ function runeDescOf(r){ return `${r.set}${r.anc?'(古)':''} ${r.m} ${r.ef}%`; }
 function entryFromSolved(cfg,solved){
   const plan={},runeDesc={};
   for(let sl=1;sl<=6;sl++){ const r=solved.p[sl]; plan[sl]=r?r.id:null; if(r)runeDesc[sl]=runeDescOf(r); }
-  return {uid:cfg.uid,cfg,plan,runeDesc,intFill:(solved.diag&&solved.diag.intFill)||null,locked:false,diag:solved.diag};
+  // alt=次佳候選（不寫入方案存檔/undo 快照；載入或復原後需重算才有）
+  return {uid:cfg.uid,cfg,plan,runeDesc,intFill:(solved.diag&&solved.diag.intFill)||null,locked:false,diag:solved.diag,alt:(solved.alts&&solved.alts.length)?solved.alts:null};
 }
 function fitPlanRunes(e){ // plan(id)→符文物件；查無(已賣/改造)記 missing
   const p={},missing={}; let hasMiss=false;
@@ -22917,6 +23114,14 @@ function fitUsedIds(exceptIdx){ // 全隊占用符文 id（排除第 exceptIdx �
   const s=new Set();
   FIT_STATE.list.forEach((e,i)=>{ if(i===exceptIdx)return; for(let sl=1;sl<=6;sl++){ if(e.plan[sl]!=null)s.add(e.plan[sl]); } });
   return s;
+}
+function altFin(sel,alt,team){ // 候選方案的最終體質（現查 runeById；含跨隊全隊型加成，與當前方案同基準）
+  if(!sel)return null;
+  const tot={},sid={};
+  for(let s=1;s<=6;s++){ const id=alt.plan[s]; const r=id!=null?runeById[id]:null; if(!r)continue;
+    const ps=parseStats(r); for(const k in ps)tot[k]=(tot[k]||0)+ps[k]; if(r.sid!=null)sid[r.sid]=(sid[r.sid]||0)+1; }
+  if(alt.intFill&&alt.intFill.sid!=null)sid[alt.intFill.sid]=(sid[alt.intFill.sid]||0)+1;
+  return computeFinal(sel.mid,tot,sid,team);
 }
 function fitTeamBonus(){ // 全隊型套裝加成跨隊彙總；單隻時維持舊行為(不外掛)
   if(FIT_STATE.list.length<=1)return null;
@@ -22950,7 +23155,20 @@ function renderTeamPanel(){
       const diag=Object.assign({},e.diag||{},{intFill:e.intFill});
       const solvedLike={p,diag,sel};
       const {resultHtml,statsHtml}=renderFitCards(solvedLike,e.cfg,team,{editable:true,monIdx:i,missing});
-      detail=`<div class="fitdetail"><div class="fitbox"><div class="card"><h3 style="margin-top:0">推薦配裝</h3>${resultHtml}</div><div class="card"><h3 style="margin-top:0">符文加成合計</h3>${statsHtml}</div></div></div>`;
+      // 其他候選方案（beam 次佳解）：與目前採用方案的關鍵數值差異＋一鍵套用
+      let altHtml='';
+      if(e.alt&&e.alt.length&&sel){
+        const cur=d.fin;
+        altHtml='<div class="card" style="margin-top:8px"><h3 style="margin-top:0">其他候選方案</h3>'+e.alt.map((a,ai)=>{
+          const f=altFin(sel,a,team);
+          const cmp=(lab,k)=>{ if(!f||!cur||f[k]==null||cur[k]==null)return ''; const df=Math.round((f[k]-cur[k])*10)/10;
+            const cls=df>0?'fok':(df<0?'fwarn':'muted');
+            return `<span style="margin-right:10px;white-space:nowrap">${lab} <b>${Math.round(f[k]*10)/10}</b> <span class="${cls}">(${df>0?'+':''}${df})</span></span>`; };
+          const rows=[cmp('SPD','spd'),cmp('HP','hp'),cmp('ATK','atk'),cmp('DEF','def'),cmp('暴率','cr'),cmp('暴傷','cd'),cmp('抵抗','re'),cmp('命中','ac')].join('');
+          return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 0;border-top:1px solid var(--line)"><b class="muted" style="white-space:nowrap">候選 ${ai+1}</b><span style="flex:1">${rows||'<span class="muted">無法計算（符文已消失或缺基礎值）</span>'}</span><button type="button" class="btn2 fitbtn" data-act="usealt" data-mi="${i}" data-ai="${ai}">套用</button></div>`;
+        }).join('')+'<small class="note">括號＝與目前採用方案的差異；套用後可按 ↩ 復原。</small></div>';
+      }
+      detail=`<div class="fitdetail"><div class="fitbox"><div class="card"><h3 style="margin-top:0">推薦配裝</h3>${resultHtml}</div><div class="card"><h3 style="margin-top:0">符文加成合計</h3>${statsHtml}</div></div>${altHtml}</div>`;
     }
     out+=`<div class="fitrow${e.locked?' locked':''}">
       <div class="fitsum" data-act="toggle" data-mi="${i}">
@@ -22968,6 +23186,7 @@ function renderTeamPanel(){
 }
 function refitOne(i){ // 只重配第 i 隻：排除其他所有隻目前占用的符文
   const e=FIT_STATE.list[i]; if(!e||e.locked)return;
+  fitPushUndo('重配 #'+(i+1));
   const cfg=e.cfg;
   const solved=solveFit(e.uid,cfg.s4,'',cfg.wantMain,!!cfg.includeAll,
     {prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:fitUsedIds(i),useInt:cfg.useInt});
@@ -22978,12 +23197,14 @@ function refitOne(i){ // 只重配第 i 隻：排除其他所有隻目前占用�
 // ---- 手動刪改單顆符文 ----
 function removeManualRune(mi,sl){
   const e=FIT_STATE.list[mi]; if(!e||e.plan[sl]==null)return;
+  fitPushUndo('刪除符文');
   e.plan[sl]=null; if(e.runeDesc)delete e.runeDesc[sl];
   if(e.intFill&&e.intFill.sl===sl)e.intFill=null; // 動到無形補位洞→取消補位推斷
   renderTeamPanel();
 }
 function applyManualRune(mi,sl,runeId){
   const e=FIT_STATE.list[mi]; const r=runeById[runeId]; if(!e||!r)return;
+  fitPushUndo('更換符文');
   // 若該符文已被本隊任何魔靈(含自己他洞)占用→先自原處卸下
   FIT_STATE.list.forEach(o=>{
     for(let s=1;s<=6;s++){ if(o.plan[s]===r.id){ o.plan[s]=null; if(o.runeDesc)delete o.runeDesc[s]; if(o.intFill&&o.intFill.sl===s)o.intFill=null; } }
@@ -22993,6 +23214,21 @@ function applyManualRune(mi,sl,runeId){
   closeRunePicker();
   renderTeamPanel();
 }
+async function applyAltPlan(mi,ai){ // 套用候選方案（alt 保留原樣，可在候選間來回切換；undo 可復原）
+  const e=FIT_STATE.list[mi]; const alt=e&&e.alt&&e.alt[ai]; if(!alt)return;
+  const ids=new Set(Object.values(alt.plan).filter(id=>id!=null));
+  const holders=new Set();
+  FIT_STATE.list.forEach((o,oi)=>{ if(oi===mi)return; for(let s=1;s<=6;s++){ if(o.plan[s]!=null&&ids.has(o.plan[s]))holders.add('#'+(oi+1)); } });
+  if(holders.size&&!await uxConfirm(`候選方案有符文目前配給本隊 ${[...holders].join('、')}，套用後將自對方卸下（該洞變空）。繼續？`,{danger:true,okText:'套用'}))return;
+  fitPushUndo('套用候選 '+(ai+1));
+  FIT_STATE.list.forEach((o,oi)=>{ if(oi===mi)return;
+    for(let s=1;s<=6;s++){ if(o.plan[s]!=null&&ids.has(o.plan[s])){ o.plan[s]=null; if(o.runeDesc)delete o.runeDesc[s]; if(o.intFill&&o.intFill.sl===s)o.intFill=null; } } });
+  const plan={},desc={};
+  for(let s=1;s<=6;s++){ const id=alt.plan[s]; plan[s]=id!=null?id:null; const r=id!=null?runeById[id]:null; if(r)desc[s]=runeDescOf(r); }
+  e.plan=plan; e.runeDesc=desc; e.intFill=alt.intFill||null;
+  renderTeamPanel();
+  uxToast(`已套用候選 ${ai+1}`,'success');
+}
 // ---- 符文選擇器 modal ----
 let rpkCtx=null;
 function closeRunePicker(){ $('#rPicker').classList.remove('open'); rpkCtx=null; }
@@ -23001,7 +23237,7 @@ $('#rPicker').onclick=ev=>{ if(ev.target.id==='rPicker')closeRunePicker(); };
 function openRunePicker(mi,sl){
   const e=FIT_STATE.list[mi]; if(!e)return;
   const sel=unitById[e.uid];
-  rpkCtx={mi,sl,q:'',sort:'ef',free:false};
+  rpkCtx={mi,sl,q:'',sort:'ef',free:false,shown:60};
   $('#rPickerBody').innerHTML=`<h3 style="margin-top:0">${sel?unitIcon(sel.en||sel.n,sel.mid)+' '+sel.n:''}　第 <b>${sl}</b> 洞　更換符文</h3>
     <div class="rpk-filters">
       <input id="rpkQ" placeholder="搜尋：套裝 / 主屬 / 副屬 / 裝備者" style="flex:1;min-width:220px">
@@ -23010,9 +23246,9 @@ function openRunePicker(mi,sl){
     </div>
     <div class="rpk-list" id="rpkList"></div>
     <small class="note">點一顆即替換到第 ${sl} 洞。「⚔ 本隊使用中」的符文點選後會自對方卸下（該洞變空）。</small>`;
-  $('#rpkQ').oninput=()=>{ rpkCtx.q=$('#rpkQ').value; renderRpkList(); };
-  $('#rpkSort').onchange=()=>{ rpkCtx.sort=$('#rpkSort').value; renderRpkList(); };
-  $('#rpkFree').onchange=()=>{ rpkCtx.free=$('#rpkFree').checked; renderRpkList(); };
+  $('#rpkQ').oninput=()=>{ rpkCtx.q=$('#rpkQ').value; rpkCtx.shown=60; renderRpkList(); };
+  $('#rpkSort').onchange=()=>{ rpkCtx.sort=$('#rpkSort').value; rpkCtx.shown=60; renderRpkList(); };
+  $('#rpkFree').onchange=()=>{ rpkCtx.free=$('#rpkFree').checked; rpkCtx.shown=60; renderRpkList(); };
   renderRpkList();
   $('#rPicker').classList.add('open');
   setTimeout(()=>{const q=$('#rpkQ'); if(q)q.focus();},0);
@@ -23026,7 +23262,8 @@ function renderRpkList(){
   if(rpkCtx.free)list=list.filter(r=>usedBy[r.id]==null||r.id===e.plan[sl]);
   const spdOf=r=>parseStats(r)['SPD']||0, mainvOf=r=>{const m=r.m.match(/\+(\d+)/);return m?+m[1]:0;};
   list.sort(rpkCtx.sort==='spd'?(a,b)=>spdOf(b)-spdOf(a):rpkCtx.sort==='mainv'?(a,b)=>mainvOf(b)-mainvOf(a):(a,b)=>b.ef-a.ef);
-  const total=list.length; list=list.slice(0,300);
+  const shown=rpkCtx.shown||60;
+  const total=list.length; list=list.slice(0,shown);
   $('#rpkList').innerHTML=(list.map(r=>{
     const ub=usedBy[r.id], cur=r.id===e.plan[sl];
     const tag=cur?'<span class="fok">✓ 目前配置</span>'
@@ -23034,16 +23271,18 @@ function renderRpkList(){
       :(r.ow?`<span class="muted">裝於 ${r.ow}</span>`:'<span class="muted">倉庫</span>'));
     return `<div class="rpk-item${cur?' rpk-cur':''}" data-rid="${r.id}"><span><span class="setbadge">${r.set}</span>${r.anc?' <span class="anc">A</span>':''} <b>${r.m}</b> <span class="muted">${r.pf||''}</span> <span class="muted">${r.sub||''}</span></span><span><b class="${effCls(r.ef)}">${r.ef}%</b> ${tag}</span></div>`;
   }).join('')||'<div class="rpk-item"><span class="muted">查無符合的符文</span></div>')
-  +(total>300?`<div class="rpk-item"><span class="muted">共 ${total} 顆，僅顯示前 300，請用搜尋縮小範圍</span></div>`:'');
+  +(total>shown?`<div class="rpk-item" data-more="1" style="justify-content:center;cursor:pointer"><span style="color:var(--acc);font-weight:700">▼ 載入更多（還有 ${total-shown} 顆）</span></div>`:'');
 }
-$('#rPickerBody').onclick=ev=>{
+$('#rPickerBody').onclick=async ev=>{
+  const more=ev.target.closest('[data-more]');
+  if(more&&rpkCtx){ rpkCtx.shown=(rpkCtx.shown||60)+60; renderRpkList(); return; }
   const it=ev.target.closest('.rpk-item'); if(!it||it.dataset.rid==null||!rpkCtx)return;
   const r=runeById[it.dataset.rid]; if(!r)return;
   const {mi,sl}=rpkCtx;
   const e=FIT_STATE.list[mi];
   if(r.id===e.plan[sl]){ closeRunePicker(); return; } // 點目前配置→視同取消
   let ub=null; FIT_STATE.list.forEach((o,oi)=>{ for(let s=1;s<=6;s++){ if(o.plan[s]===r.id&&!(oi===mi&&s===sl))ub=oi; } });
-  if(ub!=null&&!confirm(`此符文目前配給本隊 #${ub+1}，確定搶過來？（對方該洞將變空）`))return;
+  if(ub!=null&&!await uxConfirm(`此符文目前配給本隊 #${ub+1}，確定搶過來？（對方該洞將變空）`,{danger:true,okText:'搶過來'}))return;
   applyManualRune(mi,sl,r.id);
 };
 // ---- 配裝方案存檔（localStorage，多方案命名保存/載入/刪除）----
@@ -23052,7 +23291,7 @@ const escH=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;
 function planReadAll(){ try{ return JSON.parse(localStorage.getItem(PLAN_KEY)||'{}')||{}; }catch(e){ return {}; } }
 function planWriteAll(o){
   try{ localStorage.setItem(PLAN_KEY,JSON.stringify(o)); return true; }
-  catch(e){ alert('無法寫入 localStorage（file:// 開啟或隱私模式可能被瀏覽器封鎖）：'+e.message); return false; }
+  catch(e){ uxToast('無法寫入 localStorage（file:// 開啟或隱私模式可能被瀏覽器封鎖）：'+e.message,'error',8000); return false; }
 }
 function planRefreshSelect(){
   const sel=$('#fPlanSel'), cur=sel.value, all=planReadAll();
@@ -23073,23 +23312,27 @@ function writeMonRow(row,cfg){
   (cfg.thresholds||[]).forEach(t=>fAddCond(row,t.fk,t.min));
   row.querySelector('.fUseInt').checked=!!cfg.useInt;
 }
-$('#fPlanSave').onclick=()=>{
-  if(!FIT_STATE.list.length){ alert('目前沒有配裝結果可存，請先按「計算最佳配裝」。'); return; }
-  const name=(prompt('方案名稱：',$('#fPlanSel').value||'')||'').trim();
+$('#fPlanSave').onclick=async()=>{
+  if(!FIT_STATE.list.length){ uxToast('目前沒有配裝結果可存，請先按「計算最佳配裝」。','warn'); return; }
+  const name=((await uxPrompt('方案名稱：',{title:'儲存方案',defaultValue:$('#fPlanSel').value||''}))||'').trim();
   if(!name)return;
   const all=planReadAll();
-  if(all[name]&&!confirm(`方案「${name}」已存在，要覆蓋嗎？`))return;
+  if(all[name]&&!await uxConfirm(`方案「${name}」已存在，要覆蓋嗎？`,{danger:true,okText:'覆蓋'}))return;
   all[name]={
     savedAt:new Date().toISOString(),
     wizard:($('#hPlayer').textContent||''),
     mons:FIT_STATE.list.map(e=>({uid:e.uid,unitName:(unitById[e.uid]||{}).n||'',locked:!!e.locked,cfg:e.cfg,plan:e.plan,runeDesc:e.runeDesc,intFill:e.intFill}))
   };
-  if(planWriteAll(all)){ planRefreshSelect(); $('#fPlanSel').value=name; }
+  if(planWriteAll(all)){ planRefreshSelect(); $('#fPlanSel').value=name; fitMarkSynced(); uxToast(`方案「${name}」已儲存`,'success'); }
 };
-$('#fPlanLoad').onclick=()=>{
-  const name=$('#fPlanSel').value; if(!name){ alert('請先在下拉選單選擇方案。'); return; }
-  if(!UNITS.length||!RUNES.length){ alert('請先匯入 JSON 再載入方案。'); return; }
-  const pl=planReadAll()[name]; if(!pl){ alert('方案不存在。'); planRefreshSelect(); return; }
+$('#fPlanLoad').onclick=async()=>{
+  const name=$('#fPlanSel').value; if(!name){ uxToast('請先在下拉選單選擇方案。','warn'); return; }
+  if(!UNITS.length||!RUNES.length){ uxToast('請先匯入 JSON 再載入方案。','warn'); return; }
+  const pl=planReadAll()[name]; if(!pl){ uxToast('方案不存在。','warn'); planRefreshSelect(); return; }
+  if(FIT_STATE.list.length&&fitIsDirty()){
+    if(!await uxConfirm('目前清單有尚未儲存的變更，載入方案將覆蓋它們。確定載入？',{danger:true,okText:'載入'}))return;
+  }
+  if(FIT_STATE.list.length)fitPushUndo(`載入「${name}」前`);
   const misses=[];
   FIT_STATE.list=pl.mons.map(m=>{
     if(!unitById[m.uid])misses.push(m.unitName||('uid '+m.uid));
@@ -23101,13 +23344,62 @@ $('#fPlanLoad').onclick=()=>{
   if(!pl.mons.length)addMonRow();
   $('#fPool').checked=pl.mons.some(m=>m.cfg&&m.cfg.includeAll);
   renderTeamPanel();
-  if(misses.length)alert('下列魔靈在目前匯入的帳號中不存在，將顯示為未知魔靈：\n'+misses.join('、'));
+  fitMarkSynced();
+  if(misses.length)await uxAlert('下列魔靈在目前匯入的帳號中不存在，將顯示為未知魔靈：\n'+misses.join('、'));
 };
-$('#fPlanDel').onclick=()=>{
-  const name=$('#fPlanSel').value; if(!name){ alert('請先在下拉選單選擇方案。'); return; }
-  if(!confirm(`確定刪除方案「${name}」？`))return;
+$('#fPlanDel').onclick=async()=>{
+  const name=$('#fPlanSel').value; if(!name){ uxToast('請先在下拉選單選擇方案。','warn'); return; }
+  if(!await uxConfirm(`確定刪除方案「${name}」？`,{danger:true,okText:'刪除'}))return;
   const all=planReadAll(); delete all[name];
-  if(planWriteAll(all))planRefreshSelect();
+  if(planWriteAll(all)){ planRefreshSelect(); uxToast(`方案「${name}」已刪除`,'success'); }
+};
+// ---- 方案匯出／匯入（JSON 檔，跨瀏覽器/裝置備份；localStorage 綁 origin，清資料即失）----
+$('#fPlanExp').onclick=async()=>{
+  const all=planReadAll(); const names=Object.keys(all);
+  if(!names.length){ uxToast('目前沒有已存方案可匯出。','warn'); return; }
+  const cur=$('#fPlanSel').value;
+  let plans=all, scope=`全部 ${names.length} 個方案`;
+  if(cur&&all[cur]&&names.length>1){
+    const r=await uxConfirm(`要只匯出選定方案「${cur}」，還是匯出全部 ${names.length} 個方案？`,
+      {title:'匯出範圍',okText:'只匯出此方案',cancelText:'匯出全部',cancelValue:'all',dismissValue:null});
+    if(r===null)return;
+    if(r===true){ plans={[cur]:all[cur]}; scope=`方案「${cur}」`; }
+  }
+  const data={type:'swfit_plans_export',version:1,exportedAt:new Date().toISOString(),plans};
+  const blob=new Blob([JSON.stringify(data,null,1)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='符文配裝方案_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+  uxToast('已匯出 '+scope,'success');
+};
+$('#fPlanImp').onclick=()=>$('#fPlanImpFile').click();
+$('#fPlanImpFile').onchange=()=>{
+  const f=$('#fPlanImpFile').files[0]; $('#fPlanImpFile').value=''; if(!f)return;
+  const rd=new FileReader();
+  rd.onload=async ev=>{
+    let d; try{ d=JSON.parse(ev.target.result); }catch(e){ uxToast('不是有效的 JSON 檔。','error'); return; }
+    if(!d||d.type!=='swfit_plans_export'||!d.plans||typeof d.plans!=='object'){ uxToast('這不是本工具匯出的方案檔（缺 type/plans）。','error'); return; }
+    const all=planReadAll(); const inc=Object.keys(d.plans);
+    if(!inc.length){ uxToast('方案檔內沒有任何方案。','warn'); return; }
+    const dup=inc.filter(n=>all[n]);
+    let overwrite=false;
+    if(dup.length){
+      const r=await uxConfirm(`下列 ${dup.length} 個方案與現有方案同名：\n${dup.join('、')}\n\n要覆蓋現有方案，還是保留兩者（匯入的自動改名）？`,
+        {title:'同名方案',okText:'覆蓋',cancelText:'保留兩者（改名）',cancelValue:'rename',dismissValue:null,danger:true});
+      if(r===null)return;
+      overwrite=(r===true);
+    }
+    let added=0,replaced=0;
+    inc.forEach(n=>{
+      if(all[n]&&!overwrite){
+        let nn=n+' (匯入)',k=2; while(all[nn])nn=n+' (匯入'+(k++)+')';
+        all[nn]=d.plans[n]; added++;
+      } else { all[n]?replaced++:added++; all[n]=d.plans[n]; }
+    });
+    if(planWriteAll(all)){ planRefreshSelect(); uxToast(`匯入完成：新增 ${added} 個、覆蓋 ${replaced} 個方案`,'success',5000); }
+  };
+  rd.readAsText(f,'utf-8');
 };
 planRefreshSelect();
 // #fResults 事件委派（單一 onclick，renderAll 重跑只覆寫不重複）
@@ -23119,30 +23411,43 @@ $('#fResults').onclick=ev=>{
   else if(act==='refit'){ refitOne(mi); }
   else if(act==='del'){ removeManualRune(mi,+t.dataset.sl); }
   else if(act==='pick'){ openRunePicker(mi,+t.dataset.sl); }
+  else if(act==='usealt'){ applyAltPlan(mi,+t.dataset.ai); }
 };
-$('#fRun').onclick=()=>{
-  const includeAll=$('#fPool').checked;
-  const rows=$$('#fMons .fMonRow').map(readMonRow).filter(c=>c.uid);
-  if(!rows.length){ $('#fResults').innerHTML='<span class="muted">請至少加入一隻魔靈</span>'; FIT_STATE.list=[]; FIT_STATE.expanded=new Set(); return; }
-  // 鎖定者(依 uid 對應)保留原配裝並優先占用符文；其餘依序重解(符文互斥)
-  const lockMap=new Map();
-  FIT_STATE.list.forEach(e=>{ if(!e.locked)return; if(!lockMap.has(e.uid))lockMap.set(e.uid,[]); lockMap.get(e.uid).push(e); });
-  const used=new Set();
-  const picks=rows.map(cfg=>{
-    cfg.includeAll=includeAll;
-    const arr=lockMap.get(cfg.uid);
-    if(arr&&arr.length){ const e=arr.shift(); for(let sl=1;sl<=6;sl++){ if(e.plan[sl]!=null)used.add(e.plan[sl]); } return {cfg,lockedEntry:e}; }
-    return {cfg};
+$('#fRun').onclick=async()=>{
+  await withBusy([$('#fRun'),$('#fClear'),$('#fUndo'),$('#fPlanLoad'),$('#fPlanSave')],async()=>{
+    const includeAll=$('#fPool').checked;
+    const rows=$$('#fMons .fMonRow').map(readMonRow).filter(c=>c.uid);
+    if(FIT_STATE.list.length)fitPushUndo('重新計算前');
+    if(!rows.length){ $('#fResults').innerHTML='<span class="muted">請至少加入一隻魔靈</span>'; FIT_STATE.list=[]; FIT_STATE.expanded=new Set(); return; }
+    // 鎖定者(依 uid 對應)保留原配裝並優先占用符文；其餘依序重解(符文互斥)
+    const lockMap=new Map();
+    FIT_STATE.list.forEach(e=>{ if(!e.locked)return; if(!lockMap.has(e.uid))lockMap.set(e.uid,[]); lockMap.get(e.uid).push(e); });
+    const used=new Set();
+    const picks=rows.map(cfg=>{
+      cfg.includeAll=includeAll;
+      const arr=lockMap.get(cfg.uid);
+      if(arr&&arr.length){ const e=arr.shift(); for(let sl=1;sl<=6;sl++){ if(e.plan[sl]!=null)used.add(e.plan[sl]); } return {cfg,lockedEntry:e}; }
+      return {cfg};
+    });
+    const st=$('#fRunStatus'), newList=[];
+    try{
+      for(let i=0;i<picks.length;i++){
+        const {cfg,lockedEntry}=picks[i];
+        if(lockedEntry){ lockedEntry.cfg=cfg; newList.push(lockedEntry); continue; }
+        const u=unitById[cfg.uid];
+        st.innerHTML=`<span class="spin"></span>計算中… 第 ${i+1}/${picks.length} 隻${u?'：'+u.n:''}`;
+        await nextFrame(); // 讓進度文字先上屏，UI 不凍結
+        const solved=solveFit(cfg.uid,cfg.s4,'',cfg.wantMain,includeAll,
+          {prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:used,useInt:cfg.useInt});
+        Object.values(solved.p).forEach(r=>{if(r)used.add(r.id);});
+        newList.push(entryFromSolved(cfg,solved));
+      }
+    } finally { st.innerHTML=''; }
+    FIT_STATE.list=newList; FIT_STATE.expanded=new Set();
+    renderTeamPanel();
+    uxToast(`配裝完成：共 ${newList.length} 隻`,'success');
   });
-  const newList=picks.map(({cfg,lockedEntry})=>{
-    if(lockedEntry){ lockedEntry.cfg=cfg; return lockedEntry; }
-    const solved=solveFit(cfg.uid,cfg.s4,'',cfg.wantMain,includeAll,
-      {prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:used,useInt:cfg.useInt});
-    Object.values(solved.p).forEach(r=>{if(r)used.add(r.id);});
-    return entryFromSolved(cfg,solved);
-  });
-  FIT_STATE.list=newList; FIT_STATE.expanded=new Set();
-  renderTeamPanel();
+  fitUndoBtnSync(); // withBusy 解鎖會把 #fUndo 一律 enable，這裡按堆疊實況校正
 };
 
 // ---------- 套組產能分析（用整個符文池最多能配出幾組達標套裝）----------
@@ -23294,20 +23599,25 @@ function renderCap(res){
   if(!groups.length) cards=`<div class="card muted">此條件下一組都湊不出來。可降低速度門檻、提高假設基礎速，或改用「不限」2洞主屬。</div>`;
   $('#capResults').innerHTML=head+bottleneck+cards;
 }
-$('#capRun').onclick=()=>{
+$('#capRun').onclick=()=>withBusy([$('#capRun')],async()=>{
   const s4=$('#capSet4').value, s2=$('#capSet2').value;
   if(!s4){ $('#capResults').innerHTML='<div class="card muted">請選擇 4 件套。</div>'; return; }
   $('#capN4').textContent=s4; $('#capN2').textContent=s2||'（自由洞）';
-  const res=capSolve({
-    s4, s2,
-    threshold:parseFloat($('#capSpd').value)||0,
-    baseSpd:parseFloat($('#capBase').value)||0,
-    main2:$('#capMain2').value,
-    sparesOnly:$('#capSpares').checked,
-    useInt:$('#capUseInt').checked
-  });
-  renderCap(res);
-};
+  const st=$('#capRunStatus');
+  st.innerHTML='<span class="spin"></span>計算中…';
+  await nextFrame();
+  try{
+    const res=capSolve({
+      s4, s2,
+      threshold:parseFloat($('#capSpd').value)||0,
+      baseSpd:parseFloat($('#capBase').value)||0,
+      main2:$('#capMain2').value,
+      sparesOnly:$('#capSpares').checked,
+      useInt:$('#capUseInt').checked
+    });
+    renderCap(res);
+  } finally { st.innerHTML=''; }
+});
 $('#capClear').onclick=()=>{
   $('#capResults').innerHTML='<span class="muted">設定條件後按「計算最多可配組數」</span>';
 };
