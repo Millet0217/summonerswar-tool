@@ -22669,15 +22669,17 @@ const statByFk=fk=>STAT_KEYS.find(d=>d.fk===fk);
 // 複合目標屬性（非線性：需整組 plan 過 computeFinal 才有值；只供「優先屬性」選用，門檻不適用）
 const COMP_KEYS=[
   {lab:'有效輸出EDPS',fk:'edps',parts:['atk','cr','cd']},
+  {lab:'有效輸出EDEF',fk:'edef',parts:['def','cr','cd']},
   {lab:'有效血量EHP',fk:'ehp',parts:['hp','def']},
 ];
 const compByFk=fk=>COMP_KEYS.find(d=>d.fk===fk);
 const statLabOf=fk=>{const d=statByFk(fk)||compByFk(fk);return d?d.lab:fk;};
 // fin→優先屬性值：線性直接取欄位；複合套公式
-// EDPS＝ATK×(1＋min(暴率,100)/100×暴傷/100)；EHP＝HP×(1140＋3.5×DEF)/1000（SW 標準減傷公式）
+// EDPS＝ATK×(1＋min(暴率,100)/100×暴傷/100)；EDEF 同式改以 DEF 為基礎（傷害源自防禦的角色）；EHP＝HP×(1140＋3.5×DEF)/1000（SW 標準減傷公式）
 function compValOf(fk,fin){
   if(!fin)return null;
   if(fk==='edps')return Math.round(fin.atk*(1+Math.min(fin.cr,100)/100*fin.cd/100));
+  if(fk==='edef')return Math.round(fin.def*(1+Math.min(fin.cr,100)/100*fin.cd/100));
   if(fk==='ehp')return Math.round(fin.hp*(1140+3.5*fin.def)/1000);
   return fin[fk]!=null?fin[fk]:null;
 }
