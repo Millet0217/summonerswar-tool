@@ -209,6 +209,33 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
 .rpk-item:hover{background:#1e2440}
 .rpk-item .inuse{color:var(--warn);font-weight:600}
 .rpk-cur{background:rgba(110,168,255,.12)}
+/* ── 手機版面（≤768px）：tab 列橫捲、觸控目標加大、modal 近全螢幕、設定列直向堆疊 ── */
+@media(max-width:768px){
+  header{padding:10px 12px;gap:8px}
+  header h1{font-size:17px}
+  header .stat{font-size:11.5px}
+  nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:6px 8px;scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav button{flex:0 0 auto;padding:9px 13px;font-size:13.5px;min-height:38px}
+  main{padding:10px 8px}
+  .controls{gap:6px;margin-bottom:8px}
+  .controls select,.controls input[type="number"],.controls input[type="text"]{min-height:34px}
+  .btn,.btn2{min-height:36px;padding-top:6px;padding-bottom:6px}
+  .overlay{padding:10px 6px}
+  .modal{padding:14px 12px;border-radius:10px;max-width:none}
+  #uxModal .modal{margin-top:6vh}
+  .fitsum{gap:6px;padding:8px 8px}
+  .fitsum-st{font-size:12px}
+  .fMonRow .controls{margin-bottom:6px}
+  .fMonRow .controls label{flex:1 1 46%;display:flex;align-items:center;gap:4px}
+  .fMonRow .controls label select{flex:1;min-width:0}
+  .runegrid{grid-template-columns:1fr 1fr;gap:8px}
+  table th,table td{padding:6px 7px;font-size:12px}
+}
+@media(max-width:480px){
+  .runegrid{grid-template-columns:1fr}
+  .fitsum-sets{display:none} /* 極窄螢幕摘要列只留名稱與數值 */
+}
 </style>
 </head>
 <body>
@@ -228,6 +255,7 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
   <button data-tab="units" class="active">魔靈庫</button>
   <button data-tab="dex">怪物圖鑑</button>
   <button data-tab="runes">符文庫</button>
+  <button data-tab="arts">神器</button>
   <button data-tab="fit">符文自動配裝</button>
   <button data-tab="overview">總覽</button>
 </nav>
@@ -260,6 +288,11 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
   </section>
 
   <section id="runes" class="tab">
+    <div class="controls" style="margin-bottom:4px">
+      <button class="btn" id="rViewListBtn" type="button">📋 符文清單</button>
+      <button class="btn2" id="rViewCheckBtn" type="button">🔧 符文健檢</button>
+    </div>
+    <div id="rListView">
     <div class="controls">
       <select id="rSet"><option value="">全部套裝</option></select>
       <select id="rSlot"><option value="">全部洞位</option><option value="1">1洞</option><option value="2">2洞</option><option value="3">3洞</option><option value="4">4洞</option><option value="5">5洞</option><option value="6">6洞</option></select>
@@ -280,6 +313,35 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
       <span class="muted" id="rPrioHint">（最多5個；選了副屬＝必須含該副屬，填最小值再加門檻；依序由大到小，含前綴）</span>
     </div>
     <div class="tablewrap"><table id="rTable"></table></div>
+    </div>
+    <div id="rCheckView" style="display:none">
+      <div class="controls">
+        <label>值得+15：+15後效率 ≥ <input id="ckUpEff" type="number" value="85" min="0" max="130" style="width:64px"></label>
+        <label>附魔：效率 ≥ <input id="ckEnEff" type="number" value="75" min="0" max="130" style="width:64px"></label>
+        <label>可賣：效率 &lt; <input id="ckSellEff" type="number" value="70" min="0" max="130" style="width:64px"></label>
+        <label><input type="checkbox" id="ckSellEq"> 可賣含已裝備</label>
+        <label><input type="checkbox" id="ckSellAnc"> 可賣含上古</label>
+        <button class="btn2" id="ckRun" type="button">重新產生</button>
+      </div>
+      <div id="ckBody"></div>
+    </div>
+  </section>
+
+  <section id="arts" class="tab">
+    <div class="controls">
+      <select id="aType"><option value="">全部神器</option><option value="1">元素神器</option><option value="2">職業神器</option></select>
+      <select id="aElem"><option value="">全部屬性</option><option value="1">水</option><option value="2">火</option><option value="3">風</option><option value="4">光</option><option value="5">暗</option></select>
+      <select id="aArch"><option value="">全部職業</option><option value="1">攻擊</option><option value="2">防禦</option><option value="3">體力</option><option value="4">支援</option></select>
+      <select id="aMain"><option value="">全部主屬</option><option value="100">HP</option><option value="101">ATK</option><option value="102">DEF</option></select>
+      <select id="aCat"><option value="">全部類別</option></select>
+      <select id="aSub"><option value="">全部副屬</option></select>
+      <select id="aEq"><option value="">全部</option><option value="0">倉庫(未裝)</option><option value="1">已裝備</option></select>
+      <label>效率≥<input id="aEff" type="number" value="0" min="0" max="100" style="width:64px"></label>
+      <input id="aOwner" placeholder="裝在誰身上…" style="width:150px">
+      <span class="muted" id="aCount"></span>
+    </div>
+    <small class="note" style="display:block;margin:0 2px 8px">副屬「類別→副屬性」比照遊戲內篩選介面。ID 對照已依 sw-exporter 權威表全數校正（2026-07-21，4 帳號 4238 顆神器交叉驗證）；標「?」者僅繁中措辭待遊戲內核對、效果對應已確定。效率＝各副屬(值/觀測滿值)平均，為近似值。</small>
+    <div class="tablewrap"><table id="aTable"></table></div>
   </section>
 
   <section id="fit" class="tab">
@@ -391,6 +453,8 @@ img.uico.big{width:44px;height:44px;border-radius:8px}
 <script>
 let UNITS = []
 let RUNES = []
+let ARTS = []
+let CRAFTS = []
 const MONSTER_DB = {
     "28201":  {
                   "name":  "Mercenary Queen",
@@ -21928,10 +21992,20 @@ function IMP_parseRune(r, ownerId){
   };
 }
 
-// 回傳 { units:[U...], runes:[R...] }，格式與 build 時烤進去的 UNITS/RUNES 完全一致
+// 神器解析：raw ids，名稱在 renderArts 端用 ART_SUB 解碼
+function IMP_parseArt(a, ownerId){
+  const sub=[];
+  for(const e of (a.sec_effects||[])){ if(!e)continue; sub.push([+e[0], e[1], e.length>=3?+e[2]:0]); }
+  return { rid:a.rid, ty:+a.type, el:+a.attribute, ar:+a.unit_style, nr:+a.natural_rank, rk:+a.rank, lv:+a.level,
+    mt:+a.pri_effect[0], mv:a.pri_effect[1], sub, _owner:ownerId };
+}
+
+// 回傳 { units:[U...], runes:[R...], arts:[A...] }，格式與 build 時烤進去的 UNITS/RUNES 完全一致
 function parseSmw(d){
   const allRunes=[];
   for(const r of (d.runes||[])) allRunes.push(IMP_parseRune(r,null));
+  const allArts=[];
+  for(const a of (d.artifacts||[])) if(a&&a.rid) allArts.push(IMP_parseArt(a,null));
 
   const raw=[];                 // {u, runeCount, rids}
   const idDisp={};              // unit_id -> 顯示名
@@ -21941,6 +22015,7 @@ function parseSmw(d){
     const ru=(u.runes||[]).filter(x=>x&&x.rune_id);
     const rids=[];
     for(const r of ru){ allRunes.push(IMP_parseRune(r,u.unit_id)); rids.push(r.rune_id); }
+    for(const a of (u.artifacts||[])) if(a&&a.rid) allArts.push(IMP_parseArt(a,u.unit_id));
     const mid=''+u.unit_master_id;
     const meta=(typeof MONSTER_DB!=='undefined'&&MONSTER_DB[mid])||{};
     const en=meta.name||('?'+mid);
@@ -21976,13 +22051,72 @@ function parseSmw(d){
     };
   });
 
-  return {units, runes};
+  const arts=allArts.map(a=>({
+    rid:a.rid, ty:a.ty, el:a.el, ar:a.ar, nr:a.nr, rk:a.rk, lv:a.lv, mt:a.mt, mv:a.mv, sub:a.sub,
+    eq:a._owner!=null?1:0,
+    ow:a._owner!=null?(idDisp[''+a._owner]||''):'',
+    owmid:a._owner!=null?(idMid[''+a._owner]||''):'',
+    owen:a._owner!=null?(idEn[''+a._owner]||''):'',
+    owid:a._owner!=null?(''+a._owner):''
+  }));
+
+  // 魔礦：craft_type_id = 套裝×10000 + 屬性×100 + 品質(1-5一般/11-15上古)；craft_type 1/5=磨刀石 2/6=附魔寶石 3=無形磨刀石 4=無形附魔寶石
+  const crafts=[];
+  for(const c of (d.rune_craft_item_list||[])){
+    if(!c||c.craft_type_id==null)continue;
+    const cid=+c.craft_type_id;
+    const setC=Math.floor(cid/10000), stC=Math.floor(cid/100)%100, gr=cid%100;
+    crafts.push({ct:+c.craft_type, set:IMP_setName[setC]||'', sid:setC, st:IMP_effName[stC]||('#'+stC), gr});
+  }
+
+  return {units, runes, arts, crafts};
 }
+
+// ========== IndexedDB 匯入資料快取（開頁自動還原上次匯入）==========
+// file:// 或隱私模式 indexedDB 可能被擋：所有呼叫端一律 .catch 靜默降級，不影響匯入本身
+const IDB_NAME='swtool', IDB_STORE='import';
+function idbOpen(){
+  return new Promise((res,rej)=>{
+    let rq;
+    try{ rq=indexedDB.open(IDB_NAME,1); }catch(e){ return rej(e); }
+    rq.onupgradeneeded=()=>rq.result.createObjectStore(IDB_STORE);
+    rq.onsuccess=()=>res(rq.result);
+    rq.onerror=()=>rej(rq.error);
+  });
+}
+function idbTx(mode, fn){
+  return idbOpen().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction(IDB_STORE,mode);
+    const rq=fn(tx.objectStore(IDB_STORE));
+    tx.oncomplete=()=>{ db.close(); res(rq&&rq.result); };
+    tx.onerror=()=>{ db.close(); rej(tx.error); };
+    tx.onabort=()=>{ db.close(); rej(tx.error); };
+  }));
+}
+const idbSave =(name,text)=>idbTx('readwrite',st=>st.put({name,text,savedAt:Date.now()},'last'));
+const idbLoad =()=>idbTx('readonly', st=>st.get('last'));
+const idbClear=()=>idbTx('readwrite',st=>st.delete('last'));
 
 // ========== 匯入 UI 綁定 ==========
 function impSetStatus(msg, bad){
   const el=document.getElementById('impStatus');
   if(el){ el.textContent=msg; el.style.color=bad?'var(--bad)':'var(--good)'; }
+}
+function impApplyJson(text, srcName){
+  const d=JSON.parse(text);
+  if(!d || !Array.isArray(d.unit_list) || !Array.isArray(d.runes))
+    throw new Error('這不是魔靈召喚帳號匯出檔（缺 unit_list / runes）');
+  const {units, runes, arts, crafts}=parseSmw(d);
+  UNITS=units; RUNES=runes; ARTS=arts||[]; CRAFTS=crafts||[];
+  const pname=(d.wizard_info&&(d.wizard_info.wizard_name||d.wizard_info.name))||'';
+  if(pname){
+    const pe=document.getElementById('hPlayer');
+    if(pe) pe.textContent=pname;
+    document.title='魔靈召喚 帳號分析工具 — '+pname;
+  }
+  renderAll();
+  if(typeof fitResetUndo==='function')fitResetUndo();
+  impSetStatus(`已匯入 ${srcName}：怪物 ${units.length}、符文 ${runes.length}、神器 ${ARTS.length}`);
 }
 function impLoadFile(file){
   if(!file) return;
@@ -21990,27 +22124,16 @@ function impLoadFile(file){
   const reader=new FileReader();
   reader.onload=e=>{
     try{
-      const d=JSON.parse(e.target.result);
-      if(!d || !Array.isArray(d.unit_list) || !Array.isArray(d.runes))
-        throw new Error('這不是魔靈召喚帳號匯出檔（缺 unit_list / runes）');
-      const {units, runes}=parseSmw(d);
-      UNITS=units; RUNES=runes;
-      const pname=(d.wizard_info&&(d.wizard_info.wizard_name||d.wizard_info.name))||'';
-      if(pname){
-        const pe=document.getElementById('hPlayer');
-        if(pe) pe.textContent=pname;
-        document.title='魔靈召喚 帳號分析工具 — '+pname;
-      }
-      renderAll();
-      if(typeof fitResetUndo==='function')fitResetUndo();
-      impSetStatus(`已匯入 ${file.name}：怪物 ${units.length}、符文 ${runes.length}`);
+      impApplyJson(e.target.result, file.name);
+      idbSave(file.name, e.target.result).catch(()=>{});
     }catch(err){ impSetStatus('匯入失敗：'+err.message, true); }
   };
   reader.onerror=()=>impSetStatus('讀檔失敗', true);
   reader.readAsText(file, 'utf-8');
 }
 function impClear(){
-  UNITS=[]; RUNES=[];
+  idbClear().catch(()=>{});
+  UNITS=[]; RUNES=[]; ARTS=[]; CRAFTS=[];
   const pe=document.getElementById('hPlayer');
   if(pe) pe.textContent='';
   document.title='魔靈召喚 帳號分析工具';
@@ -22029,11 +22152,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if(clr){
     clr.onclick=async()=>{
       if((UNITS&&UNITS.length)||(RUNES&&RUNES.length)){
-        if(!await uxConfirm('確定清除目前已匯入的怪物與符文資料？此動作僅清空畫面，不會刪除任何檔案。',{danger:true,okText:'清除'})) return;
+        if(!await uxConfirm('確定清除目前已匯入的怪物與符文資料？將一併清除瀏覽器內的自動還原快取，不會刪除任何檔案。',{danger:true,okText:'清除'})) return;
       }
       impClear();
     };
   }
+  // 開頁自動還原上次匯入的 JSON（快取壞掉就清掉，不擋畫面）
+  idbLoad().then(rec=>{
+    if(!rec||!rec.text||(UNITS&&UNITS.length)) return;
+    try{
+      impApplyJson(rec.text, rec.name||'快取資料');
+      const dt=new Date(rec.savedAt||Date.now());
+      if(typeof uxToast==='function') uxToast(`已自動還原 ${dt.getMonth()+1}/${dt.getDate()} 匯入的「${rec.name||'資料'}」`,'success',5000);
+    }catch(e){ idbClear().catch(()=>{}); }
+  }).catch(()=>{});
 });
 
 </script>
@@ -22209,6 +22341,14 @@ function openUnitModal(u){
   const tot={}; runes.forEach(r=>{const st=parseStats(r);for(const k in st)tot[k]=(tot[k]||0)+st[k];});
   const sidCount={}; runes.forEach(r=>{if(r.sid!=null)sidCount[r.sid]=(sidCount[r.sid]||0)+1;});
   const fin=(typeof computeFinal==='function')?computeFinal(u.mid,tot,sidCount):null;
+  // 神器：主屬為固定值(100=HP/101=ATK/102=DEF)，勾選時加進符文加總重算最終體質
+  const uArts=(typeof ARTS!=='undefined'?ARTS:[]).filter(a=>a.owid===u.id);
+  let finArt=null;
+  if(fin&&uArts.length){
+    const artTot={...tot};
+    uArts.forEach(a=>{const k=ART_MAIN[a.mt];if(k)artTot[k]=(artTot[k]||0)+(+a.mv||0);});
+    finArt=computeFinal(u.mid,artTot,sidCount);
+  }
   const setFx=(typeof effectSetHtml==='function')?effectSetHtml(sidCount,fin):'';
   const efs=runes.map(r=>r.ef); const avg=efs.length?(efs.reduce((a,b)=>a+b,0)/efs.length).toFixed(1):'0';
   // 符文卡（精簡：洞位/套裝 + 主屬 + 可點擊合併磨刀的副屬，跟符文庫一致）
@@ -22228,10 +22368,17 @@ function openUnitModal(u){
     <div class="msub">${u.en||''}　·　${u.ar}　·　Lv${u.lv}　·　目前套裝：${u.rs||'—'}　·　符文平均效率 <b class="${effCls(avg)}">${avg}%</b></div>
     <div class="mstats" id="uStats" title="點擊：切換 基礎+符文 ⇄ 加總" style="cursor:pointer"></div>
     ${setFx}
-    <div class="controls" style="margin:2px 0"><button type="button" class="btn2" id="uMergeAll" title="一次把六顆符文的磨刀值加總／還原">磨刀：全部加總／還原</button></div>
+    ${uArts.length?`<div style="margin:6px 0 2px">${uArts.map(a=>`<div style="margin:2px 0;font-size:13px"><b>${artKind(a)}神器</b>　<b>${ART_MAIN[a.mt]||a.mt}</b> +${a.mv}（+${a.lv}）　${artSubHtml(a)}</div>`).join('')}</div>`:''}
+    <div class="controls" style="margin:2px 0">
+      <button type="button" class="btn2" id="uMergeAll" title="一次把六顆符文的磨刀值加總／還原">磨刀：全部加總／還原</button>
+      ${finArt?'<label style="font-size:13px"><input type="checkbox" id="uArtMain"> 最終體質含神器主屬</label>':''}
+    </div>
     <div class="runegrid">${cards}</div>`;
-  renderUStats(u,fin);
-  $('#uStats').onclick=()=>{uStatMerged=!uStatMerged;renderUStats(u,fin);};
+  let curFin=fin;
+  renderUStats(u,curFin);
+  $('#uStats').onclick=()=>{uStatMerged=!uStatMerged;renderUStats(u,curFin);};
+  const uam=$('#uArtMain');
+  if(uam)uam.onchange=()=>{curFin=uam.checked?finArt:fin;renderUStats(u,curFin);};
   $$('#uModalBody .subcell').forEach(td=>td.onclick=()=>{const i=+td.dataset.ri;subMerge.has(i)?subMerge.delete(i):subMerge.add(i);td.innerHTML=fmtSubLines(RUNES[i].sub,subMerge.has(i));});
   $('#uMergeAll').onclick=()=>{ const idxs=runes.map(r=>r._i); const allMerged=idxs.every(i=>subMerge.has(i));
     idxs.forEach(i=>{ allMerged?subMerge.delete(i):subMerge.add(i); });
@@ -22396,6 +22543,217 @@ $('#rMergeAll').onclick=()=>{ const tds=$$('#rTable .subcell'); const idxs=tds.m
   idxs.forEach(i=>{ allMerged?subMerge.delete(i):subMerge.add(i); });
   tds.forEach(td=>{const i=+td.dataset.ri;td.innerHTML=fmtSub(RUNES[i].sub,subMerge.has(i));}); };
 renderRunes();
+
+// ---------- 符文健檢（值得+15／磨刀／附魔／可賣）----------
+// 磨刀/附魔可用值：非上古為社群公認表；上古(11-15)數值標推定。只列英雄(4)/傳說(5)與上古同級，低品質魔礦不值得用。
+const GRIND_MAX={ // stat -> {品質碼:磨刀上限}
+  'SPD':{4:4,5:5,14:5,15:6},
+  'HP%':{4:7,5:10,14:10,15:12},'ATK%':{4:7,5:10,14:10,15:12},'DEF%':{4:7,5:10,14:10,15:12},
+  'HP':{4:450,5:580,14:580,15:700},'ATK':{4:22,5:30,14:30,15:40},'DEF':{4:22,5:30,14:30,15:40}
+};
+const GR_NAME={1:'普通',2:'魔法',3:'稀有',4:'英雄',5:'傳說'};
+const grName=g=>g>10?('上古'+(GR_NAME[g-10]||g)):(GR_NAME[g]||''+g);
+// 副屬逐行解析：{st,val,grind,gem,pre}
+function subLines(r){
+  return (r.sub||'').split(' / ').map(s=>{
+    if(!s)return null;
+    const pre=/\(前\)$/.test(s); const t=s.replace(/\(前\)$/,'');
+    const m=t.match(/^(.+?)\+(\d+)(?:\+(\d+)磨)?(寶)?$/);
+    if(!m)return null;
+    return {st:m[1].trim(),val:+m[2],grind:m[3]?+m[3]:0,gem:!!m[4],pre};
+  }).filter(Boolean);
+}
+const ckOwnerHtml=r=>r.ow?(unitIcon(r.owen,r.owmid,'uico')||'<span class="own">'+r.ow+'</span>'):'<span class="muted">倉庫</span>';
+function ckRuneRow(r,extra){
+  return `<tr><td><span class="gbadge ${gCls(r.gr)}">${r.gr}</span></td><td class="${effCls(r.ef)}">${r.ef}%</td><td>${r.sl}</td>
+    <td>${r.anc?'<span class="anc">'+r.st+'★A</span>':r.st+'★'}</td><td>${r.set||''}</td><td><b>${r.m}</b></td>
+    <td style="white-space:normal;min-width:260px">${fmtSub(r.sub,false)}</td><td>+${r.lv}</td><td>${ckOwnerHtml(r)}</td>${extra||''}</tr>`;
+}
+const CK_TH='<tr><th>評級</th><th>效率</th><th>洞</th><th>星</th><th>套裝</th><th>主屬</th><th>副屬</th><th>+</th><th>裝備者</th>';
+function renderCheck(){
+  const body=$('#ckBody'); if(!body)return;
+  if(!RUNES.length){ body.innerHTML='<div class="card muted">尚未匯入資料。</div>'; return; }
+  const upEff=+$('#ckUpEff').value||85, enEff=+$('#ckEnEff').value||75, sellEff=+$('#ckSellEff').value||70;
+  const sellIncEq=$('#ckSellEq').checked, sellIncAnc=$('#ckSellAnc').checked;
+  let h='';
+  // ── 1. 值得+15：+12~+14 且升滿後效率達標（+12 後不再新增副屬 roll，升滿只補主屬，效益是確定的）──
+  const ups=RUNES.map(r=>{
+    if(r.lv<12||r.lv>=15)return null;
+    const mainRatio=Math.min(1,(r.mv||0)/(IMP_mainMax[r.mt]||1));
+    const pot=Math.round((r.ef+(1-mainRatio)/2.8*100)*10)/10;
+    return pot>=upEff?{r,pot}:null;
+  }).filter(Boolean).sort((a,b)=>b.pot-a.pot);
+  h+=`<div class="card"><h3 style="margin-top:0">⬆️ 值得升 +15（${ups.length} 顆）</h3>
+    <small class="note">+12～+14 的符文升滿只補主屬值、不吃隨機 roll，列出升滿後效率 ≥ ${upEff}% 者。</small>
+    <div class="tablewrap"><table>${ups.length?('<thead>'+CK_TH+'<th>效率→+15</th></tr></thead><tbody>'+ups.slice(0,40).map(({r,pot})=>ckRuneRow(r,`<td><b class="${effCls(pot)}">${r.ef}% → ${pot}%</b></td>`)).join('')+'</tbody>'):''}</table></div>
+    ${ups.length>40?'<small class="note">（顯示前 40）</small>':''}${ups.length?'':'<span class="muted">沒有符合的符文。</span>'}</div>`;
+  // ── 2. 值得磨刀：持有的英雄/傳說磨刀石 × 同套裝符文中「該副屬磨刀提升空間最大」者 ──
+  const stones=CRAFTS.filter(c=>(c.ct===1||c.ct===5||c.ct===3)&&c.gr%10>=4&&GRIND_MAX[c.st]);
+  const stoneGroups={};
+  stones.forEach(c=>{ const k=(c.ct===3?'無形':c.set)+'|'+c.st+'|'+c.gr; (stoneGroups[k]=stoneGroups[k]||{set:(c.ct===3?'無形':c.set),st:c.st,gr:c.gr,int:c.ct===3,n:0}).n++; });
+  const stOrder={'SPD':0,'ATK%':1,'HP%':2,'DEF%':3,'HP':4,'ATK':5,'DEF':6};
+  const groups=Object.values(stoneGroups).sort((a,b)=>(stOrder[a.st]-stOrder[b.st])||(b.gr-a.gr));
+  let grRows='';
+  groups.slice(0,30).forEach(g=>{
+    const max=GRIND_MAX[g.st][g.gr]; if(!max)return;
+    const targets=RUNES.map(r=>{
+      if(g.int?(r.sid!==INT_SID):(r.set!==g.set))return null;
+      const line=subLines(r).find(L=>!L.pre&&L.st===g.st&&L.grind<max);
+      return line?{r,line,gain:max-line.grind}:null;
+    }).filter(Boolean).sort((a,b)=>(b.r.ef-a.r.ef)).slice(0,3);
+    const tHtml=targets.length?targets.map(({r,line,gain})=>
+      `<span style="display:inline-block;margin:1px 6px 1px 0">${ckOwnerHtml(r)} ${r.sl}洞 <b class="${effCls(r.ef)}">${r.ef}%</b> ${line.st}+${line.val}${line.grind?'+'+line.grind+'磨':''} → <b style="color:var(--acc)">+${max}</b>（賺 ${gain}）</span>`).join(''):'<span class="muted">無適用符文</span>';
+    grRows+=`<div class="slotline" style="align-items:flex-start"><span style="white-space:nowrap"><b>${g.set}</b>·${g.st}·${grName(g.gr)}${g.gr>10?'<sup style="color:var(--warn)">?</sup>':''} ×${g.n}</span><span style="text-align:right">${tHtml}</span></div>`;
+  });
+  h+=`<div class="card"><h3 style="margin-top:0">🪨 值得磨刀（持有英雄/傳說磨刀石 ${stones.length} 顆）</h3>
+    <small class="note">每種磨刀石列出「同套裝、該副屬離此品質磨刀上限最遠」的前 3 顆高效率符文；上古上限值為推定(標?)。</small>
+    ${grRows||'<span class="muted">沒有英雄/傳說品質的磨刀石，或帳號檔未含魔礦清單。</span>'}
+    ${groups.length>30?'<small class="note">（顯示前 30 種）</small>':''}</div>`;
+  // ── 3. 附魔建議：有固定攻/防/體廢副屬、未鑲寶、其餘效率仍達標 → 建議洗掉該行 ──
+  const JUNK=new Set(['ATK','DEF','HP']);
+  const gems=CRAFTS.filter(c=>(c.ct===2||c.ct===6||c.ct===4)&&c.gr%10>=4);
+  const gemBySet={};
+  gems.forEach(c=>{ const k=c.ct===4?'無形':c.set; (gemBySet[k]=gemBySet[k]||{}); gemBySet[k][c.st]=(gemBySet[k][c.st]||0)+1; });
+  const ens=RUNES.map(r=>{
+    if(r.ef<enEff)return null;
+    const Ls=subLines(r);
+    if(Ls.some(L=>L.gem))return null;               // 已鑲過寶石
+    const junks=Ls.filter(L=>!L.pre&&JUNK.has(L.st));
+    if(!junks.length)return null;
+    const worst=junks.sort((a,b)=>(a.val/(IMP_subMax[a.st==='HP'?1:a.st==='ATK'?3:5]||1))-(b.val/(IMP_subMax[b.st==='HP'?1:b.st==='ATK'?3:5]||1)))[0];
+    return {r,worst};
+  }).filter(Boolean).sort((a,b)=>b.r.ef-a.r.ef);
+  let enRows='';
+  ens.slice(0,40).forEach(({r,worst})=>{
+    const setKey=r.sid===INT_SID?'無形':r.set;
+    const inv=gemBySet[setKey];
+    const invTxt=inv?Object.entries(inv).map(([st,n])=>`${st}×${n}`).join(' '):'—';
+    enRows+=ckRuneRow(r,`<td><b style="color:var(--bad)">洗 ${worst.st}+${worst.val}</b></td><td class="muted" style="white-space:nowrap">${invTxt}</td>`);
+  });
+  h+=`<div class="card"><h3 style="margin-top:0">💎 附魔建議（${ens.length} 顆）</h3>
+    <small class="note">效率 ≥ ${enEff}%、含固定攻/防/體廢副屬、尚未鑲寶石者；建議把該行洗成有用屬性。「持有寶石」列同套裝英雄/傳說寶石庫存。</small>
+    <div class="tablewrap"><table>${ens.length?('<thead>'+CK_TH+'<th>建議</th><th>持有寶石</th></tr></thead><tbody>'+enRows+'</tbody>'):''}</table></div>
+    ${ens.length>40?'<small class="note">（顯示前 40）</small>':''}${ens.length?'':'<span class="muted">沒有符合的符文。</span>'}</div>`;
+  // ── 4. 可賣清單 ──
+  const teamUsed=new Set(); (window.FIT_STATE&&FIT_STATE.list||[]).forEach(e=>{for(let sl=1;sl<=6;sl++){if(e.plan&&e.plan[sl]!=null)teamUsed.add(e.plan[sl]);}});
+  const sells=RUNES.filter(r=>
+    r.ef<sellEff && (sellIncEq||r.eq==0) && (sellIncAnc||!r.anc) && !teamUsed.has(r.id)
+  ).sort((a,b)=>a.ef-b.ef);
+  h+=`<div class="card"><h3 style="margin-top:0">🗑️ 可賣清單（${sells.length} 顆）</h3>
+    <small class="note">效率 &lt; ${sellEff}%${sellIncEq?'':'、僅倉庫未裝'}${sellIncAnc?'':'、不含上古'}；已排除目前配裝隊伍占用的符文。賣前請自行再確認。</small>
+    <div class="tablewrap"><table>${sells.length?('<thead>'+CK_TH+'</tr></thead><tbody>'+sells.slice(0,100).map(r=>ckRuneRow(r)).join('')+'</tbody>'):''}</table></div>
+    ${sells.length>100?'<small class="note">（顯示前 100）</small>':''}${sells.length?'':'<span class="muted">沒有符合的符文。</span>'}</div>`;
+  body.innerHTML=h;
+}
+function rShowCheck(on){
+  $('#rListView').style.display=on?'none':'';
+  $('#rCheckView').style.display=on?'':'none';
+  $('#rViewListBtn').className=on?'btn2':'btn';
+  $('#rViewCheckBtn').className=on?'btn':'btn2';
+  if(on)renderCheck();
+}
+$('#rViewListBtn').onclick=()=>rShowCheck(false);
+$('#rViewCheckBtn').onclick=()=>rShowCheck(true);
+$('#ckRun').onclick=renderCheck;
+['ckUpEff','ckEnEff','ckSellEff','ckSellEq','ckSellAnc'].forEach(id=>{const el=$('#'+id);if(el)el.onchange=renderCheck;});
+
+// ---------- 神器分頁 ----------
+const ART_MAIN={100:'HP',101:'ATK',102:'DEF'};
+const ART_ELEM={1:'水',2:'火',3:'風',4:'光',5:'暗'};
+const ART_ARCH={1:'攻擊',2:'防禦',3:'體力',4:'支援'};
+const ART_RANK={1:'普通',2:'魔法',3:'稀有',4:'英雄',5:'傳說',6:'傳說'};
+// 遊戲副屬類別(依官方 UI)：id->顯示名
+const ART_CATS=[['dmg','增加傷害量'],['red','減少傷害量'],['buff','增強強化效果'],['heal','增加恢復量'],['acc','增加效果命中'],['add','追加傷害效果'],['etc','其他效果']];
+// 副屬解碼 id->[官方繁中名, 觀測滿值, 類別, 措辭推定旗標]
+// ★2026-07-21 全表依 sw-exporter mapping.js(產生匯出檔的工具)權威對照校正，並以 4 帳號 4238 顆神器數值分佈交叉驗證：
+//   3xx 只出現在元素神器、4xx 只出現在職業神器、412-415 不存在。帶旗標=1 者僅「繁中措辭」待遊戲內核對，ID 對應已確定。
+// 滿值=4 帳號觀測到的最大值(近似效率用)。元素順序：火水風光暗。
+const ART_SUB={
+ // 增加傷害量
+ 300:['增加對火屬性造成的傷害',21,'dmg'],301:['增加對水屬性造成的傷害',22,'dmg'],302:['增加對風屬性造成的傷害',22,'dmg'],303:['增加對光屬性造成的傷害',22,'dmg'],304:['增加對黑暗屬性造成的傷害',22,'dmg'],
+ 400:['[1技]增加暴擊傷害',26,'dmg'],401:['[2技]增加暴擊傷害',28,'dmg'],402:['[3技]增加暴擊傷害',22,'dmg'],403:['[4技]增加暴擊傷害',15,'dmg'],410:['[3技/4技]增加暴擊傷害',24,'dmg'],411:['首次攻擊時，暴擊傷害增加',26,'dmg'],
+ 222:['敵人體力狀態越好，暴擊傷害越大',26,'dmg'],223:['敵人體力狀態越差，暴擊傷害越大',54,'dmg'],224:['在自身回合增加單一目標技能暴擊傷害',20,'dmg'],225:['反擊/圍剿造成的傷害增加',18,'dmg'],
+ 208:['增加反擊造成的傷害',10,'dmg',1],209:['增加圍剿造成的傷害',11,'dmg',1],210:['增加炸彈傷害',16,'dmg',1],211:['增加反射傷害',5,'dmg',1],212:['增加制壓攻擊傷害',8,'dmg',1],
+ // 減少傷害量
+ 305:['減少從火屬性受到的傷害',27,'red'],306:['減少從水屬性受到的傷害',27,'red'],307:['減少從風屬性受到的傷害',26,'red'],308:['減少從光屬性受到的傷害',27,'red'],309:['減少從黑暗屬性受到的傷害',28,'red'],
+ 214:['減少被暴擊傷害',18,'red'],213:['受無法行動效果時減少受到的傷害',6,'red',1],
+ // 增強強化效果
+ 204:['增加攻擊力強化效果',15,'buff',1],205:['增加防禦力強化效果',11,'buff',1],206:['增加攻擊速度強化效果',26,'buff',1],207:['增加暴擊率強化效果',17,'buff',1],226:['增加攻擊/防禦強化效果',23,'buff',1],
+ // 增加恢復量
+ 404:['[1技]增加恢復量',25,'heal'],405:['[2技]增加恢復量',27,'heal'],406:['[3技]增加恢復量',28,'heal'],215:['增加吸血量',37,'heal'],
+ // 增加效果命中
+ 407:['[1技]增加效果命中',25,'acc'],408:['[2技]增加效果命中',23,'acc'],409:['[3技]增加效果命中',27,'acc'],
+ // 追加傷害效果
+ 218:['以體力為比例追加傷害',1.3,'add'],219:['以攻擊力為比例追加傷害',18,'add'],220:['以防禦力為比例追加傷害',18,'add'],221:['以攻速為比例追加傷害',180,'add'],
+ // 其他效果
+ 200:['攻擊力隨已損失體力提升',47,'etc'],201:['防禦力隨已損失體力提升',42,'etc'],202:['攻擊速度隨已損失體力提升',50,'etc'],
+ 203:['受無法行動效果時攻擊速度增加',6,'etc',1],216:['復活時體力',15,'etc',1],217:['復活時攻擊條增加',23,'etc',1]
+};
+const artSubName=id=>{const s=ART_SUB[id];return s?(s[0]+(s[3]?'<sup style="color:var(--warn)">?</sup>':'')):('#'+id);};
+const artKind=a=>a.ty==1?('元素·'+(ART_ELEM[a.el]||'')):(a.ty==2?('職業·'+(ART_ARCH[a.ar]||'')):'');
+function artEff(a){
+  let sum=0;
+  for(const e of (a.sub||[])){ const s=ART_SUB[e[0]]; const mx=s?s[1]:e[1]; if(mx)sum+=Math.min(1,e[1]/mx); }
+  return Math.round(sum/4*100);
+}
+const artEffCls=e=>e>=70?'eff-hi':e>=45?'eff-mid':'eff-lo';
+function artSubHtml(a){
+  return (a.sub||[]).map(e=>{
+    const tent=ART_SUB[e[0]]&&ART_SUB[e[0]][3];
+    return `<span style="display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin:1px;font-size:12px${tent?';opacity:.72':''}">`
+      +`${artSubName(e[0])} <b>${e[1]}</b>${e[2]>0?` <i style="color:var(--acc);font-style:normal">↑${e[2]}</i>`:''}</span>`;
+  }).join(' ');
+}
+// 類別下拉(靜態) + 副屬下拉(依所選類別串接，只列資料中出現過的)
+(()=>{ const s=$('#aCat'); if(s)s.innerHTML='<option value="">全部類別</option>'+ART_CATS.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join(''); })();
+function fillArtSub(){
+  const sel=$('#aSub'); if(!sel)return;
+  const cat=$('#aCat')?$('#aCat').value:'';
+  const ids=new Set(); ARTS.forEach(a=>(a.sub||[]).forEach(e=>ids.add(e[0])));
+  const list=[...ids].filter(id=>!cat||(ART_SUB[id]&&ART_SUB[id][2]===cat)).sort((x,y)=>x-y);
+  sel.innerHTML='<option value="">全部副屬</option>'+list.map(id=>`<option value="${id}">${ART_SUB[id]?ART_SUB[id][0].replace(/<[^>]+>/g,''):'#'+id}</option>`).join('');
+}
+let aSort={k:'ef',dir:-1};
+const aCols=[['ef','效率'],['kind','神器'],['main','主屬'],['rk','品質'],['lv','+'],['subs','副屬'],['ow','裝備者']];
+function aFilter(){
+  const ty=$('#aType').value,el=$('#aElem').value,ar=$('#aArch').value,mn=$('#aMain').value,
+        cat=$('#aCat')?$('#aCat').value:'',sb=$('#aSub').value,eq=$('#aEq').value,ef=+$('#aEff').value||0,ow=$('#aOwner').value.toLowerCase();
+  return ARTS.filter(a=>
+    (!ty||a.ty==+ty)&&(!el||(a.ty==1&&a.el==+el))&&(!ar||(a.ty==2&&a.ar==+ar))&&
+    (!mn||a.mt==+mn)&&
+    (!cat||(a.sub||[]).some(e=>ART_SUB[e[0]]&&ART_SUB[e[0]][2]===cat))&&
+    (!sb||(a.sub||[]).some(e=>e[0]==+sb))&&
+    (eq===''||a.eq==+eq)&&(artEff(a)>=ef)&&(!ow||(a.ow||'').toLowerCase().includes(ow)));
+}
+function renderArts(){
+  let rows=aFilter().map(a=>({a,ef:artEff(a)}));
+  rows.sort((p,q)=>{
+    if(aSort.k=='ef')return aSort.dir*(p.ef-q.ef);
+    if(aSort.k=='kind')return aSort.dir*artKind(p.a).localeCompare(artKind(q.a));
+    if(aSort.k=='main')return aSort.dir*(p.a.mt-q.a.mt);
+    if(aSort.k=='rk')return aSort.dir*(p.a.rk-q.a.rk);
+    if(aSort.k=='lv')return aSort.dir*(p.a.lv-q.a.lv);
+    if(aSort.k=='ow')return aSort.dir*((p.a.ow||'').localeCompare(q.a.ow||''));
+    return 0;
+  });
+  $('#aCount').textContent=rows.length+' 個';
+  let h='<thead><tr>'+aCols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('')+'</tr></thead><tbody>';
+  h+=rows.slice(0,600).map(({a,ef})=>`<tr>
+    <td class="${artEffCls(ef)}">${ef}%</td>
+    <td>${artKind(a)}</td>
+    <td><b>${ART_MAIN[a.mt]||a.mt}</b> +${a.mv}</td>
+    <td>${ART_RANK[a.rk]||a.rk}</td>
+    <td>+${a.lv}</td>
+    <td style="white-space:normal;min-width:340px">${artSubHtml(a)}</td>
+    <td>${a.ow?(unitIcon(a.owen,a.owmid,'uico')||'<span class="own">'+a.ow+'</span>'):'<span class="muted">倉庫</span>'}</td></tr>`).join('');
+  $('#aTable').innerHTML=h+'</tbody>';
+  if(rows.length>600)$('#aCount').textContent+='（顯示前600）';
+  $$('#aTable th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;aSort.dir=aSort.k==k?-aSort.dir:-1;aSort.k=k;renderArts();});
+}
+['aType','aElem','aArch','aMain','aSub','aEq','aEff','aOwner'].forEach(id=>{const el=$('#'+id);if(el)el.oninput=renderArts;});
+{ const c=$('#aCat'); if(c)c.onchange=()=>{ fillArtSub(); renderArts(); }; }
+fillArtSub();
+renderArts();
 
 // ---------- 地下城 meta DB ----------
 // 角色以 SWARFARM 英文名比對；role=定位，runes=建議套裝
@@ -23205,17 +23563,116 @@ function renderTeamPanel(){
         </span>
       </div>${detail}</div>`;
   });
-  $('#fResults').innerHTML=out;
+  $('#fResults').innerHTML=`<div class="controls" style="justify-content:flex-end;margin-bottom:4px"><button type="button" class="btn2" id="fExportImg" title="把目前隊伍配裝輸出成 PNG 圖片">🖼 匯出圖片</button></div>`+out;
+  const xb=$('#fExportImg'); if(xb)xb.onclick=exportTeamImage;
 }
-function refitOne(i){ // 只重配第 i 隻：排除其他所有隻目前占用的符文
+// ---- 配裝結果匯出 PNG（canvas 手繪；file:// 開啟時圖片會污染 canvas 無法輸出，需走 http）----
+function unitIconPath(sel){
+  if(!sel)return '';
+  const img=(sel.mid&&typeof ICONS!=='undefined'&&ICONS[sel.mid])||(enToImg[sel.en]&&enToImg[sel.en].img)||'';
+  return img?('icons/'+img):'';
+}
+function xRoundRect(cx,x,y,w,h,r){
+  cx.beginPath();
+  cx.moveTo(x+r,y); cx.arcTo(x+w,y,x+w,y+h,r); cx.arcTo(x+w,y+h,x,y+h,r); cx.arcTo(x,y+h,x,y,r); cx.arcTo(x,y,x+w,y,r); cx.closePath();
+}
+async function exportTeamImage(){
+  const list=FIT_STATE.list;
+  if(!list.length){ uxToast('沒有配裝結果可匯出','warn'); return; }
+  const team=fitTeamBonus();
+  const W=1080, headH=56, rowH=178, pad=16;
+  const H=headH+list.length*rowH+pad;
+  const cv=document.createElement('canvas'); cv.width=W*2; cv.height=H*2;
+  const cx=cv.getContext('2d'); cx.scale(2,2);
+  const F='"Microsoft JhengHei","Noto Sans TC",sans-serif';
+  const effColor=e=>e>=100?'#63e6be':e>=85?'#ffd43b':'#8a90a0';
+  cx.fillStyle='#12141a'; cx.fillRect(0,0,W,H);
+  const player=(document.getElementById('hPlayer')||{}).textContent||'';
+  cx.fillStyle='#e8eaf0'; cx.font='bold 20px '+F;
+  cx.fillText('符文配裝方案'+(player?'　—　'+player:''),pad,30);
+  cx.fillStyle='#8a90a0'; cx.font='12px '+F;
+  cx.fillText(new Date().toLocaleString(),pad,48);
+  // 頭像預載（同源才不會污染 canvas）
+  const icons={};
+  await Promise.all(list.map(e=>{
+    const sel=unitById[e.uid]; const path=sel?unitIconPath(sel):'';
+    if(!path||icons[e.uid])return null;
+    return new Promise(res=>{ const im=new Image(); im.onload=()=>{icons[e.uid]=im;res();}; im.onerror=()=>res(); im.src=path; });
+  }));
+  list.forEach((e,i)=>{
+    const y0=headH+i*rowH;
+    const sel=unitById[e.uid];
+    const {p,missing}=fitPlanRunes(e);
+    const d=renderBuildDetail(sel,p,{teamBonus:team,intFill:e.intFill,missing});
+    cx.fillStyle='#1a1d26'; xRoundRect(cx,pad,y0,W-pad*2,rowH-12,10); cx.fill();
+    const im=icons[e.uid];
+    if(im){ try{cx.drawImage(im,pad+12,y0+14,56,56);}catch(err){} }
+    cx.fillStyle='#e8eaf0'; cx.font='bold 14px '+F;
+    cx.fillText(`#${i+1} ${sel?sel.n:'(未知)'}${e.locked?' 🔒':''}`,pad+12,y0+92,120);
+    cx.fillStyle='#8a90a0'; cx.font='11px '+F;
+    cx.fillText((d.setTxt||'').replace(/<[^>]+>/g,''),pad+12,y0+110,126);
+    // 6 洞符文
+    const bx=pad+150, bw=(W-pad*2-150-236)/6;
+    for(let sl=1;sl<=6;sl++){
+      const x=bx+(sl-1)*bw, r=p[sl];
+      cx.fillStyle='#242836'; xRoundRect(cx,x,y0+12,bw-6,rowH-36,6); cx.fill();
+      cx.fillStyle='#8a90a0'; cx.font='10px '+F; cx.fillText(sl+'洞',x+7,y0+26);
+      if(r){
+        const isInt=e.intFill&&e.intFill.sl==sl;
+        cx.fillStyle='#e8eaf0'; cx.font='bold 12px '+F;
+        cx.fillText((r.set||'')+(r.anc?'(古)':'')+(isInt?'→'+(e.intFill.set||''):''),x+7,y0+42,bw-14);
+        cx.font='11px '+F; cx.fillText(r.m,x+7,y0+58,bw-14);
+        cx.fillStyle=effColor(r.ef); cx.font='10px '+F; cx.fillText('ef '+r.ef+'%',x+7,y0+72);
+        cx.fillStyle='#a6acc0'; cx.font='10px '+F;
+        (r.sub||'').split(' / ').slice(0,4).forEach((s,k)=>cx.fillText(s,x+7,y0+88+k*13,bw-14));
+      }else{
+        cx.fillStyle='#5a6070'; cx.font='11px '+F;
+        cx.fillText(missing&&missing[sl]?'已消失':'（無）',x+7,y0+42);
+      }
+    }
+    // 最終體質
+    const sx=W-pad-226;
+    cx.fillStyle='#8a90a0'; cx.font='10px '+F; cx.fillText('最終體質'+(d.fin?'':'（無基礎資料）'),sx,y0+26);
+    if(d.fin){
+      const rows=[['SPD',d.fin.spd],['HP',d.fin.hp],['ATK',d.fin.atk],['DEF',d.fin.def],['暴率',d.fin.cr+'%'],['暴傷',d.fin.cd+'%'],['抵抗',d.fin.re+'%'],['命中',d.fin.ac+'%']];
+      rows.forEach(([lab,v],k)=>{
+        const col=k%2, row=(k-col)/2;
+        const x=sx+col*112, y=y0+48+row*26;
+        cx.fillStyle='#8a90a0'; cx.font='11px '+F; cx.fillText(lab,x,y);
+        cx.fillStyle='#e8eaf0'; cx.font='bold 13px '+F; cx.fillText(''+v,x+38,y);
+      });
+    }
+  });
+  try{
+    cv.toBlob(b=>{
+      if(!b){ uxToast('圖片輸出失敗','error'); return; }
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(b);
+      const dt0=new Date();
+      a.download='符文配裝_'+dt0.getFullYear()+'-'+String(dt0.getMonth()+1).padStart(2,'0')+'-'+String(dt0.getDate()).padStart(2,'0')+'.png';
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+      uxToast('已匯出圖片','success');
+    },'image/png');
+  }catch(err){
+    uxToast('無法匯出：以 file:// 開啟時瀏覽器禁止讀取含本地圖片的 canvas，請改用線上版或本機伺服器。','error',8000);
+  }
+}
+async function refitOne(i){ // 只重配第 i 隻：排除其他所有隻目前占用的符文（worker 背景計算）
   const e=FIT_STATE.list[i]; if(!e||e.locked)return;
   fitPushUndo('重配 #'+(i+1));
   const cfg=e.cfg;
-  const solved=solveFit(e.uid,cfg.s4,'',cfg.wantMain,!!cfg.includeAll,
-    {prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:fitUsedIds(i),useInt:cfg.useInt});
-  const ne=entryFromSolved(cfg,solved); ne.locked=false;
-  FIT_STATE.list[i]=ne;
-  renderTeamPanel();
+  const st=$('#fRunStatus');
+  try{
+    const results=await solveJobs([cfg],fitUsedIds(i),st);
+    if(!results.length)return;
+    const ne=entryFromSolved(cfg,resultToSolved(results[0])); ne.locked=false;
+    FIT_STATE.list[i]=ne;
+    renderTeamPanel();
+  }catch(err){
+    if(err&&err.canceled){ uxToast('已取消計算','warn'); return; }
+    throw err;
+  } finally { if(st)st.innerHTML=''; }
 }
 // ---- 手動刪改單顆符文 ----
 function removeManualRune(mi,sl){
@@ -23436,6 +23893,104 @@ $('#fResults').onclick=ev=>{
   else if(act==='pick'){ openRunePicker(mi,+t.dataset.sl); }
   else if(act==='usealt'){ applyAltPlan(mi,+t.dataset.ai); }
 };
+// ── 背景計算 Worker：把引擎函式以 toString 序列化組成 Blob Worker，計算不佔主執行緒 ──
+// 單一事實來源：worker 程式碼直接取自上方閉包內的函式本體，不另維護副本。
+// 資料(RUNES/UNITS/BASE_STATS)每次計算傳快照進去；取消＝terminate。Worker 建不起來(舊瀏覽器/file:// 限制)自動退回同步計算。
+function buildFitWorker(){
+  const A=(name,f)=>'const '+name+'='+f.toString()+';';
+  const D=f=>f.toString();
+  const src=[
+    'const _psCache=new WeakMap();',
+    'const INT_SID='+JSON.stringify(INT_SID)+';',
+    'const IMP_setName='+JSON.stringify(IMP_setName)+';',
+    'const SET_BONUS='+JSON.stringify(SET_BONUS)+';',
+    'const STAT_KEYS='+JSON.stringify(STAT_KEYS)+';',
+    'const COMP_KEYS='+JSON.stringify(COMP_KEYS)+';',
+    'const CAP_C62='+JSON.stringify(CAP_C62)+';',
+    'let UNITS=[],RUNES=[],BASE_STATS=null;',
+    A('statByFk',statByFk),A('compByFk',compByFk),
+    D(parseStats),D(computeFinal),D(compValOf),D(runeStatContrib),D(solveFit),
+    D(capSetSpdPct),A('capRuneSpd',capRuneSpd),D(capMinGroup),D(capFormGroup),D(snapSupply),D(capSolve),
+    'onmessage=e=>{',
+    '  const d=e.data;',
+    '  if(d.runes)RUNES=d.runes; if(d.units)UNITS=d.units; if(d.baseStats)BASE_STATS=d.baseStats;',
+    '  if(d.cmd==="fit"){',
+    '    const used=new Set(d.used||[]),results=[];',
+    '    d.jobs.forEach((cfg,i)=>{',
+    '      postMessage({type:"progress",i,n:d.jobs.length,uid:cfg.uid});',
+    '      const s=solveFit(cfg.uid,cfg.s4,"",cfg.wantMain,!!cfg.includeAll,{prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:used,useInt:cfg.useInt});',
+    '      const p={};for(let sl=1;sl<=6;sl++){const r=s.p[sl];p[sl]=r?r.id:null;if(r)used.add(r.id);}',
+    '      results.push({p,alts:s.alts,diag:s.diag});',
+    '    });',
+    '    postMessage({type:"done",results});',
+    '  }else if(d.cmd==="cap"){',
+    '    postMessage({type:"done",result:capSolve(d.opts)});',
+    '  }',
+    '};'
+  ].join('\n');
+  return new Worker(URL.createObjectURL(new Blob([src],{type:'application/javascript'})));
+}
+let _fitJob=null; // {w,reject} 進行中的 worker 計算
+function fitCancelCalc(){
+  if(!_fitJob)return;
+  const j=_fitJob; _fitJob=null;
+  try{j.w.terminate();}catch(e){}
+  const err=new Error('已取消'); err.canceled=true; j.reject(err);
+}
+function fitRunWorker(msg,onProgress){
+  return new Promise((resolve,reject)=>{
+    fitCancelCalc(); // 同一時間只允許一件計算，舊的先取消
+    let w;
+    try{ w=buildFitWorker(); }catch(err){ return reject(err); }
+    _fitJob={w,reject};
+    const fin=()=>{ if(_fitJob&&_fitJob.w===w)_fitJob=null; try{w.terminate();}catch(e){} };
+    w.onerror=ev=>{ fin(); reject(new Error(ev.message||'Worker 執行錯誤')); };
+    w.onmessage=e=>{
+      const m=e.data;
+      if(m.type==='progress'){ if(onProgress)onProgress(m); return; }
+      if(m.type==='done'){ fin(); resolve(m); }
+    };
+    w.postMessage(msg);
+  });
+}
+function calcStatus(st,msg){
+  if(!st)return;
+  st.innerHTML=`<span class="spin"></span>${msg}　<button type="button" class="btn2" style="padding:1px 8px">✕ 取消</button>`;
+  const b=st.querySelector('button'); if(b)b.onclick=fitCancelCalc;
+}
+// 同步後備：輸出與 worker 相同(id-based)，餵給 resultToSolved
+async function solveJobsInline(jobs,used,st){
+  const out=[];
+  for(let i=0;i<jobs.length;i++){
+    const cfg=jobs[i],u=unitById[cfg.uid];
+    if(st)st.innerHTML=`<span class="spin"></span>計算中(相容模式)… 第 ${i+1}/${jobs.length} 隻${u?'：'+u.n:''}`;
+    await nextFrame();
+    const s=solveFit(cfg.uid,cfg.s4,'',cfg.wantMain,!!cfg.includeAll,{prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:used,useInt:cfg.useInt});
+    const p={};for(let sl=1;sl<=6;sl++){const r=s.p[sl];p[sl]=r?r.id:null;if(r)used.add(r.id);}
+    out.push({p,alts:s.alts,diag:s.diag});
+  }
+  return out;
+}
+// 配裝計算主入口：worker 優先，失敗退同步；回傳 id-based results；過程把用到的符文 id 併入 used
+async function solveJobs(jobs,used,st){
+  if(!jobs.length)return [];
+  try{
+    calcStatus(st,`計算中… 0/${jobs.length}`);
+    const done=await fitRunWorker(
+      {cmd:'fit',runes:RUNES,units:UNITS,baseStats:(typeof BASE_STATS!=='undefined')?BASE_STATS:null,jobs,used:[...used]},
+      m=>{ const u=unitById[jobs[m.i].uid]; calcStatus(st,`計算中… 第 ${m.i+1}/${m.n} 隻${u?'：'+u.n:''}`); });
+    done.results.forEach(r=>{ for(let sl=1;sl<=6;sl++){ if(r.p[sl]!=null)used.add(r.p[sl]); } });
+    return done.results;
+  }catch(err){
+    if(err&&err.canceled)throw err;
+    console.warn('Worker 計算失敗，退回同步模式：',err);
+    return await solveJobsInline(jobs,used,st);
+  }
+}
+function resultToSolved(res){ // id-based result → entryFromSolved 期望的形狀（符文物件現查 runeById）
+  const p={};for(let sl=1;sl<=6;sl++){const id=res.p[sl];p[sl]=id!=null?(runeById[id]||null):null;}
+  return {p,alts:res.alts,diag:res.diag};
+}
 $('#fRun').onclick=async()=>{
   await withBusy([$('#fRun'),$('#fClear'),$('#fUndo'),$('#fPlanLoad'),$('#fPlanSave')],async()=>{
     const includeAll=$('#fPool').checked;
@@ -23454,17 +24009,18 @@ $('#fRun').onclick=async()=>{
     });
     const st=$('#fRunStatus'), newList=[];
     try{
-      for(let i=0;i<picks.length;i++){
-        const {cfg,lockedEntry}=picks[i];
-        if(lockedEntry){ lockedEntry.cfg=cfg; newList.push(lockedEntry); continue; }
-        const u=unitById[cfg.uid];
-        st.innerHTML=`<span class="spin"></span>計算中… 第 ${i+1}/${picks.length} 隻${u?'：'+u.n:''}`;
-        await nextFrame(); // 讓進度文字先上屏，UI 不凍結
-        const solved=solveFit(cfg.uid,cfg.s4,'',cfg.wantMain,includeAll,
-          {prios:cfg.prios,thresholds:cfg.thresholds,twos:cfg.twos,excludeIds:used,useInt:cfg.useInt});
-        Object.values(solved.p).forEach(r=>{if(r)used.add(r.id);});
-        newList.push(entryFromSolved(cfg,solved));
-      }
+      const jobs=[],jobPos=[];
+      picks.forEach((pk,i)=>{ if(!pk.lockedEntry){ jobs.push(pk.cfg); jobPos.push(i); } });
+      const results=await solveJobs(jobs,used,st); // worker 背景計算(可取消)，不可用時退同步
+      const resAt={}; results.forEach((r,k)=>{resAt[jobPos[k]]=r;});
+      picks.forEach((pk,i)=>{
+        if(pk.lockedEntry){ pk.lockedEntry.cfg=pk.cfg; newList.push(pk.lockedEntry); return; }
+        const r=resAt[i]; if(!r)return;
+        newList.push(entryFromSolved(pk.cfg,resultToSolved(r)));
+      });
+    }catch(err){
+      if(err&&err.canceled){ uxToast('已取消計算','warn'); return; }
+      throw err;
     } finally { st.innerHTML=''; }
     FIT_STATE.list=newList; FIT_STATE.expanded=new Set();
     renderTeamPanel();
@@ -23627,17 +24183,25 @@ $('#capRun').onclick=()=>withBusy([$('#capRun')],async()=>{
   if(!s4){ $('#capResults').innerHTML='<div class="card muted">請選擇 4 件套。</div>'; return; }
   $('#capN4').textContent=s4; $('#capN2').textContent=s2||'（自由洞）';
   const st=$('#capRunStatus');
-  st.innerHTML='<span class="spin"></span>計算中…';
+  const opts={
+    s4, s2,
+    threshold:parseFloat($('#capSpd').value)||0,
+    baseSpd:parseFloat($('#capBase').value)||0,
+    main2:$('#capMain2').value,
+    sparesOnly:$('#capSpares').checked,
+    useInt:$('#capUseInt').checked
+  };
+  calcStatus(st,'計算中');
   await nextFrame();
   try{
-    const res=capSolve({
-      s4, s2,
-      threshold:parseFloat($('#capSpd').value)||0,
-      baseSpd:parseFloat($('#capBase').value)||0,
-      main2:$('#capMain2').value,
-      sparesOnly:$('#capSpares').checked,
-      useInt:$('#capUseInt').checked
-    });
+    let res;
+    try{
+      res=(await fitRunWorker({cmd:'cap',runes:RUNES,opts},null)).result; // worker 背景計算(可取消)
+    }catch(err){
+      if(err&&err.canceled){ uxToast('已取消計算','warn'); return; }
+      console.warn('Worker 計算失敗，退回同步模式：',err);
+      res=capSolve(opts);
+    }
     renderCap(res);
   } finally { st.innerHTML=''; }
 });
