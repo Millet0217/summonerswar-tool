@@ -22108,6 +22108,8 @@ function impApplyJson(text, srcName){
     throw new Error('這不是魔靈召喚帳號匯出檔（缺 unit_list / runes）');
   const {units, runes, arts, crafts}=parseSmw(d);
   UNITS=units; RUNES=runes; ARTS=arts||[]; CRAFTS=crafts||[];
+  window.JSON_DATE=((d.wizard_info&&d.wizard_info.wizard_last_login)||'').slice(0,10);
+  window.RTA_RUNES=Array.isArray(d.world_arena_rune_equip_list)?d.world_arena_rune_equip_list:[];
   const pname=(d.wizard_info&&(d.wizard_info.wizard_name||d.wizard_info.name))||'';
   if(pname){
     const pe=document.getElementById('hPlayer');
@@ -24209,6 +24211,106 @@ $('#capClear').onclick=()=>{
   $('#capResults').innerHTML='<span class="muted">設定條件後按「計算最多可配組數」</span>';
 };
 
+// ---------- 帳號質檢卡（仿 SWRT 版型，計分向 SWRT 校正）----------
+// 說明：SWRT 私有計分＋AI 配裝優化器輸出無法精確逆推，此卡採「有鑑別力、向 SWRT 校正」的近似式：
+//   · 符文評分 = Σ 6★符文 CR·max(0, 效率−94)^1.8            （對 2 帳號 15 點 SWRT 標準答案擬合，誤差≈12%）
+//   · 神器評分 = 左槽(元素)＋右槽(職業)；每槽 = Σ CA·max(0, Σroll²−6)^2   （擬合誤差≈中位 15%）
+//     神器分是「重獎少數精英神器」的超線性分，靠副屬 roll 數平方；通用效率壓縮無鑑別力故不採用。
+//   · 各類型 = 依主要套裝，Σ 該套裝 6★符文的符文分（同一 per-符文分，各套裝加總＝符文評分）
+//   · Top10 = RTA（世界競技場）配置前 10 隻的平均符文效率（誠實一行）
+//   星等依「該項分數」門檻分級（1★→2★→3★→👑）。仍非 SWRT 原分，僅量級與趨勢貼近。
+function qcCard(){
+  if((!RUNES||!RUNES.length) && (!ARTS||!ARTS.length)) return '';
+  const CR=0.02333, TR=94, PR=1.8;   // 符文 per-符文分 係數
+  const CA=0.21049, TA=6,  PA=2.0;   // 神器 per-件分 係數
+  const SET_MIN=6, SET_SHOW=10;
+  const runes6=(typeof r6!=='undefined'&&r6)?r6:RUNES.filter(r=>r.st==6);
+  const fmt=x=>{const r=Math.round(x*10)/10;return (r%1===0)?r.toFixed(0):r.toFixed(1);};
+  const runePts=e=> e>TR ? CR*Math.pow(e-TR,PR) : 0;
+  const artRoll2=a=>{let s=0;for(const e of (a.sub||[])){const rl=(e&&e.length>=3)?(+e[2]||0):0; s+=rl*rl;} return s;};
+  const artPts=a=>{const v=artRoll2(a)-TA; return v>0 ? CA*Math.pow(v,PA) : 0;};
+  // 星等：依分數門檻，4=皇冠
+  const setStar =v=> v>=500?4 : v>=300?3 : v>=150?2 : v>=60?1 : 0;
+  const slotStar=v=> v>=2200?4: v>=1200?3: v>=600?2 : v>=250?1 : 0;
+  const runeOv  =v=> v>=2500?4: v>=1800?3: v>=1100?2: v>=600?1 : 0;
+  const artOv   =v=> v>=4000?4: v>=2400?3: v>=1200?2: v>=500?1 : 0;
+  const effStar =e=> e>=125?4 : e>=115?3 : e>=105?2 : e>=95?1 : 0;
+  const stars=n=> n>=4
+      ? '<span style="font-size:17px;line-height:1">👑</span>'
+      : (n>0 ? '<span style="color:#ff6a1a;letter-spacing:1px;font-size:15px">'+('★'.repeat(n))+'</span>'
+             : '<span style="color:#d0d0d0;font-size:15px">☆</span>');
+  // 符文評分
+  const runeScore=runes6.reduce((s,r)=>s+runePts(r.ef),0);
+  // 神器：左槽=元素(ty1)、右槽=職業(ty2)
+  const L=ARTS.filter(a=>a.ty==1).reduce((s,a)=>s+artPts(a),0);
+  const R=ARTS.filter(a=>a.ty==2).reduce((s,a)=>s+artPts(a),0);
+  const artScore=L+R;
+  // 各類型（依套裝）：同一 per-符文分加總
+  const bySet={};
+  runes6.forEach(r=>{const k=r.set||'其他';(bySet[k]=bySet[k]||[]).push(r.ef);});
+  const setRows=Object.entries(bySet)
+      .filter(([k,v])=>v.length>=SET_MIN)
+      .map(([k,v])=>({name:k,score:v.reduce((s,e)=>s+runePts(e),0),n:v.length}))
+      .sort((a,b)=>b.score-a.score).slice(0,SET_SHOW);
+  // Top10：RTA 配置前 10 隻平均符文效率
+  let rtaHtml='';
+  const wa=window.RTA_RUNES||[];
+  if(wa.length){
+    const effById={}; RUNES.forEach(r=>{effById[''+r.id]=r.ef;});
+    const byUnit={};
+    for(const e of wa){ if(!e)continue; const u=''+e.occupied_id; (byUnit[u]=byUnit[u]||[]).push(''+e.rune_id); }
+    const unitAvg=[];
+    for(const u in byUnit){ const es=byUnit[u].map(id=>effById[id]).filter(v=>v!=null); if(es.length>=6) unitAvg.push(es.reduce((s,v)=>s+v,0)/es.length); }
+    unitAvg.sort((a,b)=>b-a);
+    const top=unitAvg.slice(0,10);
+    if(top.length){
+      const avg=top.reduce((s,v)=>s+v,0)/top.length;
+      rtaHtml=`<div style="display:flex;align-items:center;padding:11px 2px;border-top:1px solid #f0f0f2">
+        <div style="flex:1;font-weight:700;color:#ff6a1a;font-size:15px">Top10 · RTA 均效率<span style="color:#b7bcc4;font-weight:400;font-size:11px">（世界競技場前${top.length}隻）</span></div>
+        <div style="text-align:right;padding-right:14px;font-size:17px;font-weight:700;color:#222">${fmt(avg)}%</div>
+        <div style="width:66px;text-align:left">${stars(effStar(avg))}</div></div>`;
+    }
+  }
+
+  const jd=(window.JSON_DATE||'').trim()||'—';
+  const tile=(label,val)=>`<div style="flex:1;min-width:96px;background:#f5f6f8;border-radius:12px;padding:10px 12px;text-align:center">
+      <div style="font-size:20px;font-weight:800;color:#222;line-height:1.1">${val}</div>
+      <div style="font-size:12px;color:#9aa0aa;margin-top:3px">${label}</div></div>`;
+  const row=(label,val,st,labelColor)=>`<div style="display:flex;align-items:center;padding:11px 2px;border-top:1px solid #f0f0f2">
+      <div style="width:110px;font-weight:700;color:${labelColor||'#ff6a1a'};font-size:15px">${label}</div>
+      <div style="flex:1;text-align:right;padding-right:14px;font-size:17px;font-weight:700;color:#222">${fmt(val)}</div>
+      <div style="width:66px;text-align:left">${stars(st)}</div></div>`;
+  const secTitle=(t,overall)=>`<div style="display:flex;align-items:center;border-bottom:2px solid #efeff1;padding-bottom:8px;margin-bottom:2px">
+      <div style="font-size:19px;font-weight:800;color:#222;flex:1">${t}</div>
+      <div>${stars(overall)}</div></div>`;
+
+  return `<div class="card" style="grid-column:1/-1;background:#fff;color:#333;border:1px solid #ececf0;border-radius:16px;padding:16px 16px 8px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <div style="font-size:18px;font-weight:800;color:#222">帳號質檢</div>
+      <div style="font-size:11px;color:#b7bcc4;border:1px solid #e6e6ea;border-radius:10px;padding:1px 8px" title="計分向 SWRT 校正的近似式，非 SWRT 原分數">近似 SWRT</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      ${tile('Json 檔案日期',jd)}
+      ${tile('符文評分',fmt(runeScore))}
+      ${tile('神器評分',fmt(artScore))}
+    </div>
+    <div style="margin-bottom:16px">
+      ${secTitle('神器評級',artOv(artScore))}
+      ${row('左槽 · 元素',L,slotStar(L))}
+      ${row('右槽 · 職業',R,slotStar(R))}
+    </div>
+    <div>
+      ${secTitle('符文評級',runeOv(runeScore))}
+      ${rtaHtml}
+      <div style="font-size:12px;color:#9aa0aa;margin:10px 0 2px">各類型符文評分（依主要套裝）</div>
+      ${setRows.map(s=>row(s.name,s.score,setStar(s.score),'#ff6a1a')).join('')}
+    </div>
+    <div style="font-size:11px;color:#b7bcc4;margin-top:12px;line-height:1.5">
+      計分向 SWRT 校正的近似式：符文＝Σmax(0,效率−94)^1.8、神器＝Σmax(0,Σroll²−6)^2（重獎精英神器）、神器評分＝左＋右、Top10＝RTA 前10隻均效率。仍非 SWRT 原分，量級與趨勢貼近（擬合誤差約 10–20%）。
+    </div>
+  </div>`;
+}
+
 // ---------- 總覽 ----------
 // (以下 ov() 為本次重繪的最後步驟)
 function ov(){
@@ -24228,6 +24330,7 @@ function ov(){
     <div><span>其中倉庫可用</span><b>${spd.filter(r=>r.eq==0).length}</b></div>
     <div><span>上古符文</span><b>${RUNES.filter(r=>r.anc==1).length}</b></div>
     <div><span>110%+神符</span><b>${RUNES.filter(r=>r.ef>=110).length}</b></div></div></div>`);
+  const _qc=qcCard(); if(_qc) cards.unshift(_qc);
   $('#ovGrid').innerHTML=cards.join('');
 }
 ov();
