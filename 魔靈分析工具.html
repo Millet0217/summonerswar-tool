@@ -24246,19 +24246,19 @@ function qcCard(){
   const L=ARTS.filter(a=>a.ty==1).reduce((s,a)=>s+artPts(a),0);
   const R=ARTS.filter(a=>a.ty==2).reduce((s,a)=>s+artPts(a),0);
   const artScore=L+R;
-  // 各類型（依套裝）：同一 per-符文分加總
-  const bySet={};
-  runes6.forEach(r=>{const k=r.set||'其他';(bySet[k]=bySet[k]||[]).push(r.ef);});
-  const setRows=Object.entries(bySet)
-      .filter(([k,v])=>v.length>=SET_MIN)
-      .map(([k,v])=>({name:k,score:v.reduce((s,e)=>s+runePts(e),0),n:v.length}))
-      .sort((a,b)=>b.score-a.score).slice(0,SET_SHOW);
-  // Top10：暴走／絕望／迅速 三套裝，各取「完成該4件套裝的魔靈」中效率最高前10隻的平均效率
-  let rtaHtml='';
+  // 各類型符文評分：固定顯示 迅速/暴走/絕望/意志/反擊（順序照 SWRT），其餘套裝加總為 Any
+  const NAMED=[['迅速',3],['暴走',13],['絕望',10],['意志',15],['反擊',17]];
+  const namedSids=new Set(NAMED.map(x=>x[1]));
+  const scoreBySid={}; let anyScore=0;
+  runes6.forEach(r=>{const p=runePts(r.ef); if(namedSids.has(r.sid)) scoreBySid[r.sid]=(scoreBySid[r.sid]||0)+p; else anyScore+=p;});
+  const typeRows=NAMED.map(([nm,sid])=>({nm,score:scoreBySid[sid]||0}))
+                     .concat([{nm:'Any',score:anyScore}]);
+
+  // Top10 魔靈均分：迅速／暴走／絕望 三套裝（順序照 SWRT），各取「完成該4件套裝的魔靈」中效率前10隻的均效率
+  let rtaRows=[];
   {
     const effById={}, sidById={};
     RUNES.forEach(r=>{effById[''+r.id]=r.ef; sidById[''+r.id]=r.sid;});
-    // 每隻魔靈：6符文均效率 + 套裝件數
     const mons=[];
     (UNITS||[]).forEach(u=>{
       const rids=(u.ri||'').split(',').filter(Boolean);
@@ -24268,20 +24268,12 @@ function qcCard(){
       const cnt={}; rids.forEach(id=>{const s=sidById[id]; if(s!=null)cnt[s]=(cnt[s]||0)+1;});
       mons.push({avg:es.reduce((a,b)=>a+b,0)/es.length, cnt});
     });
-    const SET_TARGETS=[['暴走',13],['絕望',10],['迅速',3]];
-    const rtaRows=SET_TARGETS.map(([nm,sid])=>{
+    const SET_TARGETS=[['迅速',3],['暴走',13],['絕望',10]];
+    rtaRows=SET_TARGETS.map(([nm,sid])=>{
       const avgs=mons.filter(m=>(m.cnt[sid]||0)>=4).map(m=>m.avg).sort((a,b)=>b-a).slice(0,10);
       if(!avgs.length) return null;
-      const v=avgs.reduce((a,b)=>a+b,0)/avgs.length;
-      return {nm, v, n:avgs.length};
+      return {nm, v:avgs.reduce((a,b)=>a+b,0)/avgs.length};
     }).filter(Boolean);
-    if(rtaRows.length){
-      rtaHtml=`<div style="font-size:12px;color:#9aa0aa;margin:2px 0 2px">Top10 魔靈均效率（暴走／絕望／迅速 各套裝前10隻）</div>`
-        + rtaRows.map(r=>`<div style="display:flex;align-items:center;padding:11px 2px;border-top:1px solid #f0f0f2">
-            <div style="flex:1;font-weight:700;color:#ff6a1a;font-size:15px">${r.nm}<span style="color:#b7bcc4;font-weight:400;font-size:11px">（前${r.n}隻）</span></div>
-            <div style="text-align:right;padding-right:14px;font-size:17px;font-weight:700;color:#222">${fmt(r.v)}%</div>
-            <div style="width:66px;text-align:left">${stars(effStar(r.v))}</div></div>`).join('');
-    }
   }
 
   const jd=(window.JSON_DATE||'').trim()||'—';
@@ -24289,38 +24281,39 @@ function qcCard(){
   const tile=(label,val)=>`<div style="flex:1;min-width:96px;background:#f5f6f8;border-radius:12px;padding:10px 12px;text-align:center">
       <div style="font-size:20px;font-weight:800;color:#222;line-height:1.1">${val}</div>
       <div style="font-size:12px;color:#9aa0aa;margin-top:3px">${label}</div></div>`;
-  const row=(label,val,st,labelColor)=>`<div style="display:flex;align-items:center;padding:11px 2px;border-top:1px solid #f0f0f2">
-      <div style="width:110px;font-weight:700;color:${labelColor||'#ff6a1a'};font-size:15px">${label}</div>
-      <div style="flex:1;text-align:right;padding-right:14px;font-size:17px;font-weight:700;color:#222">${fmt(val)}</div>
+  // 一般列：名稱 | 數值(+後綴) | 星
+  const row=(label,val,st,suf)=>`<div style="display:flex;align-items:center;padding:10px 2px;border-top:1px solid #f0f0f2">
+      <div style="width:120px;font-weight:700;color:#ff6a1a;font-size:15px">${label}</div>
+      <div style="flex:1;text-align:right;padding-right:14px;font-size:17px;font-weight:700;color:#222">${fmt(val)}${suf||''}</div>
       <div style="width:66px;text-align:left">${stars(st)}</div></div>`;
-  const secTitle=(t,overall)=>`<div style="display:flex;align-items:center;border-bottom:2px solid #efeff1;padding-bottom:8px;margin-bottom:2px">
+  const groupTitle=t=>`<div style="font-size:12px;color:#9aa0aa;margin:10px 0 2px;padding-top:4px">${t}</div>`;
+  const secTitle=(t,overall)=>`<div style="display:flex;align-items:center;gap:8px;border-bottom:2px solid #efeff1;padding-bottom:8px;margin-bottom:2px">
       <div style="font-size:19px;font-weight:800;color:#222;flex:1">${t}</div>
       <div>${stars(overall)}</div></div>`;
 
   return `<div class="card" style="grid-column:1/-1;background:#fff;color:#333;border:1px solid #ececf0;border-radius:16px;padding:16px 16px 8px">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-      <div style="font-size:18px;font-weight:800;color:#222">帳號質檢</div>
+      <div style="font-size:18px;font-weight:800;color:#222">賬號健檢</div>
       ${wiz?`<div style="font-size:13px;font-weight:700;color:#ff6a1a;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="遊戲ID">${wiz}</div>`:''}
       <div style="font-size:11px;color:#b7bcc4;border:1px solid #e6e6ea;border-radius:10px;padding:1px 8px;margin-left:auto" title="計分向 SWRT 校正的近似式，非 SWRT 原分數">近似 SWRT</div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:16px">
       ${tile('Json 檔案日期',jd)}
       ${tile('符文評分',fmt(runeScore))}
-      ${tile('神器評分',fmt(artScore))}
+      ${tile('魔礦評分',fmt(artScore))}
     </div>
     <div style="margin-bottom:16px">
-      ${secTitle('神器評級',artOv(artScore))}
-      ${row('左槽 · 元素',L,slotStar(L))}
-      ${row('右槽 · 職業',R,slotStar(R))}
+      ${secTitle('魔礦評級',artOv(artScore))}
+      ${row('屬性魔礦',L,slotStar(L))}
+      ${row('類型魔礦',R,slotStar(R))}
     </div>
     <div>
       ${secTitle('符文評級',runeOv(runeScore))}
-      ${rtaHtml}
-      <div style="font-size:12px;color:#9aa0aa;margin:10px 0 2px">各類型符文評分（依主要套裝）</div>
-      ${setRows.map(s=>row(s.name,s.score,setStar(s.score),'#ff6a1a')).join('')}
+      ${rtaRows.length?groupTitle('Top10魔靈均分')+rtaRows.map(r=>row(r.nm,r.v,effStar(r.v),'%')).join(''):''}
+      ${groupTitle('各類型符文評分')+typeRows.map(r=>row(r.nm,r.score,setStar(r.score))).join('')}
     </div>
     <div style="font-size:11px;color:#b7bcc4;margin-top:12px;line-height:1.5">
-      計分向 SWRT 校正的近似式（17 點真值擬合）：符文＝Σmax(0,效率−90)^2.2、神器＝Σmax(0,Σroll²−8)^1.5（重獎精英神器）、神器評分＝左＋右、Top10＝暴走／絕望／迅速 各套裝前10隻魔靈的均效率。仍非 SWRT 原分，量級與趨勢貼近（本人帳號誤差 符文≈2%、神器≈3%；囤積弱號可達 20–30%）。
+      計分向 SWRT 校正的近似式（17 點真值擬合）：符文＝Σmax(0,效率−90)^2.2、魔礦＝Σmax(0,Σroll²−8)^1.5（重獎精英魔礦）、魔礦評分＝屬性＋類型、Top10＝迅速／暴走／絕望 各套裝前10隻魔靈的均效率。仍非 SWRT 原分，量級與趨勢貼近（本人帳號誤差 符文≈2%、魔礦≈3%；囤積弱號可達 20–30%）。
     </div>
   </div>`;
 }
