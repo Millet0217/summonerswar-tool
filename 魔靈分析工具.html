@@ -24223,17 +24223,21 @@ $('#capClear').onclick=()=>{
 function qcCard(){
   if((!RUNES||!RUNES.length) && (!ARTS||!ARTS.length)) return '';
   // ── 聚合總分係數（沿用，向 SWRT 帳號總分校正）──
-  const CR=0.00433, TR=90, PR=2.2;   // 符文總分 per-符文分
-  const CA=1.31716, TA=8,  PA=1.5;   // 魔礦 per-件分（本人帳號誤差 符文≈2%/魔礦≈3%）
+  const CR=0.004086, TR=90, PR=2.2;   // 符文總分 per-符文分（2026-07 對4帳號SWRT真值重校，原0.00433）
+  const TA=8, PA=1.5;   // 魔礦 per-件分門檻/次方；CA 改為 regime-aware（定義在 artRoll2 之後）
   // ── 逐類符文係數（向 SWRT「各類型符文評分」逐類真值校正，5 帳號星級命中）──
   const KT=98, KP=1.4;
-  const KCAT={3:0.26298,13:0.11495,10:0.166,15:0.17125,17:0.16724,any:0.05376}; // 迅速/暴走/絕望/意志/反擊/其他
-  const T10A=0.8182, T10B=5.311;     // Top10 工具效率→SWRT 效率尺標(88-95)線性轉換
+  const KCAT={3:0.26298,13:0.11495,10:0.166,15:0.12159,17:0.15498,any:0.05376}; // 迅速/暴走/絕望/意志/反擊/其他（2026-07重校：意志0.17125→0.12159、反擊0.16724→0.15498）
+  const T10A=0.71564, T10B=15.78694; // Top10 工具效率→SWRT 效率尺標線性轉換（2026-07 對4帳號12點重擬合，原0.8182/5.311）
   const runes6=(typeof r6!=='undefined'&&r6)?r6:RUNES.filter(r=>r.st==6);
   const fmt=x=>{const r=Math.round(x*10)/10;return (r%1===0)?r.toFixed(0):r.toFixed(1);};
   const runePts=e=> e>TR ? CR*Math.pow(e-TR,PR) : 0;
   const catPts =e=> e>KT ? Math.pow(e-KT,KP) : 0;
   const artRoll2=a=>{let s=0;for(const e of (a.sub||[])){const rl=(e&&e.length>=3)?(+e[2]||0):0; s+=rl*rl;} return s;};
+  // 魔礦 CA regime-aware（2026-07-30，5帳號校準）：SWRT 對「roll 集中的高品質神器」獎勵約高30%，roll²公式抓不到→出現兩 regime。
+  // 用帳號神器平均 Σroll²(avgSr2) 判別：高值型(avgSr2≈8.5，如九濤峰/御清歡)需 CA≈1.397；一般型(≈6，犭句才/鶏佛/公吿)需≈1.068。全5帳號魔礦總分進 ±6%。
+  const avgSr2 = ARTS.length ? ARTS.reduce((s,a)=>s+artRoll2(a),0)/ARTS.length : 0;
+  const CA = avgSr2>=7.5 ? 1.397 : 1.068;
   const artPts=a=>{const v=artRoll2(a)-TA; return v>0 ? CA*Math.pow(v,PA) : 0;};
   // ── SWRT 官方 7 階評級門檻（legend／金3金2金1／銅3銅2銅1；已用真實截圖逐格驗證）──
   const BANDS={
